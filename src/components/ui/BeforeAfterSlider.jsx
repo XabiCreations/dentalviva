@@ -26,6 +26,8 @@ export function BeforeAfterSlider({ beforeImage, afterImage, beforeAlt, afterAlt
   const containerRef = useRef(null)
   const handleRef = useRef(null)
   const hintIconRef = useRef(null)
+  const touchStartRef = useRef({ x: 0, y: 0 })
+  const touchDirectionRef = useRef(null) // 'horizontal' | 'vertical' | null
   const prefersReducedMotion = useRef(
     typeof window !== 'undefined'
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -114,14 +116,31 @@ export function BeforeAfterSlider({ beforeImage, afterImage, beforeAlt, afterAlt
   }, [])
 
   const handleTouchStart = useCallback((e) => {
+    touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+    touchDirectionRef.current = null
     setIsDragging(true)
   }, [])
 
   const handleTouchMove = useCallback(
     (e) => {
       if (!isDragging) return
-      e.preventDefault()
-      setSliderPos(getPositionFromEvent(e))
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x)
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y)
+
+      // Lock direction after 5px threshold
+      if (!touchDirectionRef.current && (dx > 5 || dy > 5)) {
+        touchDirectionRef.current = dx > dy ? 'horizontal' : 'vertical'
+      }
+
+      if (touchDirectionRef.current === 'vertical') {
+        setIsDragging(false)
+        return
+      }
+
+      if (touchDirectionRef.current === 'horizontal') {
+        e.preventDefault()
+        setSliderPos(getPositionFromEvent(e))
+      }
     },
     [isDragging, getPositionFromEvent]
   )
