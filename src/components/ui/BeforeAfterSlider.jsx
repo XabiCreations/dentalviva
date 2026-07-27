@@ -149,8 +149,8 @@ export function BeforeAfterSlider({ beforeImage, afterImage, beforeAlt, afterAlt
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden rounded-xl select-none"
-      style={{ cursor: isDragging ? 'ew-resize' : 'col-resize', aspectRatio: '16/9' }}
+      className="relative w-full overflow-hidden rounded-xl select-none h-[70vh] lg:h-auto lg:aspect-video"
+      style={{ cursor: isDragging ? 'ew-resize' : 'col-resize' }}
       onMouseDown={handleMouseDown}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

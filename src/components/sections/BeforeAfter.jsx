@@ -95,7 +95,7 @@ export function BeforeAfter() {
 
         {/* Slider — standalone container */}
         <div className="before-after-container border border-border rounded-2xl overflow-hidden shadow-card mb-4">
-          <div ref={sliderContainerRef} className="p-4 bg-surface">
+          <div ref={sliderContainerRef} className="p-0 lg:p-4 bg-surface">
             <BeforeAfterSlider
               key={sliderKey}
               beforeImage={current.before.url}
@@ -111,7 +111,8 @@ export function BeforeAfter() {
         <div className="flex justify-center">
           <nav
             aria-label="Casos por tratamiento"
-            className="inline-flex items-center gap-2 bg-white border border-border rounded-full p-4 shadow-card"
+            className="flex items-center gap-1 lg:gap-2 bg-white border border-border rounded-full p-1.5 lg:p-4 shadow-card w-[70vw] lg:w-auto overflow-x-auto"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {/* Tab items */}
             {cases.map((c, i) => (
@@ -121,7 +122,7 @@ export function BeforeAfter() {
                 aria-selected={activeTab === i}
                 onClick={() => handleTabChange(i)}
                 className={[
-                  'flex items-center gap-2 px-6 py-4 rounded-full text-sm font-medium transition-all duration-200',
+                  'flex items-center gap-1.5 px-3 py-1.5 lg:px-6 lg:py-4 rounded-full text-xs lg:text-sm font-medium whitespace-nowrap transition-all duration-200',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
                   activeTab === i
                     ? 'bg-primary text-white'
@@ -136,6 +137,7 @@ export function BeforeAfter() {
           </nav>
         </div>
       </div>
+      <style>{`nav[aria-label="Casos por tratamiento"]::-webkit-scrollbar { display: none; width: 0; height: 0; }`}</style>
     </section>
   )
 }

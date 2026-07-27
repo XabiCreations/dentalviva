@@ -70,7 +70,7 @@ export function WhyChooseUs() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
 
           {/* Image — spans both rows on desktop */}
-          <div ref={imgRef} className="rounded-3xl overflow-hidden aspect-[3/2] lg:aspect-auto lg:row-span-2 bg-surface">
+          <div ref={imgRef} className="hidden lg:block rounded-3xl overflow-hidden lg:aspect-auto lg:row-span-2 bg-surface">
             <img
               src="/images/bg-porque-elerguirnos.webp"
               alt="Tratamiento dental profesional en DentalViva"
@@ -79,7 +79,7 @@ export function WhyChooseUs() {
           </div>
 
           {/* Title — top right */}
-          <div ref={headRef} className="self-end pb-4">
+          <div ref={headRef} className="self-end pb-4 text-center lg:text-left">
             <p className="eyebrow mb-4" id="why-heading">Por qué elegirnos</p>
             <h2 className="text-h2 text-text">
               Los <span className="font-playfair italic text-primary">números</span> responden por nosotros
