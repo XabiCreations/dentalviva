@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { BeforeAfterSlider } from '../ui/BeforeAfterSlider'
 
@@ -38,6 +38,7 @@ export function BeforeAfter() {
   const [sliderKey, setSliderKey] = useState(0)
   const sliderContainerRef = useRef(null)
   const navRef = useRef(null)
+  const tabRefs = useRef([])
   const sectionRef = useRef(null)
 
   const prefersReducedMotion =
@@ -45,8 +46,19 @@ export function BeforeAfter() {
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
       : false
 
+  const scrollTabToCenter = useCallback((index) => {
+    const nav = navRef.current
+    const btn = tabRefs.current[index]
+    if (!nav || !btn) return
+    const target = btn.offsetLeft - nav.clientWidth / 2 + btn.offsetWidth / 2
+    const max = nav.scrollWidth - nav.clientWidth
+    // Clamp: edge items scroll to 0 or max (not centered), middle items scroll to exact center
+    nav.scrollTo({ left: Math.max(0, Math.min(max, target)), behavior: 'smooth' })
+  }, [])
+
   const handleTabChange = (index) => {
     if (index === activeTab) return
+    scrollTabToCenter(index)
     if (prefersReducedMotion || !sliderContainerRef.current) {
       setActiveTab(index)
       setSliderKey((k) => k + 1)
@@ -135,19 +147,20 @@ export function BeforeAfter() {
                 <nav
                   ref={navRef}
                   aria-label="Casos por tratamiento"
-                  className="flex items-center gap-1.5 lg:gap-2 bg-white border border-border rounded-full p-2 lg:p-4 shadow-card w-[70vw] lg:w-auto overflow-x-auto"
+                  className="flex items-center gap-2 lg:gap-2 bg-white border border-border rounded-full p-2.5 lg:p-4 shadow-card w-[70vw] lg:w-auto overflow-x-auto snap-x snap-mandatory lg:snap-none"
                   style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                   {cases.map((c, i) => (
                     <button
                       key={c.id}
+                      ref={(el) => (tabRefs.current[i] = el)}
                       role="tab"
                       aria-selected={activeTab === i}
                       onClick={() => handleTabChange(i)}
                       onMouseEnter={() => setHoveredTab(i)}
                       onMouseLeave={() => setHoveredTab(null)}
                       className={[
-                        'flex items-center gap-2 px-4 py-3 lg:px-6 lg:py-4 rounded-full text-xs lg:text-sm font-medium whitespace-nowrap transition-all duration-200',
+                        'flex items-center gap-2 px-5 py-3.5 lg:px-6 lg:py-4 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 snap-center shrink-0',
                         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
                         activeTab === i
                           ? 'bg-primary text-white'
