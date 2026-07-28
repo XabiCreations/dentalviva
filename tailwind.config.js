@@ -43,42 +43,44 @@ export default {
       fontSize: {
         // Display  min=2.25rem  max=5rem
         // slope=(5−2.25)/70=0.0393 → 3.93vw  intercept=2.25−0.786=1.46rem
+        // Display  min=2.75rem  max=5rem
+        // slope=(5−2.75)/70=0.0321 → 3.21vw  intercept=2.75−0.643=2.11rem
         'display': [
-          'clamp(2.25rem, 1.46rem + 3.93vw, 5rem)',
-          { lineHeight: '1.05', letterSpacing: '-0.03em' },
+          'clamp(2.75rem, 2.11rem + 3.21vw, 5rem)',
+          { lineHeight: '1.05', letterSpacing: '-0.03em', fontWeight: '700' },
         ],
 
-        // H1  min=1.875rem  max=3.5rem
-        // slope=(3.5−1.875)/70=0.0232 → 2.32vw  intercept=1.875−0.464=1.41rem
+        // H1  min=2.5rem  max=3.5rem
+        // slope=(3.5−2.5)/70=0.0143 → 1.43vw  intercept=2.5−0.286=2.21rem
         'h1': [
-          'clamp(1.875rem, 1.41rem + 2.32vw, 3.5rem)',
-          { lineHeight: '1.15', letterSpacing: '-0.02em' },
+          'clamp(2.5rem, 2.21rem + 1.43vw, 3.5rem)',
+          { lineHeight: '1.15', letterSpacing: '-0.02em', fontWeight: '700' },
         ],
 
-        // H2  min=1.375rem  max=2.5rem
-        // slope=(2.5−1.375)/70=0.0161 → 1.61vw  intercept=1.375−0.321=1.05rem
+        // H2  min=2rem  max=2.5rem
+        // slope=(2.5−2)/70=0.00714 → 0.71vw  intercept=2−0.143=1.86rem
         'h2': [
-          'clamp(1.375rem, 1.05rem + 1.61vw, 2.5rem)',
-          { lineHeight: '1.2', letterSpacing: '-0.015em' },
+          'clamp(2rem, 1.86rem + 0.71vw, 2.5rem)',
+          { lineHeight: '1.2', letterSpacing: '-0.015em', fontWeight: '700' },
         ],
 
-        // H3  min=1.25rem  max=2rem  (1.25³=1.95rem; was wrongly 1.25rem before)
-        // slope=(2−1.25)/70=0.0107 → 1.07vw  intercept=1.25−0.214=1.04rem
+        // H3  min=1.625rem  max=2rem
+        // slope=(2−1.625)/70=0.00536 → 0.54vw  intercept=1.625−0.107=1.52rem
         'h3': [
-          'clamp(1.25rem, 1.04rem + 1.07vw, 2rem)',
-          { lineHeight: '1.25', letterSpacing: '-0.01em' },
+          'clamp(1.625rem, 1.52rem + 0.54vw, 2rem)',
+          { lineHeight: '1.25', letterSpacing: '-0.01em', fontWeight: '600' },
         ],
 
         // H4  = 1.25² = 1.5625rem — static (narrow fluid range, not worth clamp)
         'h4': [
           '1.5625rem',
-          { lineHeight: '1.3', letterSpacing: '-0.005em' },
+          { lineHeight: '1.3', letterSpacing: '-0.005em', fontWeight: '600' },
         ],
 
         // H5  = 1.25¹ = 1.25rem — static
         'h5': [
           '1.25rem',
-          { lineHeight: '1.35' },
+          { lineHeight: '1.35', fontWeight: '600' },
         ],
 
         // Body Large — intermediate between body and H5
