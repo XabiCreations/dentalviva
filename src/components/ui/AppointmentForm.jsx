@@ -196,11 +196,11 @@ function TimePicker({ selected, onSelect, darkMode }) {
   )
 }
 
-export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', onSubmit }) {
+export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', onSubmit, initialData }) {
   const [openPanel, setOpenPanel] = useState(null)
-  const [treatment, setTreatment] = useState(null)
-  const [date, setDate] = useState(null)
-  const [time, setTime] = useState(null)
+  const [treatment, setTreatment] = useState(initialData?.treatment ?? null)
+  const [date, setDate] = useState(initialData?.date ?? null)
+  const [time, setTime] = useState(initialData?.time ?? null)
 
   const containerRef      = useRef(null)
   const dateBtnRef        = useRef(null)
@@ -379,6 +379,9 @@ export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', 
           {resolvedLabel}
         </button>
       </div>
+      <p className={`text-sm text-center mt-3 ${darkMode ? 'text-white/50' : 'text-muted/70'}`}>
+        Sin compromiso. Cancelación gratuita hasta 24h antes.
+      </p>
     </form>
   )
 }

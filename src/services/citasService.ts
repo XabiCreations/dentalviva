@@ -34,7 +34,6 @@ export interface Cita {
 }
 
 export async function createCita({ userId, tipo, tratamiento, fecha, hora, patientName }: CreateCitaParams) {
-  // Assign a dentist based on treatment, falling back to a random one
   const { data: dentists } = await supabase.from('dentists').select('id, especialidad')
   const dentist = dentists?.find(d =>
     tratamiento && d.especialidad &&

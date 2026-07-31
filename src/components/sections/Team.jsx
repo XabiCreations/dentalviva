@@ -17,7 +17,7 @@ const doctors = [
     name: 'Dr. Carlos Mendoza',
     specialty: 'Implantología',
     years: 23,
-    photo: '/images/equipo-1.webp',
+    photo: '/images/equipo/equipo-1.webp',
     linkedinUrl: 'https://linkedin.com',
   },
   {
@@ -25,7 +25,7 @@ const doctors = [
     name: 'Dra. Ana García',
     specialty: 'Ortodoncia',
     years: 15,
-    photo: '/images/equipo-2.webp',
+    photo: '/images/equipo/equipo-2.webp',
     linkedinUrl: 'https://linkedin.com',
   },
   {
@@ -33,7 +33,7 @@ const doctors = [
     name: 'Dr. Luis Torres',
     specialty: 'Estética Dental',
     years: 18,
-    photo: '/images/equipo-3.webp',
+    photo: '/images/equipo/equipo-3.webp',
     linkedinUrl: 'https://linkedin.com',
   },
 ]

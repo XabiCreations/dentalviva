@@ -6,21 +6,21 @@ import { TestimonialCard } from '../ui/TestimonialCard'
 const testimonials = [
   {
     id: 1,
-    imageUrl: '/images/testimonial-1.webp',
+    imageUrl: '/images/testimonios/testimonial-1.webp',
     patientName: 'María González',
     treatmentType: 'Estética dental',
     text: 'Llevaba años sintiéndome insegura con mi sonrisa. En DentalViva no solo encontré el tratamiento que necesitaba, sino un equipo que me hizo sentir en buenas manos. El resultado fue exactamente lo que buscaba.',
   },
   {
     id: 2,
-    imageUrl: '/images/testimonial-2.webp',
+    imageUrl: '/images/testimonios/testimonial-2.webp',
     patientName: 'Javier Martínez',
     treatmentType: 'Implantes dentales',
     text: 'Después de perder dos dientes en un accidente, pensé que nunca volvería a comer con normalidad. Los implantes de DentalViva me devolvieron la funcionalidad completa. El proceso fue mucho más sencillo de lo que imaginaba.',
   },
   {
     id: 3,
-    imageUrl: '/images/testimonial-3.webp',
+    imageUrl: '/images/testimonios/testimonial-3.webp',
     patientName: 'Laura Sánchez',
     treatmentType: 'Ortodoncia Invisalign',
     text: 'Empecé el tratamiento de Invisalign sin creer del todo que funcionaría. Dieciocho meses después, tengo la sonrisa que siempre quise. La Dra. García me guió en cada paso con mucha profesionalidad y cercanía.',
@@ -96,10 +96,15 @@ export function Testimonials() {
     <section
       ref={sectionRef}
       id="testimonios"
-      className="section-padding bg-surface"
+      className="relative overflow-hidden section-padding bg-surface"
       aria-labelledby="testimonials-heading"
     >
-      <div className="container-xl">
+      {/* Semicircle bg */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[130vw] aspect-square rounded-full bg-[#EDF2F7] pointer-events-none"
+        aria-hidden="true"
+      />
+      <div className="container-xl relative">
         {/* Header */}
         <div className="text-center mb-12 lg:mb-16">
           <p className="eyebrow mb-3">Testimonios de clientes</p>
@@ -119,5 +124,6 @@ export function Testimonials() {
         </div>
       </div>
     </section>
+
   )
 }

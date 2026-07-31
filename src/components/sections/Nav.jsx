@@ -35,6 +35,10 @@ export function Nav() {
 
   const { user, profile } = useAuth()
   const firstName = profile?.full_name?.split(' ')[0] ?? null
+  const nameParts = profile?.full_name?.trim().split(/\s+/) ?? []
+  const initials = nameParts.length >= 2
+    ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
+    : nameParts[0]?.[0]?.toUpperCase() ?? '?'
 
   // Close user menu on outside click (desktop)
   const handleClickOutsideUserMenu = useCallback((e) => {
@@ -115,7 +119,7 @@ export function Nav() {
                     aria-label="Ver historial de citas"
                   >
                     <ClipboardList size={16} strokeWidth={1.5} />
-                    Historial
+                    Mis citas
                   </Link>
 
                   <div ref={userMenuRef} className="relative">
@@ -124,19 +128,12 @@ export function Nav() {
                       className="flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-xl transition-all duration-150 text-text hover:bg-surface"
                     >
                       <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold shrink-0">
-                        {firstName?.[0]?.toUpperCase() ?? '?'}
+                        {initials}
                       </div>
                       {firstName}
                     </button>
                     {userMenuOpen && (
                       <div className="absolute top-[calc(100%+8px)] right-0 bg-white border border-border rounded-xl shadow-card py-1 w-44 z-50">
-                        <Link
-                          to="/portal"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-text hover:bg-surface transition-colors"
-                        >
-                          Mi portal
-                        </Link>
                         <button
                           onClick={handleSignOut}
                           className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-muted hover:bg-surface transition-colors"
@@ -244,24 +241,12 @@ export function Nav() {
         <div className="shrink-0 px-6 pb-10 pt-6 border-t border-border">
           {user && (
             <div className="flex items-center justify-between gap-4">
-              {/* User info */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shrink-0">
-                  {firstName?.[0]?.toUpperCase() ?? '?'}
+                  {initials}
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-text">{firstName}</p>
-                  <Link
-                    to="/portal"
-                    onClick={handleLinkClick}
-                    className="text-xs text-primary hover:underline"
-                  >
-                    Mi portal
-                  </Link>
-                </div>
+                <p className="text-sm font-semibold text-text">{firstName}</p>
               </div>
-
-              {/* Actions */}
               <div className="flex items-center gap-3">
                 <Link
                   to="/historial"
@@ -270,7 +255,7 @@ export function Nav() {
                   aria-label="Ver historial de citas"
                 >
                   <ClipboardList size={16} strokeWidth={1.5} />
-                  Historial
+                  Mis citas
                 </Link>
                 <button
                   onClick={async () => { handleLinkClick(); await signOut() }}

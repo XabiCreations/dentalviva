@@ -46,7 +46,7 @@ gsap.registerPlugin(ScrollTrigger)
 const FLOATING_IMAGES = [
   // TOP-LEFT — medium portrait
   {
-    src: '/images/testimonial-1.webp',
+    src: '/images/testimonios/testimonial-1.webp',
     alt: 'Paciente satisfecha con su nueva sonrisa',
     className: 'w-48 h-64',
     style: { top: '8%', left: '17%' },
@@ -55,7 +55,7 @@ const FLOATING_IMAGES = [
   },
   // TOP-CENTER — small portrait, slightly higher
   {
-    src: '/images/sonrisa-antes.webp',
+    src: '/images/antes-despues/sonrisa-antes.webp',
     alt: 'Paciente antes del tratamiento',
     className: 'w-32 h-44',
     style: { top: '18%', left: 'calc(50% - 4rem)' },
@@ -64,7 +64,7 @@ const FLOATING_IMAGES = [
   },
   // TOP-RIGHT — large, bleeds off right edge
   {
-    src: '/images/blanqueamiento-despues.webp',
+    src: '/images/antes-despues/blanqueamiento-despues.webp',
     alt: 'Resultado de blanqueamiento dental',
     className: 'w-56 h-72',
     style: { top: '6%', right: '10%' },
@@ -73,7 +73,7 @@ const FLOATING_IMAGES = [
   },
   // BOTTOM-FAR-LEFT — very large, top at 57%, bleeds bottom
   {
-    src: '/images/testimonial-3.webp',
+    src: '/images/testimonios/testimonial-3.webp',
     alt: 'Paciente feliz tras visitar la clínica',
     className: 'w-60 h-72',
     style: { top: '57%', left: '4%' },
@@ -82,7 +82,7 @@ const FLOATING_IMAGES = [
   },
   // BOTTOM-CENTER-LEFT — small, anchored near bottom
   {
-    src: '/images/implantes-antes.webp',
+    src: '/images/antes-despues/implantes-antes.webp',
     alt: 'Tratamiento de implantes dentales',
     className: 'w-32 h-44',
     style: { top: '74%', left: '34%' },
@@ -91,7 +91,7 @@ const FLOATING_IMAGES = [
   },
   // BOTTOM-CENTER-RIGHT — medium, slightly higher than center-left
   {
-    src: '/images/sonrisa-despues.webp',
+    src: '/images/antes-despues/sonrisa-despues.webp',
     alt: 'Sonrisa perfecta tras el tratamiento',
     className: 'w-44 h-56',
     style: { top: '67%', right: '29%' },
@@ -100,7 +100,7 @@ const FLOATING_IMAGES = [
   },
   // BOTTOM-FAR-RIGHT — large, top at 57%, bleeds bottom-right
   {
-    src: '/images/testimonial-2.webp',
+    src: '/images/testimonios/testimonial-2.webp',
     alt: 'Paciente sonriendo tras su tratamiento',
     className: 'w-56 h-72',
     style: { top: '57%', right: '8%' },
@@ -116,7 +116,11 @@ export function CTASection() {
   const [submitState, setSubmitState] = useState(null)
 
   const handleFormSubmit = async ({ treatment, date, time, mode }) => {
-    if (!user) { setSubmitState('auth-required'); return }
+    if (!user) {
+      sessionStorage.setItem('pendingAppointment', JSON.stringify({ treatment, date: date.toISOString(), time, mode }))
+      setSubmitState('auth-required')
+      return
+    }
     setSubmitState('saving')
     try {
       await createCita({
@@ -215,7 +219,6 @@ export function CTASection() {
           </p>
           <div className="max-w-xl mx-auto">
             <AppointmentForm darkMode={false} onSubmit={handleFormSubmit} />
-            <p className="text-muted text-sm mt-3">Cancelación gratuita hasta 24h antes.</p>
           </div>
         </div>
       </div>

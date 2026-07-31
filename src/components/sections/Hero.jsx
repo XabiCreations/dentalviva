@@ -57,7 +57,7 @@ function AuthModal({ onClose }) {
   )
 }
 
-const HERO_IMAGE = '/images/background-image.webp'
+const HERO_IMAGE = '/images/backgrounds/background-image.webp'
 
 const AVATAR_IMAGES = [
   'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&q=80',
@@ -66,18 +66,17 @@ const AVATAR_IMAGES = [
   'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&q=80',
 ]
 
-// Replace with actual clinic photos. Each column gets its own set of crops.
 const GALLERY_COL1 = [
-  { src: HERO_IMAGE, pos: '15% 20%' },
-  { src: HERO_IMAGE, pos: '75% 10%' },
-  { src: HERO_IMAGE, pos: '45% 65%' },
-  { src: HERO_IMAGE, pos: '90% 40%' },
+  { src: '/images/pacientes/paciente-sofia.webp',  pos: 'center center' },
+    { src: '/images/pacientes/paciente-carlos.webp', pos: 'center center' },
+  { src: '/images/pacientes/paciente-ana.webp',    pos: 'center center' },
+  { src: '/images/pacientes/paciente-pablo.webp',  pos: 'center center' },
 ]
 const GALLERY_COL2 = [
-  { src: HERO_IMAGE, pos: '60% 25%' },
-  { src: HERO_IMAGE, pos: '20% 75%' },
-  { src: HERO_IMAGE, pos: '85% 55%' },
-  { src: HERO_IMAGE, pos: '35% 10%' },
+  { src: '/images/pacientes/paciente-maria.webp',  pos: 'center center' },
+  { src: '/images/pacientes/paciente-elena.webp',  pos: 'center center' },
+  { src: '/images/pacientes/paciente-laura.webp',  pos: 'center center' },
+  { src: '/images/pacientes/paciente-david.webp',  pos: 'center center' },
 ]
 
 // Uniform height for every image tile (px).
@@ -171,14 +170,14 @@ export function Hero() {
 
     const anim1 = gsap.to(col1, {
       y: -ONE_SET_H,
-      duration: 38,
+      duration: 45,
       ease: 'none',
       repeat: -1,
     })
 
     const anim2 = gsap.to(col2, {
       y: 0,
-      duration: 46,
+      duration: 45,
       ease: 'none',
       repeat: -1,
     })
@@ -200,7 +199,11 @@ export function Hero() {
   }, [prefersReducedMotion])
 
   const handleFormSubmit = async ({ treatment, date, time, mode }) => {
-    if (!user) { setSubmitState('auth-required'); return }
+    if (!user) {
+      sessionStorage.setItem('pendingAppointment', JSON.stringify({ treatment, date: date.toISOString(), time, mode }))
+      setSubmitState('auth-required')
+      return
+    }
     setSubmitState('saving')
     setSubmitError('')
     try {
@@ -242,7 +245,7 @@ export function Hero() {
           </h1>
 
           <p ref={subRef} className="text-muted text-body-lg leading-relaxed mb-8">
-            Reserva tu cita en segundos con nuestros tratamientos personalizados. Sin compromiso. Cancelación gratuita hasta 24h antes.
+            Combinamos las nuevas tecnologías y avances en el mundo odontológico con un ambiente cercano. Reserva tu cita en segundos con nuestros tratamientos personalizados.
           </p>
 
           {/* Social proof */}

@@ -6,27 +6,27 @@ const cases = [
   {
     id: 'implantes',
     label: 'Implantes dentales',
-    before: { url: '/images/implantes-antes.webp', alt: 'Sonrisa antes de los implantes dentales' },
-    after:  { url: '/images/implantes-despues.webp', alt: 'Sonrisa después de los implantes dentales' },
+    before: { url: '/images/antes-despues/implantes-antes.webp', alt: 'Sonrisa antes de los implantes dentales' },
+    after:  { url: '/images/antes-despues/implantes-despues.webp', alt: 'Sonrisa después de los implantes dentales' },
   },
   {
     id: 'blanqueamiento',
     label: 'Blanqueamiento dental',
-    before: { url: '/images/blanqueamiento-antes.webp', alt: 'Sonrisa antes del blanqueamiento dental' },
-    after:  { url: '/images/blanqueamiento-despues.webp', alt: 'Sonrisa después del blanqueamiento dental' },
+    before: { url: '/images/antes-despues/blanqueamiento-antes.webp', alt: 'Sonrisa antes del blanqueamiento dental' },
+    after:  { url: '/images/antes-despues/blanqueamiento-despues.webp', alt: 'Sonrisa después del blanqueamiento dental' },
     objectPosition: '25% center',
   },
   {
     id: 'sonrisa',
     label: 'Estética dental',
-    before: { url: '/images/sonrisa-antes.webp', alt: 'Sonrisa antes del tratamiento estético' },
-    after:  { url: '/images/sonrisa-despues.webp', alt: 'Sonrisa después del tratamiento estético' },
+    before: { url: '/images/antes-despues/sonrisa-antes.webp', alt: 'Sonrisa antes del tratamiento estético' },
+    after:  { url: '/images/antes-despues/sonrisa-despues.webp', alt: 'Sonrisa después del tratamiento estético' },
   },
   {
     id: 'ortodoncia',
     label: 'Ortodoncia',
-    before: { url: '/images/ortodoncia-antes.webp', alt: 'Sonrisa antes del tratamiento de ortodoncia' },
-    after:  { url: '/images/ortodoncia-despues.webp', alt: 'Sonrisa después del tratamiento de ortodoncia' },
+    before: { url: '/images/antes-despues/ortodoncia-antes.webp', alt: 'Sonrisa antes del tratamiento de ortodoncia' },
+    after:  { url: '/images/antes-despues/ortodoncia-despues.webp', alt: 'Sonrisa después del tratamiento de ortodoncia' },
   },
 ]
 

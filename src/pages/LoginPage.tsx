@@ -33,7 +33,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await signIn({ identifier: identifier.trim(), password })
-      navigate('/portal', { replace: true })
+      navigate('/', { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión.')
     } finally {
@@ -48,7 +48,7 @@ export default function LoginPage() {
         {/* Dental image */}
         <div className="flex-1 relative">
           <img
-            src="/images/background-image.webp"
+            src="/images/backgrounds/background-image.webp"
             alt="Clínica dental DentalViva"
             className="absolute inset-0 w-full h-full object-cover object-[80%_center]"
           />

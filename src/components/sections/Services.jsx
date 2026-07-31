@@ -15,7 +15,7 @@ const services = [
     title: 'Blanqueamiento dental',
     description:
       'Recupera el blanco natural de tus dientes. Resultados visibles desde la primera sesión.',
-    image: '/images/blanqueamiento dental.webp',
+    image: '/images/servicios/blanqueamiento.webp',
     imageAlt: 'Tratamiento de blanqueamiento dental profesional',
     details: [
       {
@@ -33,7 +33,7 @@ const services = [
     title: 'Implantes dentales',
     description:
       'Recupera un diente perdido. Titanio que se integra con tu mandíbula, duradero y natural.',
-    image: '/images/implante.webp',
+    image: '/images/servicios/implante.webp',
     imageAlt: 'Implante dental de titanio',
     details: [
       {
@@ -51,7 +51,7 @@ const services = [
     title: 'Transforma tu sonrisa',
     description:
       'Diseña la sonrisa que siempre has querido. Carillas, coronas y tratamientos personalizados.',
-    image: '/images/sonrisa.webp',
+    image: '/images/servicios/sonrisa.webp',
     imageAlt: 'Paciente con sonrisa transformada',
     details: [
       {
@@ -69,7 +69,7 @@ const services = [
     title: 'Ortodoncia',
     description:
       'Corrige la alineación de tus dientes. Brackets o alineadores: evaluamos tu caso.',
-    image: '/images/ortodoncia.webp',
+    image: '/images/servicios/ortodoncia.webp',
     imageAlt: 'Tratamiento de ortodoncia con brackets',
     details: [
       {
@@ -87,7 +87,7 @@ const services = [
     title: 'Odontología general',
     description:
       'Tu salud bucal, protegida. Revisiones, limpiezas y diagnóstico temprano en cada visita.',
-    image: '/images/odontologia.webp',
+    image: '/images/servicios/odontologia.webp',
     imageAlt: 'Revisión dental general',
     details: [
       {
