@@ -43,31 +43,31 @@ export default {
       fontSize: {
         // Display  min=2.25rem  max=5rem
         // slope=(5−2.25)/70=0.0393 → 3.93vw  intercept=2.25−0.786=1.46rem
-        // Display  min=2.75rem  max=5rem
-        // slope=(5−2.75)/70=0.0321 → 3.21vw  intercept=2.75−0.643=2.11rem
+        // Display  min=2.5rem  max=5rem
+        // slope=(5−2.5)/70=0.0357 → 3.57vw  intercept=2.5−0.714=1.79rem
         'display': [
-          'clamp(2.75rem, 2.11rem + 3.21vw, 5rem)',
+          'clamp(2.5rem, 1.79rem + 3.57vw, 5rem)',
           { lineHeight: '1.05', letterSpacing: '-0.03em', fontWeight: '700' },
         ],
 
-        // H1  min=2.5rem  max=3.5rem
-        // slope=(3.5−2.5)/70=0.0143 → 1.43vw  intercept=2.5−0.286=2.21rem
+        // H1  min=2.2rem  max=3.5rem
+        // slope=(3.5−2.2)/70=0.0186 → 1.86vw  intercept=2.2−0.371=1.83rem
         'h1': [
-          'clamp(2.5rem, 2.21rem + 1.43vw, 3.5rem)',
+          'clamp(2.2rem, 1.83rem + 1.86vw, 3.5rem)',
           { lineHeight: '1.15', letterSpacing: '-0.02em', fontWeight: '700' },
         ],
 
-        // H2  min=2rem  max=2.5rem
-        // slope=(2.5−2)/70=0.00714 → 0.71vw  intercept=2−0.143=1.86rem
+        // H2  min=1.75rem  max=2.5rem
+        // slope=(2.5−1.75)/70=0.0107 → 1.07vw  intercept=1.75−0.214=1.54rem
         'h2': [
-          'clamp(2rem, 1.86rem + 0.71vw, 2.5rem)',
+          'clamp(1.75rem, 1.54rem + 1.07vw, 2.5rem)',
           { lineHeight: '1.2', letterSpacing: '-0.015em', fontWeight: '700' },
         ],
 
-        // H3  min=1.625rem  max=2rem
-        // slope=(2−1.625)/70=0.00536 → 0.54vw  intercept=1.625−0.107=1.52rem
+        // H3  min=1.5rem  max=2rem
+        // slope=(2−1.5)/70=0.00714 → 0.71vw  intercept=1.5−0.143=1.36rem
         'h3': [
-          'clamp(1.625rem, 1.52rem + 0.54vw, 2rem)',
+          'clamp(1.5rem, 1.36rem + 0.71vw, 2rem)',
           { lineHeight: '1.25', letterSpacing: '-0.01em', fontWeight: '600' },
         ],
 
