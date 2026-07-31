@@ -101,7 +101,7 @@ export function Testimonials() {
     >
       {/* Semicircle bg */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[130vw] aspect-square rounded-full bg-[#EDF2F7] pointer-events-none"
+        className="absolute bottom-1/2 lg:bottom-auto lg:top-1/2 left-1/2 -translate-x-1/2 w-[130vw] aspect-square rounded-full bg-[#EDF2F7] pointer-events-none"
         aria-hidden="true"
       />
       <div className="container-xl relative">
