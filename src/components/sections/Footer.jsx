@@ -58,7 +58,7 @@ function FooterLogo() {
           fill="white"
         />
       </svg>
-      <span className="text-xl font-bold text-white tracking-tight">DentalViva</span>
+      <span className="text-body-lg font-bold text-white tracking-tight">DentalViva</span>
     </div>
   )
 }
@@ -78,7 +78,7 @@ export function Footer() {
             <a href="#" aria-label="DentalViva — ir al inicio" className="inline-block mb-4">
               <FooterLogo />
             </a>
-            <p className="text-muted text-sm leading-relaxed mb-6">
+            <p className="text-muted text-body-sm leading-relaxed mb-6">
               Clínica dental en Madrid. Equipo especializado, tecnología de precisión
               y 15 años de trayectoria.
             </p>
@@ -107,7 +107,7 @@ export function Footer() {
 
           {/* Col 2: Navigation */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white/60 mb-4">
+            <h3 className="text-body-sm font-semibold uppercase tracking-wider text-white/60 mb-4">
               Navegación
             </h3>
             <ul className="flex flex-col gap-2.5" role="list">
@@ -116,7 +116,7 @@ export function Footer() {
                   <a
                     href={link.href}
                     className="
-                      text-muted text-sm hover:text-white
+                      text-muted text-body-sm hover:text-white
                       transition-colors duration-150
                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded
                     "
@@ -130,7 +130,7 @@ export function Footer() {
 
           {/* Col 3: Contact */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white/60 mb-4">
+            <h3 className="text-body-sm font-semibold uppercase tracking-wider text-white/60 mb-4">
               Contacto
             </h3>
             <ul className="flex flex-col gap-4" role="list">
@@ -144,13 +144,13 @@ export function Footer() {
                   {href ? (
                     <a
                       href={href}
-                      className="text-muted text-sm hover:text-white transition-colors"
+                      className="text-muted text-body-sm hover:text-white transition-colors"
                       aria-label={`${label}: ${text}`}
                     >
                       {text}
                     </a>
                   ) : (
-                    <span className="text-muted text-sm">{text}</span>
+                    <span className="text-muted text-body-sm">{text}</span>
                   )}
                 </li>
               ))}
@@ -159,19 +159,19 @@ export function Footer() {
 
           {/* Col 4: Hours */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white/60 mb-4">
+            <h3 className="text-body-sm font-semibold uppercase tracking-wider text-white/60 mb-4">
               Horario
             </h3>
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-4 h-4 text-primary shrink-0" strokeWidth={1.5} aria-hidden="true" />
-              <span className="text-muted text-sm">Urgencias: atención 24 h</span>
+              <span className="text-muted text-body-sm">Urgencias: atención 24 h</span>
             </div>
             <ul className="flex flex-col gap-2.5" role="list">
               {businessHours.map(({ days, hours }) => (
                 <li key={days} className="flex items-center justify-between gap-4">
-                  <span className="text-muted text-sm">{days}</span>
+                  <span className="text-muted text-body-sm">{days}</span>
                   <span
-                    className={`text-sm font-medium ${
+                    className={`text-body-sm font-medium ${
                       hours === 'Cerrado' ? 'text-white/30' : 'text-white'
                     }`}
                   >
@@ -185,25 +185,25 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-muted text-sm">
+          <p className="text-muted text-body-sm">
             © 2026 DentalViva. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-6">
             <a
               href="#"
-              className="text-muted text-sm hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+              className="text-muted text-body-sm hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
             >
               Política de privacidad
             </a>
             <a
               href="#"
-              className="text-muted text-sm hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+              className="text-muted text-body-sm hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
             >
               Aviso legal
             </a>
             <a
               href="#"
-              className="text-muted text-sm hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+              className="text-muted text-body-sm hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
             >
               Cookies
             </a>

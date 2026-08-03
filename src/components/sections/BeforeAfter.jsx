@@ -160,7 +160,7 @@ export function BeforeAfter() {
                       onMouseEnter={() => setHoveredTab(i)}
                       onMouseLeave={() => setHoveredTab(null)}
                       className={[
-                        'flex items-center gap-2 px-5 py-3.5 lg:px-6 lg:py-4 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 snap-center shrink-0',
+                        'flex items-center gap-2 px-5 py-3.5 lg:px-6 lg:py-4 rounded-full text-body-sm font-medium whitespace-nowrap transition-all duration-200 snap-center shrink-0',
                         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
                         activeTab === i
                           ? 'bg-primary text-white'

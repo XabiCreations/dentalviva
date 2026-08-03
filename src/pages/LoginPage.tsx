@@ -64,12 +64,12 @@ export default function LoginPage() {
                 />
               </svg>
             </div>
-            <span className="text-white text-xl font-bold">DentalViva</span>
+            <span className="text-white text-body-lg font-bold">DentalViva</span>
           </div>
           <div className="border-l-4 border-white/30 pl-5">
-            <p className="text-white/70 text-sm mb-1">Bienvenido a</p>
-            <h2 className="text-white text-2xl font-bold mb-2">Portal de Pacientes</h2>
-            <p className="text-white/70 text-sm leading-relaxed">
+            <p className="text-white/70 text-body-sm mb-1">Bienvenido a</p>
+            <h2 className="text-white text-h5 font-bold mb-2">Portal de Pacientes</h2>
+            <p className="text-white/70 text-body-sm leading-relaxed">
               Accede a tu historial, citas y resultados de tratamiento desde un solo lugar.
             </p>
           </div>
@@ -82,22 +82,22 @@ export default function LoginPage() {
           {/* Logo mobile */}
           <Link to="/" className="lg:hidden flex items-center gap-2 mb-8">
             <DentalLogo />
-            <span className="text-lg font-bold text-text">DentalViva</span>
+            <span className="text-body-lg font-bold text-text">DentalViva</span>
           </Link>
 
           {/* Logo desktop */}
           <Link to="/" className="hidden lg:flex items-center gap-2 mb-8">
             <DentalLogo />
-            <span className="text-lg font-bold text-text">DentalViva</span>
+            <span className="text-body-lg font-bold text-text">DentalViva</span>
           </Link>
 
-          <h1 className="text-3xl font-bold text-text mb-1">Acceder</h1>
-          <p className="text-muted text-sm mb-8">Introduce tus datos para acceder a tu cuenta</p>
+          <h1 className="text-h4 font-bold text-text mb-1">Acceder</h1>
+          <p className="text-muted text-body-sm mb-8">Introduce tus datos para acceder a tu cuenta</p>
 
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
             {/* Identifier */}
             <div>
-              <label htmlFor="identifier" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="identifier" className="block text-body-sm font-medium text-text mb-1.5">
                 Correo electrónico o DNI
               </label>
               <input
@@ -107,14 +107,14 @@ export default function LoginPage() {
                 value={identifier}
                 onChange={e => setIdentifier(e.target.value)}
                 placeholder="tuemail@ejemplo.com o 12345678A"
-                className="w-full px-4 py-3 rounded-xl border border-border text-text text-sm placeholder:text-muted/50
+                className="w-full px-4 py-3 rounded-xl border border-border text-text text-body-sm placeholder:text-muted/50
                   focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="password" className="block text-body-sm font-medium text-text mb-1.5">
                 Contraseña
               </label>
               <div className="relative">
@@ -125,7 +125,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="Introduce tu contraseña"
-                  className="w-full px-4 py-3 pr-12 rounded-xl border border-border text-text text-sm placeholder:text-muted/50
+                  className="w-full px-4 py-3 pr-12 rounded-xl border border-border text-text text-body-sm placeholder:text-muted/50
                     focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 <button
@@ -138,13 +138,13 @@ export default function LoginPage() {
                 </button>
               </div>
               <div className="flex justify-end mt-1.5">
-                <span className="text-xs text-primary cursor-not-allowed">¿Olvidaste tu contraseña?</span>
+                <span className="text-body-sm text-primary cursor-not-allowed">¿Olvidaste tu contraseña?</span>
               </div>
             </div>
 
             {/* Error */}
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+              <div className="bg-red-50 border border-red-200 text-red-700 text-body-sm px-4 py-3 rounded-xl">
                 {error}
               </div>
             )}
@@ -164,7 +164,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-sm text-muted text-center">
+          <p className="mt-6 text-body-sm text-muted text-center">
             ¿No tienes cuenta?{' '}
             <Link to="/registro" className="text-primary font-semibold hover:underline">
               Regístrate
@@ -172,7 +172,7 @@ export default function LoginPage() {
           </p>
 
           <div className="mt-8">
-            <Link to="/" className="text-xs text-muted hover:text-text transition-colors">
+            <Link to="/" className="text-body-sm text-muted hover:text-text transition-colors">
               ← Volver a la web
             </Link>
           </div>

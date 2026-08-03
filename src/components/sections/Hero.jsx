@@ -41,13 +41,13 @@ function AuthModal({ onClose }) {
         <div className="flex flex-col gap-3">
           <Link
             to="/login"
-            className="flex items-center justify-center px-6 py-3 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 transition-colors"
+            className="flex items-center justify-center px-6 py-3 bg-primary text-white rounded-xl text-body-sm font-semibold hover:bg-primary/90 transition-colors"
           >
             Iniciar sesión
           </Link>
           <Link
             to="/registro"
-            className="flex items-center justify-center px-6 py-3 border border-border text-text rounded-xl text-sm font-medium hover:bg-surface transition-colors"
+            className="flex items-center justify-center px-6 py-3 border border-border text-text rounded-xl text-body-sm font-medium hover:bg-surface transition-colors"
           >
             Crear cuenta
           </Link>
@@ -57,13 +57,44 @@ function AuthModal({ onClose }) {
   )
 }
 
+function SocialProofBadge({ socialRef, counterRef, prefersReducedMotion }) {
+  return (
+    <div
+      ref={socialRef}
+      className="hidden lg:flex absolute left-full ml-4 top-1/2 -translate-y-1/2 z-20 items-center gap-4 bg-white rounded-2xl border border-[#ebebeb] shadow-sm px-3 py-4 rotate-0"
+      aria-label="12.000 pacientes satisfechos"
+    >
+      <div className="flex items-center shrink-0" aria-hidden="true">
+        {AVATAR_IMAGES.slice(0, 3).map((src, i) => (
+          <div
+            key={i}
+            className="w-12 h-12 rounded-full border-[3px] border-white overflow-hidden bg-surface"
+            style={{ marginLeft: i === 0 ? 0 : '-0.875rem', zIndex: 3 - i }}
+          >
+            <img src={src} alt="" className="w-full h-full object-cover" />
+          </div>
+        ))}
+      </div>
+      <div>
+        <p
+          ref={counterRef}
+          className="text-h5 font-bold text-text leading-none"
+          aria-live="polite"
+        >
+          {prefersReducedMotion ? '+750' : '+0'}
+        </p>
+        <p className="text-body-sm text-muted mt-0.5 whitespace-nowrap font-semibold tracking-normal">Pacientes mensuales</p>
+      </div>
+    </div>
+  )
+}
+
 const HERO_IMAGE = '/images/backgrounds/background-image.webp'
 
 const AVATAR_IMAGES = [
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&q=80',
-  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&q=80',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&q=80',
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&q=80',
+  '/images/social-proof/social-proof-1.webp',
+  '/images/social-proof/social-proof-2.webp',
+  '/images/social-proof/social-proof-3.webp',
 ]
 
 const GALLERY_COL1 = [
@@ -85,13 +116,12 @@ const IMAGE_H = 540
 const IMAGE_GAP = 10
 // Total height of one full image set. GSAP shifts each column by exactly this
 // amount per cycle so the reset is visually invisible (seamless loop).
-const ONE_SET_H = GALLERY_COL1.length * (IMAGE_H + IMAGE_GAP) // 4 × 430 = 1720 px
+const ONE_SET_H = GALLERY_COL1.length * (IMAGE_H + IMAGE_GAP)
 
-const GALLERY_MOBILE = [...GALLERY_COL1, ...GALLERY_COL2]
-const IMG_W_M   = 200
-const IMG_H_M   = 160
-const IMG_GAP_M = 10
-const ONE_SET_W_M = GALLERY_MOBILE.length * (IMG_W_M + IMG_GAP_M)
+const IMAGE_W_M   = 180
+const IMAGE_H_M   = 220
+const IMAGE_GAP_M = 8
+const ONE_SET_W_M = GALLERY_COL1.length * (IMAGE_W_M + IMAGE_GAP_M)
 
 export function Hero() {
   const [submitState, setSubmitState] = useState(null)
@@ -104,9 +134,10 @@ export function Hero() {
   const formRef       = useRef(null)
   const socialRef     = useRef(null)
   const counterRef    = useRef(null)
-  const col1Ref       = useRef(null) // scrolls UP
-  const col2Ref       = useRef(null) // scrolls DOWN
-  const colMobileRef  = useRef(null) // scrolls LEFT (mobile)
+  const col1Ref        = useRef(null) // desktop col1 scrolls UP
+  const col2Ref        = useRef(null) // desktop col2 scrolls DOWN
+  const colMobile1Ref  = useRef(null) // mobile col1 scrolls UP
+  const colMobile2Ref  = useRef(null) // mobile col2 scrolls DOWN
 
   const prefersReducedMotion =
     typeof window !== 'undefined'
@@ -134,12 +165,12 @@ export function Hero() {
       if (counterRef.current) {
         const obj = { val: 0 }
         tl.to(obj, {
-          val: 12,
+          val: 750,
           duration: 2,
           ease: 'power2.out',
           onUpdate: () => {
             if (counterRef.current)
-              counterRef.current.textContent = Math.round(obj.val) + 'K+'
+              counterRef.current.textContent = '+' + Math.round(obj.val)
           },
         }, '-=1.5')
       }
@@ -185,17 +216,18 @@ export function Hero() {
     return () => { anim1.kill(); anim2.kill() }
   }, [prefersReducedMotion])
 
-  // ── Mobile horizontal gallery ───────────────────────────────────────────────
+  // ── Mobile horizontal rows (two rows, opposite directions) ─────────────────
   useEffect(() => {
-    const col = colMobileRef.current
-    if (!col || prefersReducedMotion) return
-    const anim = gsap.to(col, {
-      x: -ONE_SET_W_M,
-      duration: 40,
-      ease: 'none',
-      repeat: -1,
-    })
-    return () => anim.kill()
+    const row1 = colMobile1Ref.current
+    const row2 = colMobile2Ref.current
+    if (!row1 || !row2 || prefersReducedMotion) return
+
+    gsap.set(row2, { x: -ONE_SET_W_M })
+
+    const anim1 = gsap.to(row1, { x: -ONE_SET_W_M, duration: 30, ease: 'none', repeat: -1 })
+    const anim2 = gsap.to(row2, { x: 0,            duration: 30, ease: 'none', repeat: -1 })
+
+    return () => { anim1.kill(); anim2.kill() }
   }, [prefersReducedMotion])
 
   const handleFormSubmit = async ({ treatment, date, time, mode }) => {
@@ -227,7 +259,7 @@ export function Hero() {
         clipped at the top and bottom edges of the section. */}
     <section
       ref={sectionRef}
-      className="min-h-screen lg:h-screen overflow-hidden flex flex-col lg:flex-row"
+      className="relative min-h-screen lg:h-screen overflow-hidden flex flex-col lg:flex-row"
       aria-label="Sección principal"
     >
       {/* ── Left column — text + form ────────────────────────────────────── */}
@@ -241,56 +273,32 @@ export function Hero() {
             <span className="hero-word inline-block">que</span>{' '}
             <span className="hero-word inline-block">siempre</span>{' '}
             <span className="hero-word inline-block">has</span>{' '}
-            <span className="hero-word inline-block">querido</span>
+            <span className="hero-word relative inline-block">querido
+              <SocialProofBadge socialRef={socialRef} counterRef={counterRef} prefersReducedMotion={prefersReducedMotion} />
+            </span>
           </h1>
 
           <p ref={subRef} className="text-muted text-body-lg leading-relaxed mb-8">
             Combinamos las nuevas tecnologías y avances en el mundo odontológico con un ambiente cercano. Reserva tu cita en segundos con nuestros tratamientos personalizados.
           </p>
 
-          {/* Social proof */}
-          <div ref={socialRef} className="flex items-center gap-4 mb-8">
-            <div className="flex items-center shrink-0" aria-hidden="true">
-              {AVATAR_IMAGES.slice(0, 3).map((src, i) => (
-                <div
-                  key={i}
-                  className="w-12 h-12 rounded-full border-[3px] border-white overflow-hidden bg-surface"
-                  style={{ marginLeft: i === 0 ? 0 : '-0.875rem', zIndex: 3 - i }}
-                >
-                  <img src={src} alt="" className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-            <div>
-              <p
-                ref={counterRef}
-                className="text-2xl font-bold text-text leading-none"
-                aria-live="polite"
-                aria-label="12.000 pacientes satisfechos"
-              >
-                {prefersReducedMotion ? '12K+' : '0K+'}
-              </p>
-              <p className="text-sm text-muted mt-0.5">Pacientes satisfechos</p>
-            </div>
-          </div>
-
           <div ref={formRef} id="reservar">
             <AppointmentForm onSubmit={handleFormSubmit} />
 
             {submitState === 'saving' && (
-              <div className="mt-3 flex items-center gap-2 text-muted text-sm">
+              <div className="mt-3 flex items-center gap-2 text-muted text-body-sm">
                 <span className="w-4 h-4 rounded-full border-2 border-primary/50 border-t-transparent animate-spin" />
                 Guardando tu cita...
               </div>
             )}
             {submitState === 'success' && (
-              <div className="mt-3 flex items-center gap-2 text-sm bg-primary-light border border-primary/20 rounded-xl px-4 py-3">
+              <div className="mt-3 flex items-center gap-2 text-body-sm bg-primary-light border border-primary/20 rounded-xl px-4 py-3">
                 <CheckCircle size={16} className="text-primary shrink-0" />
                 <span className="text-text">Tu cita está reservada. Nos pondremos en contacto contigo para confirmar los detalles.</span>
               </div>
             )}
             {submitState === 'error' && (
-              <div className="mt-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+              <div className="mt-3 text-body-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
                 {submitError}
               </div>
             )}
@@ -299,20 +307,39 @@ export function Hero() {
         </div>
       </div>
 
-      {/* ── Mobile horizontal gallery ────────────────────────────────────── */}
+      {/* ── Mobile horizontal rows (2 filas, direcciones opuestas) ─────── */}
       <div className="relative w-full overflow-hidden pb-10 lg:hidden" aria-hidden="true">
-        <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-        <div ref={colMobileRef} className="flex gap-[10px]">
-          {[...GALLERY_MOBILE, ...GALLERY_MOBILE].map((img, i) => (
-            <div
-              key={i}
-              className="shrink-0 overflow-hidden rounded-2xl bg-surface"
-              style={{ width: IMG_W_M, height: IMG_H_M }}
-            >
-              <img src={img.src} alt="" className="w-full h-full object-cover" style={{ objectPosition: img.pos }} />
+        <div className="absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        <div className="flex flex-col gap-[8px]">
+          {/* Fila 1 — izquierda */}
+          <div className="overflow-hidden">
+            <div ref={colMobile1Ref} className="flex gap-[8px]">
+              {[...GALLERY_COL1, ...GALLERY_COL1].map((img, i) => (
+                <div
+                  key={i}
+                  className="shrink-0 overflow-hidden rounded-2xl bg-surface"
+                  style={{ width: IMAGE_W_M, height: IMAGE_H_M }}
+                >
+                  <img src={img.src} alt="" className="w-full h-full object-cover" style={{ objectPosition: img.pos }} />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          {/* Fila 2 — derecha */}
+          <div className="overflow-hidden">
+            <div ref={colMobile2Ref} className="flex gap-[8px]">
+              {[...GALLERY_COL2, ...GALLERY_COL2].map((img, i) => (
+                <div
+                  key={i}
+                  className="shrink-0 overflow-hidden rounded-2xl bg-surface"
+                  style={{ width: IMAGE_W_M, height: IMAGE_H_M }}
+                >
+                  <img src={img.src} alt="" className="w-full h-full object-cover" style={{ objectPosition: img.pos }} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

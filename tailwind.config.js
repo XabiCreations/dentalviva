@@ -41,63 +41,66 @@ export default {
       //   slope     = (max − min) / 70
       //
       fontSize: {
-        // Display  min=2.25rem  max=5rem
-        // slope=(5−2.25)/70=0.0393 → 3.93vw  intercept=2.25−0.786=1.46rem
-        // Display  min=2.5rem  max=5rem
-        // slope=(5−2.5)/70=0.0357 → 3.57vw  intercept=2.5−0.714=1.79rem
+        // Major Third (×1.25) scale — base 16px = 1rem
+        //
+        // minVW=320px(20rem)  maxVW=1440px(90rem)  span=70rem
+        // slope=(max−min)/70   intercept=min−slope×20
+
+        // Display — kept separate for hero/decorative use
+        // min=2.5rem  max=5rem  slope=0.0357→3.57vw  intercept=1.79rem
         'display': [
           'clamp(2.5rem, 1.79rem + 3.57vw, 5rem)',
           { lineHeight: '1.05', letterSpacing: '-0.03em', fontWeight: '700' },
         ],
 
-        // H1  min=2.2rem  max=3.5rem
-        // slope=(3.5−2.2)/70=0.0186 → 1.86vw  intercept=2.2−0.371=1.83rem
+        // H1 = 1.25^6 = 3.815rem
+        // min=2.3rem  slope=(3.815−2.3)/70=0.0216→2.16vw  intercept=1.87rem
         'h1': [
-          'clamp(2.2rem, 1.83rem + 1.86vw, 3.5rem)',
+          'clamp(2.3rem, 1.87rem + 2.16vw, 3.815rem)',
+          { lineHeight: '1.1', letterSpacing: '-0.025em', fontWeight: '700' },
+        ],
+
+        // H2 = 1.25^5 = 3.052rem
+        // min=1.9rem  slope=(3.052−1.9)/70=0.0165→1.65vw  intercept=1.57rem
+        'h2': [
+          'clamp(1.9rem, 1.57rem + 1.65vw, 3.052rem)',
           { lineHeight: '1.15', letterSpacing: '-0.02em', fontWeight: '700' },
         ],
 
-        // H2  min=1.75rem  max=2.5rem
-        // slope=(2.5−1.75)/70=0.0107 → 1.07vw  intercept=1.75−0.214=1.54rem
-        'h2': [
-          'clamp(1.75rem, 1.54rem + 1.07vw, 2.5rem)',
-          { lineHeight: '1.2', letterSpacing: '-0.015em', fontWeight: '700' },
+        // H3 = 1.25^4 = 2.441rem
+        // min=1.5rem  slope=(2.441−1.5)/70=0.0134→1.34vw  intercept=1.23rem
+        'h3': [
+          '2.2rem',
+          { lineHeight: '1.2', letterSpacing: '-0.015em', fontWeight: '600' },
         ],
 
-        // H3  min=1.5rem  max=2rem
-        // slope=(2−1.5)/70=0.00714 → 0.71vw  intercept=1.5−0.143=1.36rem
-        'h3': [
-          'clamp(1.5rem, 1.36rem + 0.71vw, 2rem)',
+        // H4 = 1.25^3 = 1.953rem — static
+        'h4': [
+          '1.953rem',
           { lineHeight: '1.25', letterSpacing: '-0.01em', fontWeight: '600' },
         ],
 
-        // H4  = 1.25² = 1.5625rem — static (narrow fluid range, not worth clamp)
-        'h4': [
+        // H5 = 1.25^2 = 1.5625rem — static
+        'h5': [
           '1.5625rem',
           { lineHeight: '1.3', letterSpacing: '-0.005em', fontWeight: '600' },
         ],
 
-        // H5  = 1.25¹ = 1.25rem — static
-        'h5': [
-          '1.25rem',
-          { lineHeight: '1.35', fontWeight: '600' },
-        ],
-
-        // Body Large — intermediate between body and H5
+        // Body Large = 1.25^1 = 1.25rem
         'body-lg': [
-          '1.125rem',
+          '1.25rem',
           { lineHeight: '1.65' },
         ],
 
-        // Body — Tailwind base (1rem) aliased for explicit token usage
+        // Body = 1rem (base)
         'body': [
           '1rem',
           { lineHeight: '1.6' },
         ],
 
-        // Body Small — practical small text (Tailwind's text-sm)
+        // Body Small = 0.9rem
         'body-sm': [
-          '0.875rem',
+          '0.9rem',
           { lineHeight: '1.6' },
         ],
 
@@ -108,8 +111,7 @@ export default {
         ],
 
         // Stat — large decorative numbers (WhyChooseUs section)
-        // min=3.5rem(56px)  max=4.5rem(72px)
-        // slope=(4.5−3.5)/70=0.0143 → 1.43vw  intercept=3.5−0.286=3.21rem
+        // min=3.5rem  max=4.5rem  slope=0.0143→1.43vw  intercept=3.21rem
         'stat': [
           'clamp(3.5rem, 3.21rem + 1.43vw, 4.5rem)',
           { lineHeight: '1', letterSpacing: '-0.04em' },

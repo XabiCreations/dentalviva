@@ -180,7 +180,8 @@
 
   /* Eyebrow label — overline above section headings */
   .eyebrow {
-    @apply text-sm font-medium text-primary;
+    @apply font-medium text-primary;
+    font-size: 1.2rem;
   }
   .eyebrow::before,
   .eyebrow::after {

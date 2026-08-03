@@ -87,7 +87,7 @@ function CalendarMonth({ year, month, today, selected, onSelect }) {
     <div className="flex-1 min-w-0">
       <div className="grid grid-cols-7 gap-y-1">
         {DAYS.map((d) => (
-          <div key={d} className="text-center text-xs text-muted font-medium py-1">
+          <div key={d} className="text-center text-body-sm text-muted font-medium py-1">
             {d}
           </div>
         ))}
@@ -105,7 +105,7 @@ function CalendarMonth({ year, month, today, selected, onSelect }) {
               disabled={disabled}
               onClick={() => onSelect(date)}
               className={[
-                'mx-auto w-9 h-9 flex items-center justify-center rounded-full text-sm transition-colors duration-150',
+                'mx-auto w-9 h-9 flex items-center justify-center rounded-full text-body-sm transition-colors duration-150',
                 disabled ? 'text-muted/30 cursor-not-allowed' : 'hover:bg-primary-light hover:text-primary cursor-pointer',
                 isToday && !isSelected && !disabled ? 'border-2 border-primary text-primary font-semibold' : '',
                 isSelected ? 'bg-primary text-white font-semibold' : '',
@@ -146,7 +146,7 @@ function DatePicker({ selected, onApply, darkMode }) {
         <button type="button" onClick={prevMonth} className="p-1.5 rounded-full hover:bg-surface transition-colors shrink-0" aria-label="Mes anterior">
           <ChevronLeft size={16} className="text-text" />
         </button>
-        <p className="flex-1 text-center font-semibold text-text text-sm capitalize">
+        <p className="flex-1 text-center font-semibold text-text text-body-sm capitalize">
           {MONTHS[viewMonth]} {viewYear}
         </p>
         <button type="button" onClick={nextMonth} className="p-1.5 rounded-full hover:bg-surface transition-colors shrink-0" aria-label="Mes siguiente">
@@ -182,7 +182,7 @@ function TimePicker({ selected, onSelect, darkMode }) {
             data-slot={slot}
             onClick={() => onSelect(slot)}
             className={[
-              'w-full text-left px-4 py-2 text-sm transition-colors duration-100',
+              'w-full text-left px-4 py-2 text-body-sm transition-colors duration-100',
               selected === slot
                 ? 'bg-primary-light text-primary font-semibold'
                 : darkMode ? 'text-white hover:bg-white/10' : 'text-text hover:bg-surface',
@@ -264,11 +264,11 @@ export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', 
           >
             <Calendar size={18} className="shrink-0 text-muted lg:hidden" aria-hidden="true" />
             <div className="whitespace-nowrap relative">
-              <p className="text-xs font-medium mb-0.5 opacity-0 pointer-events-none select-none" aria-hidden="true">Fecha de la cita</p>
-              <p className="text-sm font-semibold opacity-0 pointer-events-none select-none" aria-hidden="true">28 septiembre 2026</p>
+              <p className="text-body-sm font-medium mb-0.5 opacity-0 pointer-events-none select-none" aria-hidden="true">Fecha de la cita</p>
+              <p className="text-body-sm font-semibold opacity-0 pointer-events-none select-none" aria-hidden="true">28 septiembre 2026</p>
               <div className="absolute inset-0 flex flex-col justify-center">
-                <p className={`text-xs font-medium mb-0.5 ${labelColor}`}>Fecha de la cita</p>
-                <p className={`text-sm font-semibold ${formattedDate ? valueColor : placeholderColor}`}>
+                <p className={`text-body-sm font-medium mb-0.5 ${labelColor}`}>Fecha de la cita</p>
+                <p className={`text-body-sm font-semibold ${formattedDate ? valueColor : placeholderColor}`}>
                   {formattedDate ?? 'Añadir fecha'}
                 </p>
               </div>
@@ -299,11 +299,11 @@ export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', 
           >
             <Clock size={18} className="shrink-0 text-muted lg:hidden" aria-hidden="true" />
             <div className="whitespace-nowrap relative">
-              <p className="text-xs font-medium mb-0.5 opacity-0 pointer-events-none select-none" aria-hidden="true">Hora</p>
-              <p className="text-sm font-semibold opacity-0 pointer-events-none select-none" aria-hidden="true">Añadir hora</p>
+              <p className="text-body-sm font-medium mb-0.5 opacity-0 pointer-events-none select-none" aria-hidden="true">Hora</p>
+              <p className="text-body-sm font-semibold opacity-0 pointer-events-none select-none" aria-hidden="true">Añadir hora</p>
               <div className="absolute inset-0 flex flex-col justify-center">
-                <p className={`text-xs font-medium mb-0.5 ${labelColor}`}>Hora</p>
-                <p className={`text-sm font-semibold ${time ? valueColor : placeholderColor}`}>
+                <p className={`text-body-sm font-medium mb-0.5 ${labelColor}`}>Hora</p>
+                <p className={`text-body-sm font-semibold ${time ? valueColor : placeholderColor}`}>
                   {time ?? 'Añadir hora'}
                 </p>
               </div>
@@ -334,11 +334,11 @@ export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', 
           >
             <Stethoscope size={18} className="shrink-0 text-muted lg:hidden" aria-hidden="true" />
             <div className="whitespace-nowrap relative">
-              <p className="text-xs font-medium mb-0.5 opacity-0 pointer-events-none select-none" aria-hidden="true">Tipo de tratamiento</p>
-              <p className="text-sm font-semibold opacity-0 pointer-events-none select-none" aria-hidden="true">Blanqueamiento dental</p>
+              <p className="text-body-sm font-medium mb-0.5 opacity-0 pointer-events-none select-none" aria-hidden="true">Tipo de tratamiento</p>
+              <p className="text-body-sm font-semibold opacity-0 pointer-events-none select-none" aria-hidden="true">Blanqueamiento dental</p>
               <div className="absolute inset-0 flex flex-col justify-center">
-                <p className={`text-xs font-medium mb-0.5 ${labelColor}`}>Tipo de tratamiento</p>
-                <p className={`text-sm font-semibold ${treatment ? valueColor : placeholderColor}`}>
+                <p className={`text-body-sm font-medium mb-0.5 ${labelColor}`}>Tipo de tratamiento</p>
+                <p className={`text-body-sm font-semibold ${treatment ? valueColor : placeholderColor}`}>
                   {treatment ?? 'Tratamiento'}
                 </p>
               </div>
@@ -357,7 +357,7 @@ export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', 
                     type="button"
                     onClick={() => { setTreatment(t); setOpenPanel(null) }}
                     className={[
-                      'w-full text-left px-4 py-2.5 text-sm transition-colors duration-100',
+                      'w-full text-left px-4 py-2.5 text-body-sm transition-colors duration-100',
                       treatment === t
                         ? 'bg-primary-light text-primary font-semibold'
                         : darkMode ? 'text-white hover:bg-white/10' : 'text-text hover:bg-surface',
@@ -374,12 +374,12 @@ export function AppointmentForm({ darkMode = false, submitLabel, mode = 'cita', 
         {/* Submit button */}
         <button
           type="submit"
-          className="w-full lg:w-auto shrink-0 bg-primary hover:bg-primary/90 text-white font-semibold text-sm px-7 py-4 rounded-b-2xl lg:rounded-b-none lg:rounded-r-2xl transition-colors duration-150 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+          className="w-full lg:w-auto shrink-0 bg-primary hover:bg-primary/90 text-white font-semibold text-body-sm px-7 py-4 rounded-b-2xl lg:rounded-b-none lg:rounded-r-2xl transition-colors duration-150 whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
         >
           {resolvedLabel}
         </button>
       </div>
-      <p className={`text-sm text-center mt-3 ${darkMode ? 'text-white/50' : 'text-muted/70'}`}>
+      <p className={`text-body-sm text-center mt-3 ${darkMode ? 'text-white/50' : 'text-muted/70'}`}>
         Sin compromiso. Cancelación gratuita hasta 24h antes.
       </p>
     </form>

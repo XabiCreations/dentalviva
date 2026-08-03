@@ -148,7 +148,7 @@ export function WhyChooseUs() {
                 <p className="text-[62px] sm:text-[70px] font-bold text-text leading-none tracking-tight mb-3">
                   {stat.main}<span className="font-playfair italic text-primary">{stat.suffix}</span>{stat.extra ?? ''}
                 </p>
-                <p className="text-base text-muted font-medium">{stat.label}</p>
+                <p className="text-body text-muted font-medium">{stat.label}</p>
               </div>
             ))}
           </div>

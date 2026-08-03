@@ -20,7 +20,7 @@ const HEADING_SIZE_MAP = {
 
 const TEXT_SIZE_MAP = {
   'body-lg': 'text-body-lg',
-  'body':    'text-body',
+  'body':    'text-body-sm',
   'body-sm': 'text-body-sm',
   'caption': 'text-caption',
 }

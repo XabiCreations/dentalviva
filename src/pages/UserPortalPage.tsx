@@ -37,11 +37,11 @@ export default function UserPortalPage() {
       <header className="bg-white border-b border-border px-6 py-4 flex items-center justify-between shadow-nav">
         <Link to="/" className="flex items-center gap-2">
           <DentalLogo />
-          <span className="text-base font-bold text-text">DentalViva</span>
+          <span className="text-body-sm font-bold text-text">DentalViva</span>
         </Link>
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-2 text-sm text-muted hover:text-text
+          className="flex items-center gap-2 text-body-sm text-muted hover:text-text
             px-4 py-2 rounded-xl border border-border hover:border-border/80
             transition-all duration-150"
         >
@@ -61,20 +61,20 @@ export default function UserPortalPage() {
             Has entrado con éxito
           </h1>
 
-          <p className="text-muted text-lg">
+          <p className="text-muted text-body-lg">
             Bienvenido,{' '}
             <span className="font-semibold text-text">
               {profile?.full_name ?? '—'}
             </span>
           </p>
 
-          <p className="text-muted text-sm mt-6">
+          <p className="text-muted text-body-sm mt-6">
             Tu portal de paciente está en construcción. Próximamente podrás consultar tus citas, historial clínico y resultados.
           </p>
 
           <Link
             to="/"
-            className="inline-block mt-8 text-sm text-primary font-medium hover:underline"
+            className="inline-block mt-8 text-body-sm text-primary font-medium hover:underline"
           >
             ← Volver a la web
           </Link>

@@ -199,10 +199,10 @@ export function BeforeAfterSlider({ beforeImage, afterImage, beforeAlt, afterAlt
       />
 
       {/* Labels */}
-      <div className="absolute top-3 left-3 bg-text/70 text-white text-xs font-semibold px-2 py-1 rounded pointer-events-none">
+      <div className="absolute top-3 left-3 bg-text/70 text-white text-body-sm font-semibold px-2 py-1 rounded pointer-events-none">
         Antes
       </div>
-      <div className="absolute top-3 right-3 bg-primary/90 text-white text-xs font-semibold px-2 py-1 rounded pointer-events-none">
+      <div className="absolute top-3 right-3 bg-primary/90 text-white text-body-sm font-semibold px-2 py-1 rounded pointer-events-none">
         Después
       </div>
 

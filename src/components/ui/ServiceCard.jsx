@@ -8,16 +8,16 @@ export function ServiceCard({ image, title, description, imageAlt, onLearnMore }
         border border-border shadow-card
         transition-all duration-300 ease-out
         hover:-translate-y-1 hover:shadow-card-hover
-        w-[85vw] lg:w-[360px] shrink-0
+        w-[85vw] lg:w-[432px] shrink-0
       "
     >
       {/* Text block — fixed height so all cards align */}
-      <div className="flex flex-col px-6 pt-6 pb-6">
+      <div className="flex flex-col px-6 pt-6 pb-3">
         {/* Title — fixed height so all cards align regardless of line count */}
-        <div className="h-[4rem] flex items-start ">
-          <h3 className="text-h3 font-bold text-text line-clamp-2">{title}</h3>
+        <div className="h-[3.5rem] flex items-start ">
+          <h3 className="text-h4 font-bold text-text line-clamp-2">{title}</h3>
         </div>
-        <p className="text-muted text-sm leading-relaxed line-clamp-2 flex-1">{description}</p>
+        <p className="text-muted text-body leading-relaxed line-clamp-2 flex-1">{description}</p>
         <button
           type="button"
           onClick={onLearnMore}
@@ -32,12 +32,12 @@ export function ServiceCard({ image, title, description, imageAlt, onLearnMore }
           <span className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
             <ArrowRight size={14} className="text-white" />
           </span>
-          <span className="text-sm font-semibold text-text">Saber más</span>
+          <span className="text-body-sm font-semibold text-text">Saber más</span>
         </button>
       </div>
 
       {/* Image — fixed height so all cards are identical regardless of text */}
-      <div className="h-[300px] shrink-0 p-4 pt-0">
+      <div className="h-[360px] shrink-0 p-4 pt-0">
         <div className="w-full h-full rounded-lg overflow-hidden">
           <img
             src={image}

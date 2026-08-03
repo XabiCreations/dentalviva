@@ -88,7 +88,7 @@ export function Nav() {
               aria-label="DentalViva — volver al inicio"
             >
               <DentalLogo />
-              <span className="text-xl font-bold tracking-tight text-text">DentalViva</span>
+              <span className="text-body-lg font-bold tracking-tight text-text">DentalViva</span>
             </a>
 
             {/* Desktop links */}
@@ -97,7 +97,7 @@ export function Nav() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="px-4 py-2 rounded-lg text-sm font-medium text-muted transition-colors duration-150 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="px-4 py-2 rounded-lg text-body-sm font-medium text-muted transition-colors duration-150 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     {link.label}
                   </a>
@@ -115,7 +115,7 @@ export function Nav() {
                 <>
                   <Link
                     to="/historial"
-                    className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-xl transition-all duration-150 text-muted hover:text-primary hover:bg-primary/10"
+                    className="flex items-center gap-1.5 text-body-sm font-medium px-3 py-1.5 rounded-xl transition-all duration-150 text-muted hover:text-primary hover:bg-primary/10"
                     aria-label="Ver historial de citas"
                   >
                     <ClipboardList size={16} strokeWidth={1.5} />
@@ -125,9 +125,9 @@ export function Nav() {
                   <div ref={userMenuRef} className="relative">
                     <button
                       onClick={() => setUserMenuOpen(o => !o)}
-                      className="flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-xl transition-all duration-150 text-text hover:bg-surface"
+                      className="flex items-center gap-2 text-body-sm font-medium px-3 py-1.5 rounded-xl transition-all duration-150 text-text hover:bg-surface"
                     >
-                      <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-body-sm font-bold shrink-0">
                         {initials}
                       </div>
                       {firstName}
@@ -136,7 +136,7 @@ export function Nav() {
                       <div className="absolute top-[calc(100%+8px)] right-0 bg-white border border-border rounded-xl shadow-card py-1 w-44 z-50">
                         <button
                           onClick={handleSignOut}
-                          className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-muted hover:bg-surface transition-colors"
+                          className="flex items-center gap-2 w-full px-4 py-2.5 text-body-sm text-muted hover:bg-surface transition-colors"
                         >
                           <LogOut size={14} strokeWidth={1.5} />
                           Cerrar sesión
@@ -148,7 +148,7 @@ export function Nav() {
               ) : (
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold text-primary bg-primary/10 border border-transparent"
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl text-body-sm font-semibold text-primary bg-primary/10 border border-transparent"
                 >
                   Acceso
                 </Link>
@@ -194,7 +194,7 @@ export function Nav() {
             aria-label="DentalViva — volver al inicio"
           >
             <DentalLogo />
-            <span className="text-xl font-bold tracking-tight text-text">DentalViva</span>
+            <span className="text-body-lg font-bold tracking-tight text-text">DentalViva</span>
           </a>
 
           <div className="flex items-center gap-2">
@@ -229,7 +229,7 @@ export function Nav() {
               <Link
                 to="/login"
                 onClick={handleLinkClick}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold text-primary bg-primary/10 border border-transparent"
+                className="inline-flex items-center justify-center px-4 py-2 rounded-xl text-body-sm font-semibold text-primary bg-primary/10 border border-transparent"
               >
                 Acceso
               </Link>
@@ -242,16 +242,16 @@ export function Nav() {
           {user && (
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shrink-0">
+                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-body-sm font-bold shrink-0">
                   {initials}
                 </div>
-                <p className="text-sm font-semibold text-text">{firstName}</p>
+                <p className="text-body-sm font-semibold text-text">{firstName}</p>
               </div>
               <div className="flex items-center gap-3">
                 <Link
                   to="/historial"
                   onClick={handleLinkClick}
-                  className="flex items-center gap-1.5 text-sm font-medium text-muted hover:text-primary transition-colors"
+                  className="flex items-center gap-1.5 text-body-sm font-medium text-muted hover:text-primary transition-colors"
                   aria-label="Ver historial de citas"
                 >
                   <ClipboardList size={16} strokeWidth={1.5} />
@@ -259,7 +259,7 @@ export function Nav() {
                 </Link>
                 <button
                   onClick={async () => { handleLinkClick(); await signOut() }}
-                  className="flex items-center gap-1.5 text-sm font-medium text-muted hover:text-text transition-colors"
+                  className="flex items-center gap-1.5 text-body-sm font-medium text-muted hover:text-text transition-colors"
                 >
                   <LogOut size={16} strokeWidth={1.5} />
                   Cerrar sesión

@@ -46,7 +46,7 @@ const ESTADO_CONFIG: Record<EstadoCita | string, { label: string; className: str
 function EstadoBadge({ estado }: { estado: string }) {
   const config = ESTADO_CONFIG[estado] ?? ESTADO_CONFIG['pendiente']
   return (
-    <span className={['inline-block text-xs font-semibold px-2.5 py-1 rounded-full', config.className].join(' ')}>
+    <span className={['inline-block text-body-sm font-semibold px-2.5 py-1 rounded-full', config.className].join(' ')}>
       {config.label}
     </span>
   )
@@ -89,7 +89,7 @@ function CitaCard({ cita, onCancel }: CitaCardProps) {
           <button
             type="button"
             onClick={() => setConfirming(true)}
-            className="text-xs text-muted hover:text-red-600 font-medium transition-colors duration-150"
+            className="text-body-sm text-muted hover:text-red-600 font-medium transition-colors duration-150"
           >
             Cancelar reserva
           </button>
@@ -97,19 +97,19 @@ function CitaCard({ cita, onCancel }: CitaCardProps) {
 
         {confirming && (
           <div className="flex items-center gap-3">
-            <span className="text-xs text-text">¿Confirmar cancelación?</span>
+            <span className="text-body-sm text-text">¿Confirmar cancelación?</span>
             <button
               type="button"
               onClick={handleCancel}
               disabled={cancelling}
-              className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-50 transition-colors"
+              className="text-body-sm font-semibold text-red-600 hover:text-red-700 disabled:opacity-50 transition-colors"
             >
               {cancelling ? 'Cancelando…' : 'Sí, cancelar'}
             </button>
             <button
               type="button"
               onClick={() => setConfirming(false)}
-              className="text-xs text-muted hover:text-text transition-colors"
+              className="text-body-sm text-muted hover:text-text transition-colors"
             >
               No
             </button>
@@ -124,7 +124,7 @@ function CitaCard({ cita, onCancel }: CitaCardProps) {
           <Stethoscope size={15} className="text-primary mt-0.5 shrink-0" strokeWidth={1.5} />
           <div>
             <p className="text-[11px] text-muted font-medium uppercase tracking-wide mb-0.5">Tratamiento</p>
-            <p className="text-sm font-semibold text-text">{tratamiento}</p>
+            <p className="text-body-sm font-semibold text-text">{tratamiento}</p>
           </div>
         </div>
 
@@ -133,9 +133,9 @@ function CitaCard({ cita, onCancel }: CitaCardProps) {
           <User size={15} className="text-primary mt-0.5 shrink-0" strokeWidth={1.5} />
           <div>
             <p className="text-[11px] text-muted font-medium uppercase tracking-wide mb-0.5">Profesional</p>
-            <p className="text-sm font-semibold text-text">{dentistaNombre}</p>
+            <p className="text-body-sm font-semibold text-text">{dentistaNombre}</p>
             {dentistaEspecialidad && (
-              <p className="text-xs text-muted mt-0.5">{dentistaEspecialidad}</p>
+              <p className="text-body-sm text-muted mt-0.5">{dentistaEspecialidad}</p>
             )}
           </div>
         </div>
@@ -145,7 +145,7 @@ function CitaCard({ cita, onCancel }: CitaCardProps) {
           <CalendarDays size={15} className="text-primary mt-0.5 shrink-0" strokeWidth={1.5} />
           <div>
             <p className="text-[11px] text-muted font-medium uppercase tracking-wide mb-0.5">Fecha</p>
-            <p className="text-sm font-semibold text-text capitalize">{formatFecha(cita.fecha)}</p>
+            <p className="text-body-sm font-semibold text-text capitalize">{formatFecha(cita.fecha)}</p>
           </div>
         </div>
 
@@ -154,13 +154,13 @@ function CitaCard({ cita, onCancel }: CitaCardProps) {
           <Clock size={15} className="text-primary mt-0.5 shrink-0" strokeWidth={1.5} />
           <div>
             <p className="text-[11px] text-muted font-medium uppercase tracking-wide mb-0.5">Hora</p>
-            <p className="text-sm font-semibold text-text">{cita.hora}</p>
+            <p className="text-body-sm font-semibold text-text">{cita.hora}</p>
           </div>
         </div>
       </div>
 
       {error && (
-        <p className="px-5 pb-4 text-xs text-red-600">{error}</p>
+        <p className="px-5 pb-4 text-body-sm text-red-600">{error}</p>
       )}
     </article>
   )
@@ -216,11 +216,11 @@ export default function HistorialPage() {
       <header className="bg-white border-b border-border px-6 py-4 flex items-center justify-between shadow-nav">
         <Link to="/" className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
           <DentalLogo />
-          <span className="text-base font-bold text-text">DentalViva</span>
+          <span className="text-body-sm font-bold text-text">DentalViva</span>
         </Link>
         <button
           onClick={() => signOut()}
-          className="flex items-center gap-2 text-sm text-muted hover:text-text px-4 py-2 rounded-xl border border-border hover:border-border/80 transition-all duration-150"
+          className="flex items-center gap-2 text-body-sm text-muted hover:text-text px-4 py-2 rounded-xl border border-border hover:border-border/80 transition-all duration-150"
         >
           <LogOut size={14} strokeWidth={1.5} />
           Cerrar sesión
@@ -232,12 +232,12 @@ export default function HistorialPage() {
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center gap-3 mb-2">
             <ClipboardList size={22} strokeWidth={1.5} className="text-primary shrink-0" />
-            <h1 className="text-2xl font-bold text-text">Mi historial</h1>
+            <h1 className="text-h5 font-bold text-text">Mi historial</h1>
           </div>
-          <p className="text-muted text-sm mb-8 ml-9">Todas tus citas reservadas.</p>
+          <p className="text-muted text-body-sm mb-8 ml-9">Todas tus citas reservadas.</p>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-4 text-sm text-red-700" role="alert">
+            <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-4 text-body-sm text-red-700" role="alert">
               {error}
             </div>
           )}
@@ -246,7 +246,7 @@ export default function HistorialPage() {
             <div className="bg-white border border-border rounded-2xl shadow-card px-6 py-12 text-center">
               <CalendarDays size={40} strokeWidth={1} className="text-border mx-auto mb-4" />
               <p className="text-text font-medium mb-1">Todavía no tienes citas registradas</p>
-              <p className="text-muted text-sm">Cuando reserves una cita, aparecerá aquí.</p>
+              <p className="text-muted text-body-sm">Cuando reserves una cita, aparecerá aquí.</p>
             </div>
           )}
 
@@ -261,7 +261,7 @@ export default function HistorialPage() {
           )}
 
           <div className="mt-10 text-center">
-            <Link to="/" className="inline-block text-sm text-primary font-medium hover:underline">
+            <Link to="/" className="inline-block text-body-sm text-primary font-medium hover:underline">
               &larr; Volver a la web
             </Link>
           </div>

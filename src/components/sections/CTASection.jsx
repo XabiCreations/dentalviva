@@ -25,10 +25,10 @@ function AuthModal({ onClose }) {
         <h3 className="text-h4 font-bold text-text text-center mb-2">Un último paso para confirmar tu cita</h3>
         <p className="text-muted text-body-sm text-center mb-7">Inicia sesión o regístrate para confirmar tu cita.</p>
         <div className="flex flex-col gap-3">
-          <Link to="/login" className="flex items-center justify-center px-6 py-3 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 transition-colors">
+          <Link to="/login" className="flex items-center justify-center px-6 py-3 bg-primary text-white rounded-xl text-body-sm font-semibold hover:bg-primary/90 transition-colors">
             Iniciar sesión
           </Link>
-          <Link to="/registro" className="flex items-center justify-center px-6 py-3 border border-border text-text rounded-xl text-sm font-medium hover:bg-surface transition-colors">
+          <Link to="/registro" className="flex items-center justify-center px-6 py-3 border border-border text-text rounded-xl text-body-sm font-medium hover:bg-surface transition-colors">
             Crear cuenta
           </Link>
         </div>

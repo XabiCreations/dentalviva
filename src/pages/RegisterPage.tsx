@@ -66,7 +66,7 @@ function validate(fields: {
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
-  return <p className="mt-1 text-xs text-red-600">{message}</p>
+  return <p className="mt-1 text-body-sm text-red-600">{message}</p>
 }
 
 export default function RegisterPage() {
@@ -107,7 +107,7 @@ export default function RegisterPage() {
   }
 
   const inputClass = (hasError?: string) =>
-    `w-full px-4 py-3 rounded-xl border text-text text-sm placeholder:text-muted/50
+    `w-full px-4 py-3 rounded-xl border text-text text-body-sm placeholder:text-muted/50
     focus:outline-none focus:ring-2 transition-all ${
       hasError
         ? 'border-red-400 focus:border-red-400 focus:ring-red-200'
@@ -135,12 +135,12 @@ export default function RegisterPage() {
                 />
               </svg>
             </div>
-            <span className="text-white text-xl font-bold">DentalViva</span>
+            <span className="text-white text-body-lg font-bold">DentalViva</span>
           </div>
           <div className="border-l-4 border-white/30 pl-5">
-            <p className="text-white/70 text-sm mb-1">Únete a</p>
-            <h2 className="text-white text-2xl font-bold mb-2">Portal de Pacientes</h2>
-            <p className="text-white/70 text-sm leading-relaxed">
+            <p className="text-white/70 text-body-sm mb-1">Únete a</p>
+            <h2 className="text-white text-h5 font-bold mb-2">Portal de Pacientes</h2>
+            <p className="text-white/70 text-body-sm leading-relaxed">
               Crea tu cuenta y accede a tu historial clínico, citas y seguimiento de tratamientos.
             </p>
           </div>
@@ -152,16 +152,16 @@ export default function RegisterPage() {
         <div className="w-full max-w-md py-8">
           <Link to="/" className="flex items-center gap-2 mb-8">
             <DentalLogo />
-            <span className="text-lg font-bold text-text">DentalViva</span>
+            <span className="text-body-lg font-bold text-text">DentalViva</span>
           </Link>
 
-          <h1 className="text-3xl font-bold text-text mb-1">Crear cuenta</h1>
-          <p className="text-muted text-sm mb-8">Completa tus datos para registrarte</p>
+          <h1 className="text-h4 font-bold text-text mb-1">Crear cuenta</h1>
+          <p className="text-muted text-body-sm mb-8">Completa tus datos para registrarte</p>
 
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
             {/* Full name */}
             <div>
-              <label htmlFor="full_name" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="full_name" className="block text-body-sm font-medium text-text mb-1.5">
                 Nombre completo
               </label>
               <input
@@ -178,7 +178,7 @@ export default function RegisterPage() {
 
             {/* Birth date */}
             <div>
-              <label htmlFor="birth_date" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="birth_date" className="block text-body-sm font-medium text-text mb-1.5">
                 Fecha de nacimiento
               </label>
               <input
@@ -194,7 +194,7 @@ export default function RegisterPage() {
 
             {/* DNI */}
             <div>
-              <label htmlFor="dni" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="dni" className="block text-body-sm font-medium text-text mb-1.5">
                 DNI
               </label>
               <input
@@ -211,7 +211,7 @@ export default function RegisterPage() {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="email" className="block text-body-sm font-medium text-text mb-1.5">
                 Correo electrónico
               </label>
               <input
@@ -228,7 +228,7 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="password" className="block text-body-sm font-medium text-text mb-1.5">
                 Contraseña
               </label>
               <div className="relative">
@@ -255,7 +255,7 @@ export default function RegisterPage() {
 
             {/* Confirm password */}
             <div>
-              <label htmlFor="confirm_password" className="block text-sm font-medium text-text mb-1.5">
+              <label htmlFor="confirm_password" className="block text-body-sm font-medium text-text mb-1.5">
                 Confirmar contraseña
               </label>
               <div className="relative">
@@ -282,7 +282,7 @@ export default function RegisterPage() {
 
             {/* Server error */}
             {serverError && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+              <div className="bg-red-50 border border-red-200 text-red-700 text-body-sm px-4 py-3 rounded-xl">
                 {serverError}
               </div>
             )}
@@ -302,7 +302,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-sm text-muted text-center">
+          <p className="mt-6 text-body-sm text-muted text-center">
             ¿Ya tienes cuenta?{' '}
             <Link to="/login" className="text-primary font-semibold hover:underline">
               Inicia sesión
@@ -310,7 +310,7 @@ export default function RegisterPage() {
           </p>
 
           <div className="mt-6">
-            <Link to="/" className="text-xs text-muted hover:text-text transition-colors">
+            <Link to="/" className="text-body-sm text-muted hover:text-text transition-colors">
               ← Volver a la web
             </Link>
           </div>

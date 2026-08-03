@@ -33,9 +33,9 @@ export function TestimonialCard({ testimonial, onPrev, onNext }) {
           <div className="px-6 pt-10 pb-6 flex flex-col gap-5 text-center">
             <div>
               <p className="text-h5 font-semibold text-text">{testimonial.patientName}</p>
-              <p className="text-primary text-sm font-medium mt-1">{testimonial.treatmentType}</p>
+              <p className="text-primary text-body-sm font-medium mt-1">{testimonial.treatmentType}</p>
             </div>
-            <p className="text-base text-text leading-relaxed font-medium italic">
+            <p className="text-body-sm text-text leading-relaxed font-medium italic">
               "{testimonial.text}"
             </p>
             <div className="flex items-center gap-3 justify-center mt-auto">

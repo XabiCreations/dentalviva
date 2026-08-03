@@ -19,6 +19,7 @@ import { useAuth } from './auth/AuthContext'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import HistorialPage from './pages/HistorialPage'
+import { TypographyShowcase } from './components/sections/TypographyShowcase'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -63,6 +64,7 @@ function LandingPage() {
       <main id="main-content">
         <Hero />
         <Services />
+        <TypographyShowcase />
         <WhyChooseUs />
         <BeforeAfter />
         <Testimonials />
