@@ -1,12 +1,4 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-
-const arrowBtn = `
-  w-10 h-10 rounded-full border border-border
-  flex items-center justify-center
-  transition-all duration-150
-  hover:border-primary hover:bg-primary-light hover:text-primary
-  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
-`
+import { NavArrowsInfinite } from './NavArrows'
 
 export function TestimonialCard({ testimonial, onPrev, onNext }) {
   if (!testimonial) return null
@@ -38,14 +30,7 @@ export function TestimonialCard({ testimonial, onPrev, onNext }) {
             <p className="text-body-sm text-text leading-relaxed font-medium italic">
               "{testimonial.text}"
             </p>
-            <div className="flex items-center gap-3 justify-center mt-auto">
-              <button onClick={onPrev} aria-label="Testimonio anterior" className={arrowBtn}>
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button onClick={onNext} aria-label="Testimonio siguiente" className={arrowBtn}>
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
+            <NavArrowsInfinite onPrev={onPrev} onNext={onNext} className="justify-center mt-auto" />
           </div>
         </div>
       </div>
@@ -74,14 +59,7 @@ export function TestimonialCard({ testimonial, onPrev, onNext }) {
             <p className="text-body-lg text-text leading-relaxed font-medium italic">
               "{testimonial.text}"
             </p>
-            <div className="flex items-center gap-3 mt-auto">
-              <button onClick={onPrev} aria-label="Testimonio anterior" className={arrowBtn}>
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button onClick={onNext} aria-label="Testimonio siguiente" className={arrowBtn}>
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
+            <NavArrowsInfinite onPrev={onPrev} onNext={onNext} className="mt-auto" />
           </div>
         </div>
       </div>

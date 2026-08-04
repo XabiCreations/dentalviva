@@ -61,7 +61,7 @@ function SocialProofBadge({ socialRef, counterRef, prefersReducedMotion }) {
   return (
     <div
       ref={socialRef}
-      className="hidden lg:flex absolute left-full ml-4 top-1/2 -translate-y-1/2 z-20 items-center gap-4 bg-white rounded-2xl border border-[#ebebeb] shadow-sm px-3 py-4 rotate-0"
+      className="flex w-fit items-center gap-4 bg-white rounded-2xl border border-[#ebebeb] shadow-sm px-[0.75rem] py-[0.75rem]"
       aria-label="12.000 pacientes satisfechos"
     >
       <div className="flex items-center shrink-0" aria-hidden="true">
@@ -75,15 +75,18 @@ function SocialProofBadge({ socialRef, counterRef, prefersReducedMotion }) {
           </div>
         ))}
       </div>
-      <div>
+      <div className="flex items-center gap-2">
         <p
           ref={counterRef}
-          className="text-h5 font-bold text-text leading-none"
+          className="text-h3 font-bold text-text leading-none"
           aria-live="polite"
         >
           {prefersReducedMotion ? '+750' : '+0'}
         </p>
-        <p className="text-body-sm text-muted mt-0.5 whitespace-nowrap font-semibold tracking-normal">Pacientes mensuales</p>
+        <div className="flex flex-col">
+          <span className="text-body-sm text-muted font-semibold tracking-normal">Pacientes</span>
+          <span className="text-body-sm text-muted font-semibold tracking-normal">mensuales</span>
+        </div>
       </div>
     </div>
   )
@@ -266,16 +269,16 @@ export function Hero() {
       <div className="flex items-center w-full lg:w-[48%] px-6 sm:px-10 lg:px-16 xl:px-20 pt-24 pb-10 lg:py-28">
         <div className="w-full max-w-xl">
 
-          <h1 ref={headlineRef} className="text-h1 text-text font-bold mb-5">
+          <SocialProofBadge socialRef={socialRef} counterRef={counterRef} prefersReducedMotion={prefersReducedMotion} />
+
+          <h1 ref={headlineRef} className="text-h1 text-text font-bold mt-6 mb-5">
             <span className="hero-word inline-block">Consigue</span>{' '}
             <span className="hero-word inline-block">la</span>{' '}
             <span className="hero-word font-playfair inline-block text-primary italic">sonrisa</span>{' '}
             <span className="hero-word inline-block">que</span>{' '}
             <span className="hero-word inline-block">siempre</span>{' '}
             <span className="hero-word inline-block">has</span>{' '}
-            <span className="hero-word relative inline-block">querido
-              <SocialProofBadge socialRef={socialRef} counterRef={counterRef} prefersReducedMotion={prefersReducedMotion} />
-            </span>
+            <span className="hero-word inline-block">querido</span>
           </h1>
 
           <p ref={subRef} className="text-muted text-body-lg leading-relaxed mb-8">

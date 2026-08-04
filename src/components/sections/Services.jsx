@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ServiceCard } from '../ui/ServiceCard'
 import { ServiceModal } from '../ui/ServiceModal'
+import { NavArrowsLimited } from '../ui/NavArrows'
 
 const CARD_WIDTH = 360
 const CARD_GAP = 20
@@ -217,36 +217,7 @@ export function Services() {
           </div>
 
           {/* Arrow buttons — desktop only in header */}
-          <div className="hidden lg:flex items-center gap-2 shrink-0 mt-1">
-            <button
-              type="button"
-              onClick={scrollPrev}
-              disabled={!canPrev}
-              aria-label="Servicio anterior"
-              className={[
-                'w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-150',
-                canPrev
-                  ? 'bg-primary border-primary text-white hover:bg-primary/90'
-                  : 'border-border/40 text-muted/30 cursor-not-allowed',
-              ].join(' ')}
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              type="button"
-              onClick={scrollNext}
-              disabled={!canNext}
-              aria-label="Servicio siguiente"
-              className={[
-                'w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-150',
-                canNext
-                  ? 'bg-primary border-primary text-white hover:bg-primary/90'
-                  : 'border-border/40 text-muted/30 cursor-not-allowed',
-              ].join(' ')}
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
+          <NavArrowsLimited onPrev={scrollPrev} onNext={scrollNext} canPrev={canPrev} canNext={canNext} className="hidden lg:flex shrink-0 mt-1" />
         </div>
       </div>
 
@@ -283,36 +254,7 @@ export function Services() {
       </div>
 
       {/* Arrow buttons — mobile/tablet, below carousel */}
-      <div className="lg:hidden container-xl mt-6 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={scrollPrev}
-          disabled={!canPrev}
-          aria-label="Servicio anterior"
-          className={[
-            'w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-150',
-            canPrev
-              ? 'bg-primary border-primary text-white hover:bg-primary/90'
-              : 'border-border/40 text-muted/30 cursor-not-allowed',
-          ].join(' ')}
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={scrollNext}
-          disabled={!canNext}
-          aria-label="Servicio siguiente"
-          className={[
-            'w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-150',
-            canNext
-              ? 'bg-primary border-primary text-white hover:bg-primary/90'
-              : 'border-border/40 text-muted/30 cursor-not-allowed',
-          ].join(' ')}
-        >
-          <ChevronRight size={18} />
-        </button>
-      </div>
+      <NavArrowsLimited onPrev={scrollPrev} onNext={scrollNext} canPrev={canPrev} canNext={canNext} className="lg:hidden container-xl mt-6" />
 
       <style>{`[role="region"]::-webkit-scrollbar { display: none; }`}</style>
 

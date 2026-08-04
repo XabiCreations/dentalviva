@@ -74,9 +74,10 @@ export default {
           { lineHeight: '1.2', letterSpacing: '-0.015em', fontWeight: '600' },
         ],
 
-        // H4 = 1.25^3 = 1.953rem — static
+        // H4 = 1.25^3 = 1.953rem
+        // min=1.3rem  slope=(1.953−1.3)/70=0.0093→0.93vw  intercept=1.11rem
         'h4': [
-          '1.953rem',
+          'clamp(1.3rem, 1.11rem + 0.93vw, 1.953rem)',
           { lineHeight: '1.25', letterSpacing: '-0.01em', fontWeight: '600' },
         ],
 
