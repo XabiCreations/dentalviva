@@ -99,9 +99,21 @@ export function Testimonials() {
       className="relative overflow-hidden section-padding bg-surface"
       aria-labelledby="testimonials-heading"
     >
-      {/* Semicircle bg */}
+      {/* Background image at 40% opacity */}
       <div
-        className="absolute bottom-1/2 lg:bottom-auto lg:top-1/2 left-1/2 -translate-x-1/2 w-[130vw] aspect-square rounded-full bg-[#EDF2F7] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url(/images/backgrounds/bg-testimonios.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.1,
+        }}
+        aria-hidden="true"
+      />
+      {/* Semicircle bg — above the image */}
+      <div
+        className="absolute bottom-1/2 left-1/2 -translate-x-1/2 w-[130vw] aspect-square rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(248,250,252,1) 0%, transparent 100%)' }}
         aria-hidden="true"
       />
       <div className="container-xl relative">
@@ -124,6 +136,5 @@ export function Testimonials() {
         </div>
       </div>
     </section>
-
   )
 }

@@ -13,11 +13,8 @@ export function ServiceCard({ image, title, description, imageAlt, onLearnMore }
     >
       {/* Text block — fixed height so all cards align */}
       <div className="flex flex-col px-6 pt-6 pb-3">
-        {/* Title — fixed height so all cards align regardless of line count */}
-        <div className="h-[3.5rem] flex items-start ">
-          <h3 className="text-h4 font-semibold text-text line-clamp-2">{title}</h3>
-        </div>
-        <p className="text-muted text-body leading-relaxed line-clamp-2 flex-1">{description}</p>
+          <h3 className="text-h5 text-text line-clamp-2 mb-2">{title}</h3>
+        <p className="text-muted text-body-sm lg:text-body leading-relaxed line-clamp-2 flex-1">{description}</p>
         <button
           type="button"
           onClick={onLearnMore}
@@ -43,7 +40,7 @@ export function ServiceCard({ image, title, description, imageAlt, onLearnMore }
             src={image}
             alt={imageAlt || title}
             loading="lazy"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover saturate-[0.85]"
           />
         </div>
       </div>

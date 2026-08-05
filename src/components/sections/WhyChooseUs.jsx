@@ -89,7 +89,7 @@ export function WhyChooseUs() {
     <section
       ref={sectionRef}
       id="porque-elegirnos"
-      className="section-padding bg-background"
+      className="section-padding bg-[#F9FAFC]"
       aria-labelledby="why-heading"
     >
       <div className="container-xl">
@@ -99,13 +99,25 @@ export function WhyChooseUs() {
           {/* pt-6 pl-6 compensa el offset negativo -top-6 -left-6 de la imagen decorativa */}
           <div ref={imgRef} className="hidden lg:block lg:row-span-2 relative pt-6 pl-6">
             {/* Imagen principal de la sección */}
-            <div className="rounded-3xl overflow-hidden w-full h-full bg-surface">
+            <div className="rounded-3xl overflow-hidden w-full h-full bg-surface relative z-10">
               <img
                 src="/images/backgrounds/bg-porque-elerguirnos.webp"
                 alt="Instalaciones profesionales de DentalViva"
                 className="w-full h-full object-cover"
               />
             </div>
+
+            {/* Cuadrado decorativo inferior izquierda con patrón */}
+            <div
+              className="absolute w-[400px] h-[400px] rounded-3xl z-0"
+              style={{
+                bottom: '-4.5rem',
+                left: '-3.5rem',
+                backgroundColor: '#F9FAFC',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23E1E5F0' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+              }}
+              aria-hidden="true"
+            />
 
             {/*
               Imagen decorativa secundaria — esquina superior izquierda.
@@ -116,7 +128,7 @@ export function WhyChooseUs() {
             */}
             <div
               ref={decorImgRef}
-              className="absolute -top-6 -left-6 w-[200px] h-[200px] rounded-3xl overflow-hidden shadow-lg ring-4 ring-[#f5f5f5]"
+              className="absolute -top-6 -left-6 w-[200px] h-[200px] rounded-3xl overflow-hidden shadow-lg ring-4 ring-[#f5f5f5] z-20"
             >
               <img
                 src="/images/certificados/certificado.webp"
@@ -140,7 +152,7 @@ export function WhyChooseUs() {
               <div
                 key={stat.label}
                 className={[
-                  'stat-item py-8',
+                  'stat-item py-8 flex flex-col items-center justify-center text-center',
                   i % 2 === 0 ? 'border-r border-border pr-10' : 'pl-10',
                   i < 2 ? 'border-b border-border' : '',
                 ].join(' ')}
