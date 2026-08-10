@@ -254,7 +254,9 @@ export function Services() {
       </div>
 
       {/* Arrow buttons — mobile/tablet, below carousel */}
-      <NavArrowsLimited onPrev={scrollPrev} onNext={scrollNext} canPrev={canPrev} canNext={canNext} className="lg:hidden container-xl mt-6" />
+      <div className="lg:hidden container-xl mt-6 flex justify-center">
+        <NavArrowsLimited onPrev={scrollPrev} onNext={scrollNext} canPrev={canPrev} canNext={canNext} />
+      </div>
 
       <style>{`[role="region"]::-webkit-scrollbar { display: none; }`}</style>
 

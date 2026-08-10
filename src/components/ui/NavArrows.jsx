@@ -2,9 +2,9 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const base = 'w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
 
-export function NavArrowsLimited({ onPrev, onNext, canPrev, canNext, className = '' }) {
+export function NavArrowsLimited({ onPrev, onNext, canPrev, canNext, className = '', noFrame = false }) {
   return (
-    <div className={`flex items-center gap-2 border border-[#ebebeb] rounded-2xl p-2 ${className}`}>
+    <div className={`flex items-center gap-2 ${noFrame ? '' : 'border border-[#ebebeb] rounded-2xl p-2'} ${className}`}>
       <button
         type="button"
         onClick={onPrev}
@@ -27,14 +27,14 @@ export function NavArrowsLimited({ onPrev, onNext, canPrev, canNext, className =
   )
 }
 
-export function NavArrowsInfinite({ onPrev, onNext, className = '' }) {
+export function NavArrowsInfinite({ onPrev, onNext, className = '', noFrame = false }) {
   return (
-    <div className={`w-fit flex items-center gap-3 border border-[#ebebeb] rounded-2xl p-2 ${className}`}>
+    <div className={`w-fit flex items-center gap-3 ${noFrame ? '' : 'border border-[#ebebeb] rounded-2xl p-2 bg-white'} ${className}`}>
       <button
         type="button"
         onClick={onPrev}
         aria-label="Anterior"
-        className={`${base} border-border hover:border-primary hover:bg-primary-light hover:text-primary`}
+        className={`${base} bg-white border-border hover:border-primary hover:bg-primary-light hover:text-primary`}
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
@@ -42,7 +42,7 @@ export function NavArrowsInfinite({ onPrev, onNext, className = '' }) {
         type="button"
         onClick={onNext}
         aria-label="Siguiente"
-        className={`${base} border-border hover:border-primary hover:bg-primary-light hover:text-primary`}
+        className={`${base} bg-white border-border hover:border-primary hover:bg-primary-light hover:text-primary`}
       >
         <ChevronRight className="w-5 h-5" />
       </button>

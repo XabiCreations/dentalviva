@@ -12,7 +12,7 @@ export function DoctorCard({ photo, name, specialty, years, linkedinUrl }) {
       />
 
       {/* Gradient overlay: transparent top → black/40 bottom */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(0,50,99,0.54)] to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(0,50,99,0.3)] to-transparent" />
 
       {/* Info at bottom */}
       <div className="absolute bottom-0 left-0 right-0 p-5 flex items-end justify-between gap-3">

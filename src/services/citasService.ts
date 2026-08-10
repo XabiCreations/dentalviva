@@ -2,12 +2,12 @@ import { supabase } from '../lib/supabase'
 
 export type CitaTipo = 'cita'
 
-export type EstadoCita = 'pendiente' | 'confirmada' | 'cancelada' | 'realizada'
+export type EstadoCita = 'pendiente' | 'confirmada' | 'completada' | 'cancelada' | 'no_asistio'
 
 export interface Dentist {
   id: string
-  nombre: string
-  especialidad: string | null
+  name: string
+  specialty: string | null
 }
 
 export interface CreateCitaParams {
@@ -34,10 +34,10 @@ export interface Cita {
 }
 
 export async function createCita({ userId, tipo, tratamiento, fecha, hora, patientName }: CreateCitaParams) {
-  const { data: dentists } = await supabase.from('dentists').select('id, especialidad')
+  const { data: dentists } = await supabase.from('dentists').select('id, specialty')
   const dentist = dentists?.find(d =>
-    tratamiento && d.especialidad &&
-    tratamiento.toLowerCase().includes(d.especialidad.toLowerCase().split(' ')[0])
+    tratamiento && d.specialty &&
+    tratamiento.toLowerCase().includes(d.specialty.toLowerCase().split(' ')[0])
   ) ?? dentists?.[Math.floor(Math.random() * (dentists?.length ?? 1))]
 
   const { error } = await supabase.from('citas').insert({
@@ -59,7 +59,7 @@ export async function createCita({ userId, tipo, tratamiento, fecha, hora, patie
 export async function getCitasByUser(userId: string): Promise<Cita[]> {
   const { data, error } = await supabase
     .from('citas')
-    .select('*, dentist:dentists(id, nombre, especialidad)')
+    .select('*, dentist:dentists(id, name, specialty)')
     .eq('user_id', userId)
     .order('fecha', { ascending: false })
     .order('hora', { ascending: false })

@@ -63,8 +63,8 @@ function CitaCard({ cita, onCancel }: CitaCardProps) {
   const [error, setError] = useState<string | null>(null)
 
   const tratamiento = cita.tratamiento?.trim() || 'Sin especificar'
-  const dentistaNombre = cita.dentist?.nombre ?? 'Por asignar'
-  const dentistaEspecialidad = cita.dentist?.especialidad
+  const dentistaNombre = cita.dentist?.name ?? 'Por asignar'
+  const dentistaEspecialidad = cita.dentist?.specialty
 
   const handleCancel = async () => {
     setCancelling(true)
