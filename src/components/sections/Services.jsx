@@ -221,25 +221,39 @@ export function Services() {
         </div>
       </div>
 
-      {/* Carousel */}
-      <div className="overflow-x-hidden">
+      {/* Mobile: columna */}
+      <div className="lg:hidden container-xl flex flex-col gap-5">
+        {services.map((service, i) => (
+          <div key={service.id} ref={(el) => (cardsRef.current[i] = el)}>
+            <ServiceCard
+              image={service.image}
+              imageAlt={service.imageAlt}
+              title={service.title}
+              description={service.description}
+              onLearnMore={() => setActiveService(service)}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: carrusel */}
+      <div className="hidden lg:block overflow-x-hidden">
         <div
           ref={trackRef}
           role="region"
           aria-label="Carrusel de servicios dentales"
-          className="flex gap-5 overflow-x-scroll cursor-grab select-none py-3 snap-x snap-mandatory lg:snap-none"
+          className="flex gap-5 overflow-x-scroll cursor-grab select-none py-3"
           style={{
             paddingLeft: carouselPaddingLeft,
             paddingRight: '2rem',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch',
           }}
           onMouseDown={onMouseDown}
           onMouseMove={onMouseMove}
         >
           {services.map((service, i) => (
-            <div key={service.id} ref={(el) => (cardsRef.current[i] = el)} className="shrink-0 snap-center">
+            <div key={service.id} className="shrink-0">
               <ServiceCard
                 image={service.image}
                 imageAlt={service.imageAlt}
@@ -251,11 +265,6 @@ export function Services() {
           ))}
           <div className="w-2 shrink-0" aria-hidden="true" />
         </div>
-      </div>
-
-      {/* Arrow buttons — mobile/tablet, below carousel */}
-      <div className="lg:hidden container-xl mt-6 flex justify-center">
-        <NavArrowsLimited onPrev={scrollPrev} onNext={scrollNext} canPrev={canPrev} canNext={canNext} />
       </div>
 
       <style>{`[role="region"]::-webkit-scrollbar { display: none; }`}</style>

@@ -21,6 +21,14 @@ import RegisterPage from './pages/RegisterPage'
 import HistorialPage from './pages/HistorialPage'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 
+import { AdminAuthProvider } from './admin/AdminAuthContext'
+import { AdminProtectedRoute } from './admin/AdminProtectedRoute'
+import { AdminLayout } from './admin/AdminLayout'
+import AdminLoginPage from './pages/admin/AdminLoginPage'
+import AdminDashboardPage from './pages/admin/AdminDashboardPage'
+import AdminCitasPage from './pages/admin/AdminCitasPage'
+import AdminCalendarioPage from './pages/admin/AdminCalendarioPage'
+
 gsap.registerPlugin(ScrollTrigger)
 
 function LandingPage() {
@@ -74,6 +82,23 @@ function LandingPage() {
   )
 }
 
+function AdminRoot() {
+  return (
+    <AdminAuthProvider>
+      <Routes>
+        <Route path="login" element={<AdminLoginPage />} />
+        <Route element={<AdminProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="citas" element={<AdminCitasPage />} />
+            <Route path="calendario" element={<AdminCalendarioPage />} />
+          </Route>
+        </Route>
+      </Routes>
+    </AdminAuthProvider>
+  )
+}
+
 export default function App() {
   return (
     <Routes>
@@ -88,6 +113,7 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/admin/*" element={<AdminRoot />} />
     </Routes>
   )
 }
