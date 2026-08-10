@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
         aria-hidden="true"
       />
       {/* White overlay 90% */}
-      <div className="absolute inset-0 bg-white/90" aria-hidden="true" />
+      <div className="absolute inset-0 bg-white/95" aria-hidden="true" />
 
       {/* Card */}
       <div className="relative z-10 w-full max-w-md bg-white rounded-2xl shadow-card p-10">

@@ -8,7 +8,7 @@ export function ServiceCard({ image, title, description, imageAlt, onLearnMore }
         border border-border shadow-card
         transition-all duration-300 ease-out
         hover:-translate-y-1 hover:shadow-card-hover
-        w-[85vw] lg:w-[432px] shrink-0
+        w-full max-w-sm mx-auto lg:w-[432px] lg:max-w-none lg:mx-0 shrink-0
       "
     >
       {/* Text block — fixed height so all cards align */}
@@ -19,7 +19,7 @@ export function ServiceCard({ image, title, description, imageAlt, onLearnMore }
           type="button"
           onClick={onLearnMore}
           className="
-            flex items-center gap-3 w-fit mt-6
+            flex items-center gap-3 w-fit mt-4
             bg-white border border-border
             pr-5 pl-1.5 py-1.5 rounded-full
             hover:border-primary/40 hover:shadow-sm transition-all duration-150
