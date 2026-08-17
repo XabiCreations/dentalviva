@@ -5,6 +5,7 @@ import { Button } from '../ui/Button'
 import { AppointmentModal } from '../ui/AppointmentModal'
 import { useAuth } from '../../auth/AuthContext'
 import { signOut } from '../../auth/authService'
+import { getDisplayName } from '../../utils/profile'
 
 const navLinks = [
   { label: 'Servicios', href: '#servicios' },
@@ -34,8 +35,8 @@ export function Nav() {
   const userMenuRef = useRef(null)
 
   const { user, profile } = useAuth()
-  const firstName = profile?.full_name?.split(' ')[0] ?? null
-  const nameParts = profile?.full_name?.trim().split(/\s+/) ?? []
+  const displayName = getDisplayName(profile)
+  const nameParts = displayName?.trim().split(/\s+/) ?? []
   const initials = nameParts.length >= 2
     ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
     : nameParts[0]?.[0]?.toUpperCase() ?? '?'
@@ -130,7 +131,7 @@ export function Nav() {
                       <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-body-sm font-bold shrink-0">
                         {initials}
                       </div>
-                      {firstName}
+                      {displayName}
                     </button>
                     {userMenuOpen && (
                       <div className="absolute top-[calc(100%+8px)] right-0 bg-white border border-border rounded-xl shadow-card py-1 w-44 z-50">
@@ -245,7 +246,7 @@ export function Nav() {
                 <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-body-sm font-bold shrink-0">
                   {initials}
                 </div>
-                <p className="text-body-sm font-semibold text-text">{firstName}</p>
+                <p className="text-body-sm font-semibold text-text">{displayName}</p>
               </div>
               <div className="flex items-center gap-3">
                 <Link

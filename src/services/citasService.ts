@@ -17,6 +17,8 @@ export interface CreateCitaParams {
   fecha: Date
   hora: string
   patientName: string | null
+  patientPhone?: string | null
+  patientEmail?: string | null
 }
 
 export interface Cita {
@@ -33,20 +35,56 @@ export interface Cita {
   dentist: Dentist | null
 }
 
-export async function createCita({ userId, tipo, tratamiento, fecha, hora, patientName }: CreateCitaParams) {
-  const { data: dentists } = await supabase.from('dentists').select('id, specialty')
-  const dentist = dentists?.find(d =>
-    tratamiento && d.specialty &&
-    tratamiento.toLowerCase().includes(d.specialty.toLowerCase().split(' ')[0])
-  ) ?? dentists?.[Math.floor(Math.random() * (dentists?.length ?? 1))]
+// Asignación fija por tratamiento → ID de dentista
+// 'Ortodoncia' queda fuera → reparto aleatorio entre los 3
+const TREATMENT_DENTIST_MAP: Record<string, string> = {
+  'Implantes dentales':    '35174ed1-4a1a-47fb-bb56-8adadafc0f29', // Dr. Carlos Mendoza
+  'Blanqueamiento dental': '35a7d5ae-0c3f-4adf-8c26-c64a5f861255', // Dra. Ana García
+  'Estética dental':       '5c941484-83dd-44da-8beb-992191781680', // Dr. Luis Torres
+}
+
+export async function createCita({ userId, tipo, tratamiento, fecha, hora, patientName, patientPhone, patientEmail }: CreateCitaParams) {
+  // Verificar sesión activa antes de insertar (evita FK violation con sesiones stale)
+  const { data: { user: authUser } } = await supabase.auth.getUser()
+  if (!authUser || authUser.id !== userId) {
+    throw new Error('Tu sesión ha expirado. Por favor, cierra sesión e inicia de nuevo.')
+  }
+
+  // Solo dentistas con cuenta admin (user_id IS NOT NULL)
+  const { data: dentists } = await supabase
+    .from('dentists')
+    .select('id')
+    .not('user_id', 'is', null)
+
+  const fixedId = tratamiento ? TREATMENT_DENTIST_MAP[tratamiento] : null
+  const dentist = fixedId
+    ? dentists?.find(d => d.id === fixedId)
+    : dentists?.[Math.floor(Math.random() * (dentists?.length ?? 1))]
+
+  // Si el profile no se cargó en el componente, lo buscamos nosotros
+  let name = patientName
+  if (!name) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('full_name, last_name')
+      .eq('id', userId)
+      .single()
+    if (profile) {
+      name = (profile.last_name && !profile.full_name?.trim().endsWith(profile.last_name.trim()))
+        ? `${profile.full_name} ${profile.last_name}`
+        : profile.full_name ?? null
+    }
+  }
 
   const { error } = await supabase.from('citas').insert({
     user_id: userId,
     tipo,
     tratamiento,
-    fecha: fecha.toISOString().split('T')[0],
+    fecha: fecha.toLocaleDateString('sv-SE'),
     hora,
-    patient_name: patientName,
+    patient_name: name,
+    patient_email: patientEmail ?? authUser.email ?? null,
+    patient_phone: patientPhone ?? null,
     dentist_id: dentist?.id ?? null,
   })
 

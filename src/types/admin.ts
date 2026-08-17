@@ -58,6 +58,17 @@ export interface CreateAppointmentPayload {
   user_id?: string | null
 }
 
+// ─── Paciente (fila de profiles) ─────────────────────────────────────────────
+export interface PatientRow {
+  id: string
+  full_name: string
+  last_name: string | null
+  dni: string
+  email: string
+  phone: string | null
+  created_at: string
+}
+
 // ─── Parámetros de filtrado para la tabla de citas ───────────────────────────
 export interface AppointmentFilters {
   search: string

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, ClipboardList, CalendarDays, LogOut, X } from 'lucide-react'
+import { LayoutDashboard, ClipboardList, CalendarDays, Users, LogOut, X } from 'lucide-react'
 import { useAdminAuth } from './AdminAuthContext'
 
 interface AdminSidebarProps {
@@ -13,9 +13,10 @@ function getInitials(name: string): string {
 }
 
 const NAV_ITEMS = [
-  { to: '/admin',          label: 'Inicio',     icon: LayoutDashboard, end: true },
-  { to: '/admin/citas',    label: 'Citas',      icon: ClipboardList,   end: false },
-  { to: '/admin/calendario', label: 'Calendario', icon: CalendarDays,  end: false },
+  { to: '/admin',             label: 'Inicio',      icon: LayoutDashboard, end: true  },
+  { to: '/admin/citas',       label: 'Citas',       icon: ClipboardList,   end: false },
+  { to: '/admin/calendario',  label: 'Calendario',  icon: CalendarDays,    end: false },
+  { to: '/admin/pacientes',   label: 'Pacientes',   icon: Users,           end: false },
 ]
 
 function DentalLogo() {

@@ -3,6 +3,7 @@ import { X, CheckCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AppointmentForm } from './AppointmentForm'
 import { useAuth } from '../../auth/AuthContext'
+import { getDisplayName } from '../../utils/profile'
 import { createCita } from '../../services/citasService'
 
 function DentalLogoSmall() {
@@ -41,6 +42,10 @@ export function AppointmentModal({ mode, onClose, initialData }) {
 
   const handleFormSubmit = async ({ treatment, date, time, mode: m }) => {
     if (!user) {
+      sessionStorage.setItem(
+        'pendingAppointment',
+        JSON.stringify({ treatment, date: date.toISOString(), time, mode: m })
+      )
       setStep('auth-required')
       return
     }
@@ -53,7 +58,9 @@ export function AppointmentModal({ mode, onClose, initialData }) {
         tratamiento: treatment,
         fecha: date,
         hora: time,
-        patientName: profile?.full_name ?? null,
+        patientName: getDisplayName(profile) ?? null,
+        patientEmail: user.email?.endsWith('@patients.dentaviva.es') ? null : (user.email ?? null),
+        patientPhone: profile?.phone ?? null,
       })
       setStep('success')
     } catch (err) {
@@ -142,8 +149,8 @@ export function AppointmentModal({ mode, onClose, initialData }) {
               </div>
               <h3 className="text-h5 font-semibold text-text mb-2">¡Cita reservada!</h3>
               <p className="text-muted text-body-sm mb-6">
-                {profile?.full_name
-                  ? `Hola ${profile.full_name.split(' ')[0]}, nos pondremos`
+                {getDisplayName(profile)
+                  ? `Hola ${getDisplayName(profile)}, nos pondremos`
                   : 'Nos pondremos'}{' '}
                 en contacto contigo para confirmar los detalles.
               </p>

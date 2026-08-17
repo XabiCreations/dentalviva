@@ -11,7 +11,7 @@ import { WhyChooseUs } from './components/sections/WhyChooseUs'
 import { BeforeAfter } from './components/sections/BeforeAfter'
 import { Testimonials } from './components/sections/Testimonials'
 import { Team } from './components/sections/Team'
-import { CTASection } from './components/sections/CTASection'
+import { NewsletterSection } from './components/sections/NewsletterSection'
 import { Footer } from './components/sections/Footer'
 import { AppointmentModal } from './components/ui/AppointmentModal'
 import { useAuth } from './auth/AuthContext'
@@ -28,6 +28,7 @@ import AdminLoginPage from './pages/admin/AdminLoginPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
 import AdminCitasPage from './pages/admin/AdminCitasPage'
 import AdminCalendarioPage from './pages/admin/AdminCalendarioPage'
+import AdminPacientesPage from './pages/admin/AdminPacientesPage'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -75,7 +76,7 @@ function LandingPage() {
         <BeforeAfter />
         <Testimonials />
         <Team />
-        <CTASection />
+        <NewsletterSection />
       </main>
       <Footer />
     </div>
@@ -92,6 +93,7 @@ function AdminRoot() {
             <Route index element={<AdminDashboardPage />} />
             <Route path="citas" element={<AdminCitasPage />} />
             <Route path="calendario" element={<AdminCalendarioPage />} />
+            <Route path="pacientes" element={<AdminPacientesPage />} />
           </Route>
         </Route>
       </Routes>

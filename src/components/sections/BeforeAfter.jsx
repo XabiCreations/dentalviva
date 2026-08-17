@@ -140,14 +140,14 @@ export function BeforeAfter() {
           const showLeft  = !atNavStart && hoveredTab !== 0
           const showRight = !atNavEnd   && hoveredTab !== cases.length - 1
           return (
-            <div className="flex justify-center">
-              <div className="relative">
+            <div className="container-xl flex justify-center">
+              <div className="relative w-full lg:w-auto">
                 <div className={`absolute left-0 inset-y-0 w-10 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none rounded-l-full lg:hidden transition-opacity duration-200 ${showLeft ? 'opacity-100' : 'opacity-0'}`} />
                 <div className={`absolute right-0 inset-y-0 w-10 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none rounded-r-full lg:hidden transition-opacity duration-200 ${showRight ? 'opacity-100' : 'opacity-0'}`} />
                 <nav
                   ref={navRef}
                   aria-label="Casos por tratamiento"
-                  className="flex items-center gap-2 lg:gap-2 bg-white border border-border rounded-full p-2.5 lg:p-4 shadow-card w-[70vw] lg:w-auto overflow-x-auto snap-x snap-mandatory lg:snap-none"
+                  className="flex items-center gap-2 lg:gap-2 bg-white border border-border rounded-full p-2.5 lg:p-4 shadow-card w-full lg:w-auto overflow-x-auto snap-x snap-mandatory lg:snap-none"
                   style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                   {cases.map((c, i) => (
@@ -164,7 +164,7 @@ export function BeforeAfter() {
                         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
                         activeTab === i
                           ? 'bg-primary text-white'
-                          : 'text-muted hover:bg-primary-light hover:text-primary',
+                          : 'bg-[#f5f5f5] lg:bg-white text-muted hover:bg-primary-light hover:text-primary',
                       ].join(' ')}
                     >
                       {c.label}

@@ -51,24 +51,27 @@ export type Database = {
         Row: {
           id: string
           full_name: string
-          birth_date: string
+          last_name: string | null
           dni: string
           email: string
+          phone?: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
           id: string
           full_name: string
-          birth_date: string
           dni: string
           email: string
+          phone?: string | null
         }
         Update: {
           full_name?: string
+          last_name?: string | null
           birth_date?: string
           dni?: string
           email?: string
+          phone?: string | null
         }
         Relationships: never[]
       }
@@ -95,6 +98,29 @@ export type Database = {
           email?: string
           specialty?: string
           avatar_url?: string | null
+        }
+        Relationships: never[]
+      }
+      newsletter_subscribers: {
+        Row: {
+          id: string
+          email: string
+          name: string
+          user_id: string | null
+          status: string
+          subscribed_at: string
+          created_at: string
+        }
+        Insert: {
+          email: string
+          name: string
+          user_id?: string | null
+          status?: string
+        }
+        Update: {
+          name?: string
+          user_id?: string | null
+          status?: string
         }
         Relationships: never[]
       }
@@ -160,7 +186,39 @@ export type Database = {
       }
     }
     Views: { [_ in never]: never }
-    Functions: { [_ in never]: never }
+    Functions: {
+      cleanup_ghost_account: {
+        Args: { p_email: string }
+        Returns: string
+      }
+      link_newsletter_subscription: {
+        Args: { p_email: string; p_user_id: string }
+        Returns: undefined
+      }
+      subscribe_newsletter: {
+        Args: { p_name: string; p_email: string }
+        Returns: undefined
+      }
+      is_email_subscribed: {
+        Args: { p_email: string }
+        Returns: boolean
+      }
+      get_all_patients: {
+        Args: Record<never, never>
+        Returns: {
+          id: string; full_name: string; last_name: string | null
+          dni: string; email: string; phone: string | null; created_at: string
+        }[]
+      }
+      admin_update_patient: {
+        Args: { p_id: string; p_full_name: string; p_last_name: string | null; p_dni: string; p_email: string; p_phone: string | null }
+        Returns: undefined
+      }
+      admin_delete_patient: {
+        Args: { p_id: string }
+        Returns: undefined
+      }
+    }
   }
 }
 

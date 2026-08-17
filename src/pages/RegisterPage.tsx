@@ -1,7 +1,23 @@
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Check, AlertTriangle } from 'lucide-react'
 import { signUp, validateDni } from '../auth/authService'
+import { supabase } from '../lib/supabase'
+
+const PASSWORD_CRITERIA = [
+  { label: 'Mínimo 8 caracteres',           test: (p: string) => p.length >= 8 },
+  { label: 'Al menos 1 símbolo (!,?,&,...)', test: (p: string) => /[!?,&.@#$%^*()\-_=+[\]{}|;'":<>/\\]/.test(p) },
+  { label: 'Al menos una mayúscula',         test: (p: string) => /[A-Z]/.test(p) },
+]
+
+type PasswordState = 'pristine' | 'valid' | 'invalid' | 'empty'
+
+function getPasswordState(password: string, touched: boolean): PasswordState {
+  if (!touched && !password) return 'pristine'
+  if (touched && !password) return 'empty'
+  if (PASSWORD_CRITERIA.every(c => c.test(password))) return 'valid'
+  return 'invalid'
+}
 
 function DentalLogo() {
   return (
@@ -15,89 +31,117 @@ function DentalLogo() {
   )
 }
 
-interface FieldErrors {
-  full_name?: string
-  birth_date?: string
-  dni?: string
-  email?: string
-  password?: string
-  confirm_password?: string
-}
-
-function validate(fields: {
-  full_name: string
-  birth_date: string
-  dni: string
-  email: string
-  password: string
-  confirm_password: string
-}): FieldErrors {
-  const errors: FieldErrors = {}
-
-  if (!fields.full_name.trim()) errors.full_name = 'El nombre es obligatorio.'
-  if (!fields.birth_date) errors.birth_date = 'La fecha de nacimiento es obligatoria.'
-  if (!fields.dni.trim()) {
-    errors.dni = 'El DNI es obligatorio.'
-  } else if (!validateDni(fields.dni.trim())) {
-    errors.dni = 'El DNI no es válido.'
-  }
-  if (!fields.email.trim()) {
-    errors.email = 'El correo es obligatorio.'
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) {
-    errors.email = 'El formato del correo no es válido.'
-  }
-  if (!fields.password) {
-    errors.password = 'La contraseña es obligatoria.'
-  } else if (fields.password.length < 8) {
-    errors.password = 'Mínimo 8 caracteres.'
-  } else if (!/[A-Z]/.test(fields.password)) {
-    errors.password = 'Debe incluir al menos una mayúscula.'
-  } else if (!/[0-9]/.test(fields.password)) {
-    errors.password = 'Debe incluir al menos un número.'
-  }
-  if (!fields.confirm_password) {
-    errors.confirm_password = 'Confirma tu contraseña.'
-  } else if (fields.password !== fields.confirm_password) {
-    errors.confirm_password = 'Las contraseñas no coinciden.'
-  }
-
-  return errors
-}
-
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return <p className="mt-1 text-body-sm text-red-600">{message}</p>
 }
 
+type Fields = {
+  full_name: string
+  last_name: string
+  dni: string
+  phone: string
+  email: string
+  password: string
+  confirm_password: string
+}
+
 export default function RegisterPage() {
   const navigate = useNavigate()
-  const [fields, setFields] = useState({
-    full_name: '', birth_date: '', dni: '', email: '', password: '', confirm_password: '',
+  const [fields, setFields] = useState<Fields>({
+    full_name: '', last_name: '', dni: '', phone: '', email: '', password: '', confirm_password: '',
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
+  const [passwordTouched, setPasswordTouched] = useState(false)
+  const [touched, setTouched] = useState<Set<keyof Fields>>(new Set())
+  const [newsletter, setNewsletter] = useState(false)
   const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const set = (key: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.trim())
+  const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    if (!hasValidEmail) { setIsSubscribed(null); return }
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await supabase.rpc('is_email_subscribed', {
+          p_email: fields.email.trim().toLowerCase(),
+        })
+        setIsSubscribed(data === true)
+      } catch {
+        setIsSubscribed(false)
+      }
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [fields.email, hasValidEmail])
+
+  const set = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFields(prev => ({ ...prev, [key]: e.target.value }))
-    setFieldErrors(prev => ({ ...prev, [key]: undefined }))
   }
+
+  const touch = (key: keyof Fields) =>
+    setTouched(prev => new Set([...prev, key]))
+
+  function getLiveError(key: keyof Fields): string | undefined {
+    const v = fields[key]
+    switch (key) {
+      case 'full_name':
+        return !v.trim() ? 'El nombre es obligatorio.' : undefined
+      case 'last_name':
+        return !v.trim() ? 'El apellido es obligatorio.' : undefined
+      case 'dni':
+        if (!v.trim()) return 'El DNI es obligatorio.'
+        return !validateDni(v.trim()) ? 'El DNI no es válido.' : undefined
+      case 'phone':
+        return !v.trim() ? 'El teléfono es obligatorio.' : undefined
+      case 'email':
+        return v.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+          ? 'El formato del correo no es válido.'
+          : undefined
+      case 'confirm_password':
+        if (!v) return 'Confirma tu contraseña.'
+        return v !== fields.password ? 'Las contraseñas no coinciden.' : undefined
+      case 'password':
+        return !PASSWORD_CRITERIA.every(c => c.test(v))
+          ? 'La contraseña no cumple los requisitos.'
+          : undefined
+    }
+  }
+
+  const getError = (key: keyof Fields) =>
+    touched.has(key) ? getLiveError(key) : undefined
+
+  const isFieldValid = (key: keyof Fields): boolean => {
+    if (!touched.has(key)) return false
+    if (key === 'email' && !fields[key].trim()) return false
+    return getLiveError(key) === undefined
+  }
+
+  const fieldBorder = (key: keyof Fields): string => {
+    if (getError(key)) return 'border-red-400 focus:border-red-400 focus:ring-red-200'
+    if (isFieldValid(key)) return 'border-emerald-500 focus:border-emerald-500 focus:ring-emerald-200'
+    return 'border-border focus:border-primary focus:ring-primary/20'
+  }
+
+  const fieldClass = (key: keyof Fields, extra = '') =>
+    `w-full px-4 py-3 rounded-xl border text-text text-body-sm placeholder:text-muted focus:outline-none focus:ring-2 transition-all ${extra} ${fieldBorder(key)}`
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setServerError('')
 
-    const errors = validate(fields)
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors)
-      return
-    }
+    const allKeys = Object.keys(fields) as Array<keyof Fields>
+    setTouched(new Set(allKeys))
+    setPasswordTouched(true)
+
+    const hasErrors = allKeys.some(k => getLiveError(k) !== undefined)
+    if (hasErrors) return
 
     setLoading(true)
     try {
-      await signUp(fields)
+      await signUp({ ...fields, newsletter: hasValidEmail && !isSubscribed && newsletter })
       navigate('/', { replace: true })
     } catch (err) {
       setServerError(err instanceof Error ? err.message : 'Error al crear la cuenta.')
@@ -105,14 +149,6 @@ export default function RegisterPage() {
       setLoading(false)
     }
   }
-
-  const inputClass = (hasError?: string) =>
-    `w-full px-4 py-3 rounded-xl border text-text text-body-sm placeholder:text-muted/50
-    focus:outline-none focus:ring-2 transition-all ${
-      hasError
-        ? 'border-red-400 focus:border-red-400 focus:ring-red-200'
-        : 'border-border focus:border-primary focus:ring-primary/20'
-    }`
 
   return (
     <div className="min-h-screen flex">
@@ -159,60 +195,82 @@ export default function RegisterPage() {
           <p className="text-muted text-body-sm mb-8">Completa tus datos para registrarte</p>
 
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-            {/* Full name */}
-            <div>
-              <label htmlFor="full_name" className="block text-body-sm font-medium text-text mb-1.5">
-                Nombre completo
-              </label>
-              <input
-                id="full_name"
-                type="text"
-                autoComplete="name"
-                value={fields.full_name}
-                onChange={set('full_name')}
-                placeholder="Introduce tu nombre completo"
-                className={inputClass(fieldErrors.full_name)}
-              />
-              <FieldError message={fieldErrors.full_name} />
+            {/* Nombre + Apellido */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="full_name" className="block text-body-sm font-medium text-text mb-1.5">
+                  Nombre
+                </label>
+                <input
+                  id="full_name"
+                  type="text"
+                  autoComplete="given-name"
+                  value={fields.full_name}
+                  onChange={set('full_name')}
+                  onBlur={() => touch('full_name')}
+                  placeholder="Nombre"
+                  className={fieldClass('full_name')}
+                />
+                <FieldError message={getError('full_name')} />
+              </div>
+              <div>
+                <label htmlFor="last_name" className="block text-body-sm font-medium text-text mb-1.5">
+                  Apellido
+                </label>
+                <input
+                  id="last_name"
+                  type="text"
+                  autoComplete="family-name"
+                  value={fields.last_name}
+                  onChange={set('last_name')}
+                  onBlur={() => touch('last_name')}
+                  placeholder="Apellido"
+                  className={fieldClass('last_name')}
+                />
+                <FieldError message={getError('last_name')} />
+              </div>
             </div>
 
-            {/* Birth date */}
-            <div>
-              <label htmlFor="birth_date" className="block text-body-sm font-medium text-text mb-1.5">
-                Fecha de nacimiento
-              </label>
-              <input
-                id="birth_date"
-                type="date"
-                value={fields.birth_date}
-                onChange={set('birth_date')}
-                max={new Date().toISOString().split('T')[0]}
-                className={inputClass(fieldErrors.birth_date)}
-              />
-              <FieldError message={fieldErrors.birth_date} />
-            </div>
-
-            {/* DNI */}
-            <div>
-              <label htmlFor="dni" className="block text-body-sm font-medium text-text mb-1.5">
-                DNI
-              </label>
-              <input
-                id="dni"
-                type="text"
-                autoComplete="off"
-                value={fields.dni}
-                onChange={set('dni')}
-                placeholder="12345678A"
-                className={inputClass(fieldErrors.dni)}
-              />
-              <FieldError message={fieldErrors.dni} />
+            {/* DNI + Teléfono */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="dni" className="block text-body-sm font-medium text-text mb-1.5">
+                  DNI
+                </label>
+                <input
+                  id="dni"
+                  type="text"
+                  autoComplete="off"
+                  value={fields.dni}
+                  onChange={set('dni')}
+                  onBlur={() => touch('dni')}
+                  placeholder="12345678A"
+                  className={fieldClass('dni')}
+                />
+                <FieldError message={getError('dni')} />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block text-body-sm font-medium text-text mb-1.5">
+                  Teléfono
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  value={fields.phone}
+                  onChange={set('phone')}
+                  onBlur={() => touch('phone')}
+                  placeholder="123 456 789"
+                  className={fieldClass('phone')}
+                />
+                <FieldError message={getError('phone')} />
+              </div>
             </div>
 
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-body-sm font-medium text-text mb-1.5">
-                Correo electrónico
+                Correo electrónico <span className="text-muted font-normal">(opcional)</span>
               </label>
               <input
                 id="email"
@@ -220,10 +278,11 @@ export default function RegisterPage() {
                 autoComplete="email"
                 value={fields.email}
                 onChange={set('email')}
-                placeholder="tuemail@ejemplo.com"
-                className={inputClass(fieldErrors.email)}
+                onBlur={() => touch('email')}
+                placeholder="tu@gmail.com"
+                className={fieldClass('email')}
               />
-              <FieldError message={fieldErrors.email} />
+              <FieldError message={getError('email')} />
             </div>
 
             {/* Password */}
@@ -238,8 +297,18 @@ export default function RegisterPage() {
                   autoComplete="new-password"
                   value={fields.password}
                   onChange={set('password')}
-                  placeholder="Crea una contraseña segura"
-                  className={inputClass(fieldErrors.password) + ' pr-12'}
+                  onBlur={() => setPasswordTouched(true)}
+                  placeholder="Introduce una contraseña"
+                  className={(() => {
+                    const state = getPasswordState(fields.password, passwordTouched)
+                    const border = {
+                      pristine: 'border-border focus:border-primary focus:ring-primary/20',
+                      valid:    'border-emerald-500 focus:border-emerald-500 focus:ring-emerald-200',
+                      invalid:  'border-red-400 focus:border-red-400 focus:ring-red-200',
+                      empty:    'border-amber-400 focus:border-amber-400 focus:ring-amber-200',
+                    }[state]
+                    return `w-full px-4 py-3 pr-12 rounded-xl border text-text text-body-sm placeholder:text-muted focus:outline-none focus:ring-2 transition-all ${border}`
+                  })()}
                 />
                 <button
                   type="button"
@@ -250,7 +319,26 @@ export default function RegisterPage() {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              <FieldError message={fieldErrors.password} />
+
+              {/* Feedback en tiempo real */}
+              <div className="mt-2 flex flex-col gap-1.5">
+                {getPasswordState(fields.password, passwordTouched) === 'empty' && (
+                  <p className="flex items-center gap-1.5 text-body-sm text-amber-600">
+                    <AlertTriangle size={13} strokeWidth={2} className="shrink-0" />
+                    Introduce tu contraseña
+                  </p>
+                )}
+                {PASSWORD_CRITERIA.map(({ label, test }) => {
+                  const met = fields.password ? test(fields.password) : false
+                  const color = !fields.password ? 'text-muted' : met ? 'text-emerald-600' : 'text-red-600'
+                  return (
+                    <p key={label} className={`flex items-center gap-1.5 text-body-sm ${color}`}>
+                      <Check size={13} strokeWidth={2.5} className="shrink-0" />
+                      {label}
+                    </p>
+                  )
+                })}
+              </div>
             </div>
 
             {/* Confirm password */}
@@ -265,8 +353,9 @@ export default function RegisterPage() {
                   autoComplete="new-password"
                   value={fields.confirm_password}
                   onChange={set('confirm_password')}
-                  placeholder="Repite tu contraseña"
-                  className={inputClass(fieldErrors.confirm_password) + ' pr-12'}
+                  onBlur={() => touch('confirm_password')}
+                  placeholder="Repite la contraseña"
+                  className={fieldClass('confirm_password', 'pr-12')}
                 />
                 <button
                   type="button"
@@ -277,8 +366,37 @@ export default function RegisterPage() {
                   {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              <FieldError message={fieldErrors.confirm_password} />
+              <FieldError message={getError('confirm_password')} />
             </div>
+
+            {/* Newsletter opt-in */}
+            {hasValidEmail && isSubscribed === false && (
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className="relative flex-shrink-0 mt-0.5">
+                  <input
+                    type="checkbox"
+                    checked={newsletter}
+                    onChange={e => setNewsletter(e.target.checked)}
+                    className="peer sr-only"
+                  />
+                  <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all
+                    ${newsletter
+                      ? 'bg-primary border-primary'
+                      : 'border-border bg-white group-hover:border-primary/50'
+                    }`}
+                  >
+                    {newsletter && (
+                      <svg width="11" height="8" viewBox="0 0 11 8" fill="none">
+                        <path d="M1 4L4 7L10 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                </div>
+                <span className="text-body-sm text-muted leading-snug group-hover:text-text transition-colors">
+                  Quiero recibir consejos semanales para cuidar mi boca
+                </span>
+              </label>
+            )}
 
             {/* Server error */}
             {serverError && (

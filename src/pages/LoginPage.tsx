@@ -106,8 +106,8 @@ export default function LoginPage() {
                 autoComplete="username"
                 value={identifier}
                 onChange={e => setIdentifier(e.target.value)}
-                placeholder="tuemail@ejemplo.com o 12345678A"
-                className="w-full px-4 py-3 rounded-xl border border-border text-text text-body-sm placeholder:text-muted/50
+                placeholder="Correo electrónico o DNI"
+                className="w-full px-4 py-3 rounded-xl border border-border text-text text-body-sm placeholder:text-muted
                   focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
               />
             </div>
@@ -125,7 +125,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="Introduce tu contraseña"
-                  className="w-full px-4 py-3 pr-12 rounded-xl border border-border text-text text-body-sm placeholder:text-muted/50
+                  className="w-full px-4 py-3 pr-12 rounded-xl border border-border text-text text-body-sm placeholder:text-muted
                     focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 <button
@@ -137,9 +137,7 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              <div className="flex justify-end mt-1.5">
-                <span className="text-body-sm text-primary cursor-not-allowed">¿Olvidaste tu contraseña?</span>
-              </div>
+
             </div>
 
             {/* Error */}
