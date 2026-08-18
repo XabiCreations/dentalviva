@@ -36,7 +36,6 @@ export interface AdminAppointment {
   patient_name: string | null
   patient_phone: string | null
   patient_email: string | null
-  patient_birth_date: string | null  // 'YYYY-MM-DD'
   created_at: string
   dentist?: Dentist | null
 }
@@ -47,7 +46,6 @@ export interface CreateAppointmentPayload {
   patient_name: string
   patient_phone: string | null
   patient_email: string | null
-  patient_birth_date: string | null
   tratamiento: string
   fecha: string
   hora: string

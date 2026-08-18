@@ -1,4 +1,4 @@
-import { CheckCircle, XCircle, Phone, Mail, RefreshCw } from 'lucide-react'
+import { CheckCircle, XCircle, Phone, Mail, RefreshCw, Pencil, Trash2 } from 'lucide-react'
 
 const iconOnly  = 'p-2 rounded-lg transition-colors'
 const withLabel = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors text-body-sm font-medium'
@@ -96,6 +96,46 @@ export function CallButton({ phone }: CallButtonProps) {
     <span title="Sin teléfono" className={`${iconOnly} bg-primary/10 text-primary/30 cursor-not-allowed`}>
       <Phone size={16} strokeWidth={1.75} />
     </span>
+  )
+}
+
+// ─── EditButton ───────────────────────────────────────────────────────────────
+
+interface EditButtonProps {
+  onClick: () => void
+  disabled?: boolean
+}
+
+export function EditButton({ onClick, disabled }: EditButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title="Editar"
+      className={`${iconOnly} bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50`}
+    >
+      <Pencil size={16} strokeWidth={1.75} />
+    </button>
+  )
+}
+
+// ─── DeleteButton ─────────────────────────────────────────────────────────────
+
+interface DeleteButtonProps {
+  onClick: () => void
+  disabled?: boolean
+}
+
+export function DeleteButton({ onClick, disabled }: DeleteButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title="Eliminar"
+      className={`${iconOnly} bg-rose-50 text-rose-500 hover:bg-rose-100 disabled:opacity-50`}
+    >
+      <Trash2 size={16} strokeWidth={1.75} />
+    </button>
   )
 }
 

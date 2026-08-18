@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
-import type { AdminAppointment, AppointmentStatus, PatientRow } from '../types/admin'
+import type { AdminAppointment, AppointmentStatus, PatientRow, CreateAppointmentPayload } from '../types/admin'
 
 const capitalize = (s: string) => s.trim().replace(/\b\w/g, c => c.toUpperCase())
 
@@ -135,8 +135,33 @@ export async function adminUpdatePatient(
   if (error) throw error
 }
 
-export async function adminDeletePatient(id: string): Promise<void> {
-  const { error } = await supabase.rpc('admin_delete_patient', { p_id: id })
+export async function adminCreateCita(payload: CreateAppointmentPayload): Promise<AdminAppointment> {
+  const { data, error } = await supabase
+    .from('citas')
+    .insert({
+      dentist_id:         payload.dentist_id,
+      user_id:            payload.user_id ?? null,
+      tipo:               'cita' as const,
+      tratamiento:        payload.tratamiento,
+      fecha:              payload.fecha,
+      hora:               payload.hora.length === 5 ? payload.hora + ':00' : payload.hora,
+      duration_min:       payload.duration_min,
+      estado:             payload.estado,
+      source:             payload.source,
+      notes:              payload.notes,
+      patient_name:       payload.patient_name,
+      patient_phone:      payload.patient_phone,
+      patient_email:      payload.patient_email,
+    })
+    .select()
+    .single()
+
+  if (error) throw new Error(error.message)
+  return data as AdminAppointment
+}
+
+export async function adminDeletePatient(id: string, deleteNewsletter = false): Promise<void> {
+  const { error } = await supabase.rpc('admin_delete_patient', { p_id: id, p_delete_newsletter: deleteNewsletter })
   if (error) throw error
 }
 
@@ -182,7 +207,7 @@ export async function adminCreatePatient(data: {
 
   await supabase.rpc('admin_update_patient', {
     p_id:        userId,
-    p_full_name: displayName,
+    p_full_name: normalizedName,
     p_last_name: normalizedLastName || null,
     p_dni:       data.dni.toUpperCase(),
     p_email:     authEmail,

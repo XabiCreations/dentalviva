@@ -118,15 +118,15 @@ export function NewsletterSection() {
     <section
       ref={sectionRef}
       aria-labelledby="cta-heading"
-      className="relative py-20 lg:py-0 lg:h-screen flex items-center bg-[#f5f5f5] overflow-visible"
+      className="relative py-20 lg:py-0 lg:h-screen flex items-center bg-[#F9FAFC] overflow-visible"
     >
       {/* Ripple waves — clipped to section, first in DOM so floating images paint above */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="absolute w-40 h-40 rounded-full border border-primary/25" />
           <div className="absolute w-[500px] h-[500px] rounded-full border border-primary/18" />
-          <div className="absolute w-[900px] h-[900px] rounded-full border border-primary/12" />
-          <div className="absolute w-[1300px] h-[1300px] rounded-full border border-primary/7" />
+          <div className="absolute w-[900px] h-[900px] rounded-full border border-primary/4" />
+          <div className="absolute w-[1300px] h-[1300px] rounded-full border border-primary/2" />
         </div>
       </div>
 

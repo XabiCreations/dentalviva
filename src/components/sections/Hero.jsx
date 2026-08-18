@@ -59,33 +59,48 @@ function AuthModal({ onClose }) {
 
 function SocialProofBadge({ socialRef, counterRef, prefersReducedMotion }) {
   return (
-    <div
-      ref={socialRef}
-      className="flex w-fit items-center gap-4 bg-white rounded-2xl border border-[#ebebeb] shadow-sm px-[0.75rem] py-[0.75rem]"
-      aria-label="12.000 pacientes satisfechos"
-    >
-      <div className="flex items-center shrink-0" aria-hidden="true">
-        {AVATAR_IMAGES.slice(0, 3).map((src, i) => (
-          <div
-            key={i}
-            className="w-12 h-12 rounded-full border-[3px] border-white overflow-hidden bg-surface"
-            style={{ marginLeft: i === 0 ? 0 : '-0.875rem', zIndex: 3 - i }}
+    <div className="flex items-stretch gap-2 sm:gap-3">
+      {/* Patients badge */}
+      <div
+        ref={socialRef}
+        className="flex items-center gap-2 sm:gap-4 bg-white rounded-2xl border border-[#ebebeb] shadow-sm px-2 py-2 sm:px-3 sm:py-3"
+        aria-label="12.000 pacientes satisfechos"
+      >
+        <div className="flex items-center shrink-0" aria-hidden="true">
+          {AVATAR_IMAGES.slice(0, 3).map((src, i) => (
+            <div
+              key={i}
+              className="w-9 h-9 sm:w-14 sm:h-14 rounded-full border-[3px] border-white overflow-hidden bg-surface"
+              style={{ marginLeft: i === 0 ? 0 : '-0.6rem', zIndex: 3 - i }}
+            >
+              <img src={src} alt="" className="w-full h-full object-cover" />
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <p
+            ref={counterRef}
+            className="text-xl sm:text-h3 font-bold text-text leading-none"
+            aria-live="polite"
           >
-            <img src={src} alt="" className="w-full h-full object-cover" />
+            {prefersReducedMotion ? '+750' : '+0'}
+          </p>
+          <div className="flex flex-col">
+            <span className="text-[11px] text-muted font-semibold tracking-normal">Pacientes</span>
+            <span className="text-[11px] text-muted font-semibold tracking-normal">mensuales</span>
           </div>
-        ))}
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <p
-          ref={counterRef}
-          className="text-h3 font-bold text-text leading-none"
-          aria-live="polite"
-        >
-          {prefersReducedMotion ? '+750' : '+0'}
-        </p>
-        <div className="flex flex-col">
-          <span className="text-body-sm text-muted font-semibold tracking-normal">Pacientes</span>
-          <span className="text-body-sm text-muted font-semibold tracking-normal">mensuales</span>
+
+      {/* Rating badge */}
+      <div
+        className="flex items-center gap-1.5 bg-white rounded-2xl border border-[#ebebeb] shadow-sm px-2 py-2 sm:px-3 sm:py-3"
+        aria-label="Valoración 4.8 sobre 5"
+      >
+        <span className="text-[2rem] sm:text-[2.75rem] leading-none text-amber-400" aria-hidden="true">★</span>
+        <div className="flex flex-col items-center">
+          <p className="text-xl sm:text-h3 font-bold text-text leading-none">4.8</p>
+          <span className="hidden sm:block text-[11px] text-muted font-semibold tracking-normal">(235 reseñas)</span>
         </div>
       </div>
     </div>

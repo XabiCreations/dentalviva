@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Search, UserPlus, Pencil, Trash2, Check, X, Eye, EyeOff, ChevronDown, Copy, Wand2 } from 'lucide-react'
+import { CallButton, EmailButton, EditButton, DeleteButton } from '../../components/admin/ActionIconButtons'
 import { supabase } from '../../lib/supabase'
 import { getAllPatients, adminUpdatePatient, adminDeletePatient, adminCreatePatient } from '../../services/adminService'
 import type { PatientRow } from '../../types/admin'
@@ -128,11 +129,13 @@ function Toast({ toast, onDismiss }: { toast: ToastData; onDismiss: () => void }
 interface DeleteModalProps {
   patient: PatientRow
   deleting: boolean
-  onConfirm: () => void
+  onConfirm: (deleteNewsletter: boolean) => void
   onCancel: () => void
 }
 
 function DeleteModal({ patient, deleting, onConfirm, onCancel }: DeleteModalProps) {
+  const [deleteNewsletter, setDeleteNewsletter] = useState(false)
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel() }
     window.addEventListener('keydown', handler)
@@ -151,22 +154,39 @@ function DeleteModal({ patient, deleting, onConfirm, onCancel }: DeleteModalProp
           <Trash2 size={20} className="text-red-600" strokeWidth={1.75} />
         </div>
         <h2 className="text-h5 font-bold text-text mb-2">Eliminar paciente</h2>
-        <p className="text-body-sm text-muted mb-6">
+        <p className="text-body-sm text-muted mb-5">
           ¿Estás seguro de que quieres eliminar a{' '}
           <strong className="text-text">{fullName}</strong>?
           Esta acción no se puede deshacer.
         </p>
+
+        {/* Newsletter checkbox */}
+        <label className="flex items-center gap-3 cursor-pointer select-none mb-6 p-3 rounded-xl bg-surface hover:bg-border/40 transition-colors">
+          <button
+            type="button"
+            onClick={() => setDeleteNewsletter(v => !v)}
+            className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${
+              deleteNewsletter ? 'bg-red-500 border-red-500' : 'border-border bg-white'
+            }`}
+          >
+            {deleteNewsletter && <Check size={12} strokeWidth={3} className="text-white" />}
+          </button>
+          <span className="text-body-sm text-muted leading-snug">
+            Eliminar también de la newsletter
+          </span>
+        </label>
+
         <div className="flex gap-3">
           <button
             onClick={onCancel}
             disabled={deleting}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-border text-body-sm font-medium text-muted
-              hover:text-text hover:bg-surface transition-colors disabled:opacity-50"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-border text-body-sm font-medium text-text
+              hover:bg-surface transition-colors disabled:opacity-50"
           >
             Cancelar
           </button>
           <button
-            onClick={onConfirm}
+            onClick={() => onConfirm(deleteNewsletter)}
             disabled={deleting}
             className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white text-body-sm font-semibold
               hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
@@ -587,11 +607,11 @@ export default function AdminPacientesPage() {
 
   // ── Delete ───────────────────────────────────────────────────────────────────
 
-  const confirmDelete = async () => {
+  const confirmDelete = async (deleteNewsletter: boolean) => {
     if (!deleteTarget) return
     setDeleting(true)
     try {
-      await adminDeletePatient(deleteTarget.id)
+      await adminDeletePatient(deleteTarget.id, deleteNewsletter)
       setPatients(prev => prev.filter(p => p.id !== deleteTarget.id))
       setDeleteTarget(null)
       setToast({ message: 'Paciente eliminado correctamente.', type: 'success' })
@@ -632,7 +652,7 @@ export default function AdminPacientesPage() {
       <div className="bg-white border border-border rounded-2xl shadow-card overflow-hidden">
 
         {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 border-b border-border/60">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-border/60">
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" strokeWidth={2} />
             <input
@@ -644,7 +664,7 @@ export default function AdminPacientesPage() {
                 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all w-72"
             />
           </div>
-          <div className="relative">
+          <div className="relative shrink-0">
             <select
               value={sort}
               onChange={e => { setSort(e.target.value as SortValue); setPage(1) }}
@@ -655,11 +675,7 @@ export default function AdminPacientesPage() {
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
-            <ChevronDown
-              size={14}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none"
-              strokeWidth={2}
-            />
+            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" strokeWidth={2} />
           </div>
         </div>
 
@@ -790,11 +806,14 @@ export default function AdminPacientesPage() {
                           className={inputCls('email') + ' min-w-[180px]'}
                         />
                       ) : fakeEmail ? (
-                        <span className="text-body-sm text-muted/40 italic">Sin email</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-body-sm text-muted/40 italic">Sin email</span>
+                          <EmailButton email={null} />
+                        </div>
                       ) : (
                         <div className="flex items-center gap-1">
                           <span className="text-body-sm text-muted">{patient.email}</span>
-                          <CopyButton value={patient.email} />
+                          <EmailButton email={patient.email} />
                         </div>
                       )}
                     </td>
@@ -809,13 +828,11 @@ export default function AdminPacientesPage() {
                           type="tel"
                           className={inputCls('phone') + ' min-w-[120px]'}
                         />
-                      ) : patient.phone ? (
-                        <div className="flex items-center gap-1">
-                          <span className="text-body-sm text-muted">{patient.phone}</span>
-                          <CopyButton value={patient.phone} />
-                        </div>
                       ) : (
-                        <span className="text-body-sm text-muted">—</span>
+                        <div className="flex items-center gap-1">
+                          {patient.phone && <span className="text-body-sm text-muted">{patient.phone}</span>}
+                          <CallButton phone={patient.phone} />
+                        </div>
                       )}
                     </td>
 
@@ -852,20 +869,8 @@ export default function AdminPacientesPage() {
                           </>
                         ) : (
                           <>
-                            <button
-                              onClick={() => startEdit(patient)}
-                              title="Editar"
-                              className="p-1.5 rounded-lg text-primary bg-primary-light hover:bg-primary/20 transition-colors"
-                            >
-                              <Pencil size={14} strokeWidth={1.75} />
-                            </button>
-                            <button
-                              onClick={() => setDeleteTarget(patient)}
-                              title="Eliminar"
-                              className="p-1.5 rounded-lg text-rose-500 bg-rose-50 hover:bg-rose-100 transition-colors"
-                            >
-                              <Trash2 size={14} strokeWidth={1.75} />
-                            </button>
+                            <EditButton onClick={() => startEdit(patient)} />
+                            <DeleteButton onClick={() => setDeleteTarget(patient)} />
                           </>
                         )}
                       </div>

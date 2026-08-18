@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
-  Phone, Mail, Clock, Stethoscope, CheckCircle,
-  Calendar, AlertCircle, MessageSquare, UserX,
+  Phone, Clock, Stethoscope, CheckCircle,
+  Calendar, MessageSquare, UserX,
 } from 'lucide-react'
 import { useAdminAuth } from '../../admin/AdminAuthContext'
 import { Toast, type ToastData } from '../../admin/Toast'
@@ -123,31 +123,25 @@ function NextPatientCard({ dentistId, onToast, reloadTrigger }: NextPatientCardP
     <div className="bg-white border border-border rounded-2xl shadow-card overflow-hidden h-[320px] flex flex-col">
       {/* Card header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border/60">
-        <div className="flex items-center gap-3">
-          <h2 className="text-body-sm font-semibold text-text">Siguiente paciente</h2>
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => setIndex(i => i - 1)}
-              disabled={!hasPrev}
-              className="px-3 py-1.5 rounded-xl bg-surface text-primary text-body-sm font-medium
-                hover:bg-border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              Ver anterior
-            </button>
-            <span className="text-body-sm text-muted tabular-nums px-1">{index + 1} / {citas.length}</span>
-            <button
-              onClick={() => setIndex(i => i + 1)}
-              disabled={!hasNext}
-              className="px-3 py-1.5 rounded-xl bg-surface text-primary text-body-sm font-medium
-                hover:bg-border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              Ver siguiente
-            </button>
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 text-primary text-body-sm font-semibold">
-          <Clock size={14} strokeWidth={2} />
-          {hm(cita.hora)} · {cita.duration_min} min
+        <h2 className="text-body-sm font-semibold text-text">Siguiente paciente</h2>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setIndex(i => i - 1)}
+            disabled={!hasPrev}
+            className="px-3 py-1.5 rounded-xl bg-surface text-primary text-body-sm font-medium
+              hover:bg-border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            Ver anterior
+          </button>
+          <span className="text-body-sm text-muted tabular-nums px-1">{index + 1} / {citas.length}</span>
+          <button
+            onClick={() => setIndex(i => i + 1)}
+            disabled={!hasNext}
+            className="px-3 py-1.5 rounded-xl bg-surface text-primary text-body-sm font-medium
+              hover:bg-border transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            Ver siguiente
+          </button>
         </div>
       </div>
 
@@ -160,48 +154,23 @@ function NextPatientCard({ dentistId, onToast, reloadTrigger }: NextPatientCardP
           </div>
           <div className="min-w-0">
             <p className="text-h5 font-bold text-text leading-tight truncate">{cita.patient_name}</p>
-            <div className="flex items-center gap-1.5 mt-1">
-              <Stethoscope size={13} className="text-muted shrink-0" strokeWidth={1.5} />
-              <p className="text-body-sm text-muted truncate">{cita.tratamiento ?? 'Sin especificar'}</p>
-            </div>
           </div>
         </div>
 
-        {/* Contact */}
-        <div className="flex flex-col gap-2.5 mb-5">
-          {cita.patient_phone ? (
-            <a href={`tel:${cita.patient_phone.replace(/\s/g, '')}`}
-              className="flex items-center gap-2.5 text-body-sm text-text hover:text-primary transition-colors group w-fit">
-              <Phone size={14} className="text-muted group-hover:text-primary transition-colors shrink-0" strokeWidth={1.5} />
-              {cita.patient_phone}
-            </a>
-          ) : (
-            <span className="flex items-center gap-2.5 text-body-sm text-muted/40">
-              <Phone size={14} className="shrink-0" strokeWidth={1.5} />
-              —
-            </span>
-          )}
-          {cita.patient_email ? (
-            <a href={`mailto:${cita.patient_email}`}
-              className="flex items-center gap-2.5 text-body-sm text-text hover:text-primary transition-colors group w-fit">
-              <Mail size={14} className="text-muted group-hover:text-primary transition-colors shrink-0" strokeWidth={1.5} />
-              {cita.patient_email}
-            </a>
-          ) : (
-            <span className="flex items-center gap-2.5 text-body-sm text-muted/40">
-              <Mail size={14} className="shrink-0" strokeWidth={1.5} />
-              —
-            </span>
-          )}
-        </div>
-
-        {/* Notes / allergies */}
-        {cita.notes && (
-          <div className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5">
-            <AlertCircle size={14} className="text-amber-600 shrink-0 mt-0.5" strokeWidth={1.75} />
-            <p className="text-body-sm text-amber-900 leading-relaxed">{cita.notes}</p>
+        {/* Cita details */}
+        <div className="flex flex-col gap-3 mb-5">
+          <div className="flex items-center gap-2.5">
+            <Stethoscope size={14} className="text-muted shrink-0" strokeWidth={1.5} />
+            <span className="text-body-sm text-text font-medium">{cita.tratamiento ?? 'Sin especificar'}</span>
           </div>
-        )}
+          <div className="flex items-center gap-2.5">
+            <Clock size={14} className="text-muted shrink-0" strokeWidth={1.5} />
+            <span className="text-body-sm text-text">
+              {cita.hora.slice(0, 5)}
+              <span className="text-muted ml-1.5">· {cita.duration_min} min</span>
+            </span>
+          </div>
+        </div>
 
         {/* Actions */}
         <div className="flex gap-3 pt-1 mt-auto">

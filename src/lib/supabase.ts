@@ -215,7 +215,7 @@ export type Database = {
         Returns: undefined
       }
       admin_delete_patient: {
-        Args: { p_id: string }
+        Args: { p_id: string; p_delete_newsletter?: boolean }
         Returns: undefined
       }
     }
