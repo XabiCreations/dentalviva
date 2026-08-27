@@ -18,7 +18,8 @@ import { useAuth } from './auth/AuthContext'
 
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
-import HistorialPage from './pages/HistorialPage'
+import MisCitasPage from './pages/MisCitasPage'
+import MiCuentaPage from './pages/MiCuentaPage'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 
 import { AdminAuthProvider } from './admin/AdminAuthContext'
@@ -108,10 +109,18 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/registro" element={<RegisterPage />} />
       <Route
-        path="/historial"
+        path="/mis-citas"
         element={
           <ProtectedRoute>
-            <HistorialPage />
+            <MisCitasPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mi-cuenta"
+        element={
+          <ProtectedRoute>
+            <MiCuentaPage />
           </ProtectedRoute>
         }
       />

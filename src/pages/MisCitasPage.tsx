@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { LogOut, CalendarDays, ClipboardList, User, Clock, Stethoscope } from 'lucide-react'
+import { CalendarDays, ClipboardList, User, Clock, Stethoscope } from 'lucide-react'
 import { useAuth } from '../auth/AuthContext'
-import { signOut } from '../auth/authService'
 import { getCitasByUser, cancelCita, type Cita, type EstadoCita } from '../services/citasService'
+import { Nav } from '../components/sections/Nav'
+import { Footer } from '../components/sections/Footer'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -24,17 +25,6 @@ function canCancel(cita: Cita): boolean {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function DentalLogo() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <circle cx="16" cy="16" r="16" fill="#EBF4FF" />
-      <path
-        d="M16 7C12.5 7 10 9.5 10 12C10 13.5 10.5 15 11 16.5C11.7 18.5 12 20.5 12 22C12 23.1 12.9 24 14 24C15.1 24 16 23.1 16 22V20C16 20 16 22 18 22C19.1 22 20 23.1 20 22C20 20.5 20.3 18.5 21 16.5C21.5 15 22 13.5 22 12C22 9.5 19.5 7 16 7Z"
-        fill="#2A7FD4"
-      />
-    </svg>
-  )
-}
 
 const ESTADO_CONFIG: Record<EstadoCita | string, { label: string; className: string }> = {
   pendiente:  { label: 'Pendiente',  className: 'bg-amber-100 text-amber-700' },
@@ -185,7 +175,7 @@ export default function HistorialPage() {
         const result = await getCitasByUser(user!.id)
         if (!cancelled) setCitas(result)
       } catch {
-        if (!cancelled) setError('No se pudo cargar el historial. Inténtalo de nuevo.')
+        if (!cancelled) setError('No se pudieron cargar las citas. Inténtalo de nuevo.')
       } finally {
         if (!cancelled) setIsLoading(false)
       }
@@ -205,34 +195,25 @@ export default function HistorialPage() {
   if (authLoading || isLoading) {
     return (
       <div className="min-h-screen bg-surface flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" aria-label="Cargando historial" />
+        <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" aria-label="Cargando citas" />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-surface flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-border px-6 py-4 flex items-center justify-between shadow-nav">
-        <Link to="/" className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
-          <DentalLogo />
-          <span className="text-body-sm font-bold text-text">DentalViva</span>
-        </Link>
-        <button
-          onClick={() => signOut()}
-          className="flex items-center gap-2 text-body-sm text-muted hover:text-text px-4 py-2 rounded-xl border border-border hover:border-border/80 transition-all duration-150"
-        >
-          <LogOut size={14} strokeWidth={1.5} />
-          Cerrar sesión
-        </button>
-      </header>
+      <Nav />
 
       {/* Main */}
-      <main className="flex-1 px-4 py-10 sm:px-6 lg:px-8">
+      <main className="flex-1 px-4 pt-24 pb-16 sm:px-6 lg:px-8 lg:pt-28">
         <div className="max-w-3xl mx-auto">
+          <Link to="/" className="inline-flex items-center gap-1.5 text-body-sm text-muted hover:text-primary transition-colors mb-6">
+            ← Volver a la web
+          </Link>
+
           <div className="flex items-center gap-3 mb-2">
             <ClipboardList size={22} strokeWidth={1.5} className="text-primary shrink-0" />
-            <h1 className="text-h5 font-bold text-text">Mi historial</h1>
+            <h1 className="text-h5 font-bold text-text">Mis citas</h1>
           </div>
           <p className="text-muted text-body-sm mb-8 ml-9">Todas tus citas reservadas.</p>
 
@@ -260,13 +241,13 @@ export default function HistorialPage() {
             </ol>
           )}
 
-          <div className="mt-10 text-center">
-            <Link to="/" className="inline-block text-body-sm text-primary font-medium hover:underline">
-              &larr; Volver a la web
-            </Link>
-          </div>
+          <Link to="/" className="inline-flex items-center gap-1.5 text-body-sm text-muted hover:text-primary transition-colors mt-8">
+            ← Volver a la web
+          </Link>
         </div>
       </main>
+
+      <Footer />
     </div>
   )
 }

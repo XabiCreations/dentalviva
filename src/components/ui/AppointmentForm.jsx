@@ -5,8 +5,9 @@ import { ChevronLeft, ChevronRight, Calendar, Clock, Stethoscope } from 'lucide-
 const TREATMENTS = [
   'Blanqueamiento dental',
   'Implantes dentales',
+  'Diseño de sonrisa',
   'Ortodoncia',
-  'Estética dental',
+  'Odontología general',
 ]
 
 const DAYS = ['L', 'M', 'X', 'J', 'V', 'S', 'D']

@@ -41,6 +41,56 @@ function hm(hora: string): string {
   return hora.slice(0, 5)
 }
 
+// ─── ConfirmModal ─────────────────────────────────────────────────────────────
+
+interface ConfirmModalProps {
+  title: string
+  description: string
+  confirmLabel: string
+  confirmClassName: string
+  icon: React.ReactNode
+  onConfirm: () => void
+  onCancel: () => void
+}
+
+function ConfirmModal({ title, description, confirmLabel, confirmClassName, icon, onConfirm, onCancel }: ConfirmModalProps) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onCancel])
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={onCancel}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-xl w-full max-w-xs p-6"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="mb-4">{icon}</div>
+        <h3 className="text-body-lg font-bold text-text mb-1">{title}</h3>
+        <p className="text-body-sm text-muted mb-6">{description}</p>
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-medium text-text hover:bg-surface transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={onConfirm}
+            className={`flex-1 py-2.5 rounded-xl text-body-sm font-semibold transition-colors ${confirmClassName}`}
+          >
+            {confirmLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── NextPatientCard ──────────────────────────────────────────────────────────
 
 interface NextPatientCardProps {
@@ -53,8 +103,9 @@ function NextPatientCard({ dentistId, onToast, reloadTrigger }: NextPatientCardP
   const [citas, setCitas] = useState<AdminAppointment[]>([])
   const [index, setIndex] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [completing, setCompleting]     = useState(false)
-  const [noAsisting, setNoAsisting]     = useState(false)
+  const [completing, setCompleting]         = useState(false)
+  const [noAsisting, setNoAsisting]         = useState(false)
+  const [pendingAction, setPendingAction]   = useState<'completada' | 'ausente' | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -120,6 +171,7 @@ function NextPatientCard({ dentistId, onToast, reloadTrigger }: NextPatientCardP
   }
 
   return (
+    <>
     <div className="bg-white border border-border rounded-2xl shadow-card overflow-hidden h-[320px] flex flex-col">
       {/* Card header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border/60">
@@ -175,7 +227,7 @@ function NextPatientCard({ dentistId, onToast, reloadTrigger }: NextPatientCardP
         {/* Actions */}
         <div className="flex gap-3 pt-1 mt-auto">
           <button
-            onClick={handleComplete}
+            onClick={() => setPendingAction('completada')}
             disabled={completing || noAsisting}
             className="flex-1 flex items-center justify-center gap-2 bg-primary text-white text-body-sm font-semibold
               py-2.5 rounded-xl hover:bg-primary/90 active:scale-[0.99] transition-all duration-150
@@ -188,7 +240,7 @@ function NextPatientCard({ dentistId, onToast, reloadTrigger }: NextPatientCardP
             Completada
           </button>
           <button
-            onClick={handleNoAsistio}
+            onClick={() => setPendingAction('ausente')}
             disabled={noAsisting || completing}
             className="flex items-center justify-center gap-2 border border-border text-text text-body-sm font-medium
               px-4 py-2.5 rounded-xl hover:bg-surface transition-all duration-150
@@ -236,6 +288,31 @@ function NextPatientCard({ dentistId, onToast, reloadTrigger }: NextPatientCardP
 
       </div>
     </div>
+
+    {pendingAction === 'completada' && (
+      <ConfirmModal
+        icon={<CheckCircle size={28} className="text-primary" strokeWidth={1.75} />}
+        title="Marcar como completada"
+        description="¿Confirmas que la cita ha finalizado correctamente?"
+        confirmLabel="Completada"
+        confirmClassName="bg-primary text-white hover:bg-primary/90"
+        onConfirm={() => { setPendingAction(null); handleComplete() }}
+        onCancel={() => setPendingAction(null)}
+      />
+    )}
+
+    {pendingAction === 'ausente' && (
+      <ConfirmModal
+        icon={<UserX size={28} className="text-muted" strokeWidth={1.75} />}
+        title="Marcar como ausente"
+        description="¿Confirmas que el paciente no se ha presentado a la cita?"
+        confirmLabel="Ausente"
+        confirmClassName="bg-surface border border-border text-text hover:bg-border"
+        onConfirm={() => { setPendingAction(null); handleNoAsistio() }}
+        onCancel={() => setPendingAction(null)}
+      />
+    )}
+    </>
   )
 }
 
@@ -291,18 +368,20 @@ function PendingCard({ dentistId, onToast, onApproved }: PendingCardProps) {
 
   return (
     <div className="bg-white border border-border rounded-2xl shadow-card overflow-hidden flex flex-col h-[320px]">
-      {/* Card header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-border/60 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <h2 className="text-body-sm font-semibold text-text">Pendientes de aprobar</h2>
-          {items.length > 0 && (
-            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[12px] font-semibold rounded-full">
-              {items.length}
-            </span>
-          )}
+      {/* Card header — only when there are items or loading */}
+      {(loading || items.length > 0) && (
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border/60 shrink-0">
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-body-sm font-semibold text-text">Pendientes de aprobar</h2>
+            {items.length > 0 && (
+              <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[12px] font-semibold rounded-full">
+                {items.length}
+              </span>
+            )}
+          </div>
+          <RefreshButton onClick={handleRefresh} disabled={refreshing || loading} loading={refreshing} label="Actualizar" />
         </div>
-        <RefreshButton onClick={handleRefresh} disabled={refreshing || loading} loading={refreshing} label="Actualizar" />
-      </div>
+      )}
 
       {/* List */}
       <div className="flex-1 min-h-0 overflow-y-auto">
@@ -313,8 +392,8 @@ function PendingCard({ dentistId, onToast, onApproved }: PendingCardProps) {
         )}
 
         {!loading && items.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-center px-6">
-            <CheckCircle size={40} strokeWidth={1} className="text-emerald-300 mb-4" />
+          <div className="h-full flex flex-col items-center justify-center text-center px-6">
+            <CheckCircle size={40} strokeWidth={1} className="text-border mb-4" />
             <p className="text-text font-semibold mb-1">Todo al día</p>
             <p className="text-muted text-body-sm">No hay citas pendientes de aprobar.</p>
           </div>

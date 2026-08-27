@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Search, UserPlus, Pencil, Trash2, Check, X, Eye, EyeOff, ChevronDown, Copy, Wand2 } from 'lucide-react'
-import { CallButton, EmailButton, EditButton, DeleteButton } from '../../components/admin/ActionIconButtons'
+import { CallButton, EmailButton, EditButton, DeleteButton, RefreshButton } from '../../components/admin/ActionIconButtons'
 import { supabase } from '../../lib/supabase'
 import { getAllPatients, adminUpdatePatient, adminDeletePatient, adminCreatePatient } from '../../services/adminService'
 import type { PatientRow } from '../../types/admin'
@@ -522,6 +522,7 @@ export default function AdminPacientesPage() {
   const [deleting, setDeleting]           = useState(false)
   const [showCreate, setShowCreate]       = useState(false)
   const [toast, setToast]                 = useState<ToastData | null>(null)
+  const [refreshing, setRefreshing]       = useState(false)
 
   const load = () => {
     setLoading(true)
@@ -676,6 +677,14 @@ export default function AdminPacientesPage() {
               ))}
             </select>
             <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" strokeWidth={2} />
+          </div>
+          <div className="ml-auto shrink-0">
+            <RefreshButton
+              onClick={async () => { setRefreshing(true); load(); setRefreshing(false) }}
+              disabled={refreshing}
+              loading={refreshing}
+              label="Actualizar"
+            />
           </div>
         </div>
 

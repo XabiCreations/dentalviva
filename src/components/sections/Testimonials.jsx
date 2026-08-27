@@ -10,22 +10,22 @@ const testimonials = [
   {
     id: 1,
     imageUrl: '/images/testimonios/testimonial-1.webp',
-    patientName: 'María González',
-    treatmentType: 'Estética dental',
+    patientName: 'Carlos González',
+    treatmentType: 'Diseño de sonrisa',
     text: 'Llevaba años sintiéndome insegura con mi sonrisa. En DentalViva no solo encontré el tratamiento que necesitaba, sino un equipo que me hizo sentir en buenas manos. El resultado fue exactamente lo que buscaba.',
   },
   {
     id: 2,
     imageUrl: '/images/testimonios/testimonial-2.webp',
-    patientName: 'Javier Martínez',
+    patientName: 'Ana Martínez',
     treatmentType: 'Implantes dentales',
     text: 'Después de perder dos dientes en un accidente, pensé que nunca volvería a comer con normalidad. Los implantes de DentalViva me devolvieron la funcionalidad completa. El proceso fue mucho más sencillo de lo que imaginaba.',
   },
   {
     id: 3,
     imageUrl: '/images/testimonios/testimonial-3.webp',
-    patientName: 'Laura Sánchez',
-    treatmentType: 'Ortodoncia Invisalign',
+    patientName: 'Alejandro Sánchez',
+    treatmentType: 'Ortodoncia',
     text: 'Empecé el tratamiento de Invisalign sin creer del todo que funcionaría. Dieciocho meses después, tengo la sonrisa que siempre quise. La Dra. García me guió en cada paso con mucha profesionalidad y cercanía.',
   },
 ]

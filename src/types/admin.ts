@@ -6,9 +6,6 @@ export type AppointmentStatus =
   | 'cancelada'
   | 'no_asistio'
 
-// ─── Canal de origen de la cita ──────────────────────────────────────────────
-export type AppointmentSource = 'web' | 'telefono' | 'presencial' | 'whatsapp'
-
 // ─── Perfil del dentista ──────────────────────────────────────────────────────
 export interface Dentist {
   id: string
@@ -23,16 +20,14 @@ export interface Dentist {
 // ─── Cita completa (admin) ────────────────────────────────────────────────────
 export interface AdminAppointment {
   id: string
-  user_id: string | null
+  user_id: string
   dentist_id: string | null
-  tipo: 'cita'
   tratamiento: string | null
   fecha: string              // 'YYYY-MM-DD'
   hora: string               // 'HH:MM'
   duration_min: number
   estado: AppointmentStatus
-  source: AppointmentSource
-  notes: string | null
+  // Computed via JOIN with profiles — not stored in citas table
   patient_name: string | null
   patient_phone: string | null
   patient_email: string | null
@@ -43,27 +38,22 @@ export interface AdminAppointment {
 // ─── Payload para crear una cita desde el panel ───────────────────────────────
 export interface CreateAppointmentPayload {
   dentist_id: string
-  patient_name: string
-  patient_phone: string | null
-  patient_email: string | null
+  user_id: string
   tratamiento: string
   fecha: string
   hora: string
   duration_min: number
   estado: AppointmentStatus
-  source: AppointmentSource
-  notes: string | null
-  user_id?: string | null
 }
 
 // ─── Paciente (fila de profiles) ─────────────────────────────────────────────
 export interface PatientRow {
   id: string
   full_name: string
-  last_name: string | null
+  last_name: string
   dni: string
   email: string
-  phone: string | null
+  phone: string
   created_at: string
 }
 

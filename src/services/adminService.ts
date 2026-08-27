@@ -19,6 +19,70 @@ function getNowMadrid(): string {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
+type CitaRow = {
+  id: string
+  user_id: string | null
+  dentist_id: string | null
+  tratamiento: string | null
+  fecha: string
+  hora: string
+  duration_min: number
+  estado: AppointmentStatus
+  created_at: string
+}
+
+type ProfileSlice = {
+  id: string
+  full_name: string
+  last_name: string
+  phone: string
+  email: string
+}
+
+// Fetches profiles for a list of user_ids and returns a lookup map
+async function fetchProfileMap(userIds: string[]): Promise<Map<string, ProfileSlice>> {
+  const map = new Map<string, ProfileSlice>()
+  if (userIds.length === 0) return map
+
+  const { data } = await supabase
+    .from('profiles')
+    .select('id, full_name, last_name, phone, email')
+    .in('id', userIds)
+
+  for (const p of data ?? []) {
+    map.set(p.id, p as ProfileSlice)
+  }
+  return map
+}
+
+// Merges cita rows with their profile data
+function mergeProfile(row: CitaRow, profileMap: Map<string, ProfileSlice>): AdminAppointment {
+  const p = row.user_id ? profileMap.get(row.user_id) ?? null : null
+  const patient_name = p?.full_name
+    ? (p.last_name ? `${p.full_name} ${p.last_name}` : p.full_name)
+    : null
+  return {
+    id:           row.id,
+    user_id:      row.user_id ?? '',
+    dentist_id:   row.dentist_id,
+    tratamiento:  row.tratamiento,
+    fecha:        row.fecha,
+    hora:         row.hora,
+    duration_min: row.duration_min,
+    estado:       row.estado,
+    created_at:   row.created_at,
+    patient_name,
+    patient_phone: p?.phone ?? null,
+    patient_email: p?.email ?? null,
+  }
+}
+
+async function enrichCitas(rows: CitaRow[]): Promise<AdminAppointment[]> {
+  const userIds = [...new Set(rows.map(r => r.user_id).filter(Boolean))] as string[]
+  const profileMap = await fetchProfileMap(userIds)
+  return rows.map(r => mergeProfile(r, profileMap))
+}
+
 export async function getUpcomingAppointments(dentistId: string): Promise<AdminAppointment[]> {
   const today = getTodayMadrid()
   const now = getNowMadrid()
@@ -33,7 +97,7 @@ export async function getUpcomingAppointments(dentistId: string): Promise<AdminA
     .order('hora', { ascending: true })
 
   if (error) throw error
-  return (data ?? []) as AdminAppointment[]
+  return enrichCitas((data ?? []) as CitaRow[])
 }
 
 export async function getAllCitas(dentistId: string): Promise<AdminAppointment[]> {
@@ -45,7 +109,7 @@ export async function getAllCitas(dentistId: string): Promise<AdminAppointment[]
     .order('hora', { ascending: false })
 
   if (error) throw error
-  return (data ?? []) as AdminAppointment[]
+  return enrichCitas((data ?? []) as CitaRow[])
 }
 
 export async function getPendingAppointments(dentistId: string): Promise<AdminAppointment[]> {
@@ -58,34 +122,30 @@ export async function getPendingAppointments(dentistId: string): Promise<AdminAp
     .order('hora', { ascending: true })
 
   if (error) throw error
-  return (data ?? []) as AdminAppointment[]
+  return enrichCitas((data ?? []) as CitaRow[])
 }
 
-export async function getPatientDetails(
-  userId: string | null,
-  patientName: string | null,
-  dentistId: string,
-): Promise<PatientDetails> {
-  let query = supabase.from('citas').select('*').eq('dentist_id', dentistId)
-  query = userId
-    ? query.eq('user_id', userId)
-    : query.eq('patient_name', patientName ?? '')
-
-  const { data, error } = await query
+export async function getPatientDetails(userId: string, dentistId: string): Promise<PatientDetails> {
+  const { data, error } = await supabase
+    .from('citas')
+    .select('*')
+    .eq('dentist_id', dentistId)
+    .eq('user_id', userId)
     .order('fecha', { ascending: false })
     .order('hora', { ascending: false })
+
   if (error) throw error
 
-  const all = (data ?? []) as AdminAppointment[]
+  const profileMap = await fetchProfileMap([userId])
+  const all = ((data ?? []) as CitaRow[]).map(r => mergeProfile(r, profileMap))
 
-  let dni: string | null = null
-  if (userId) {
-    const { data: profile } = await supabase
-      .from('profiles').select('dni').eq('id', userId).single()
-    dni = profile?.dni ?? null
-  }
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('dni')
+    .eq('id', userId)
+    .single()
 
-  return { totalCitas: all.length, lastCita: all[0] ?? null, dni }
+  return { totalCitas: all.length, lastCita: all[0] ?? null, dni: profile?.dni ?? null }
 }
 
 export async function getCitasByMonth(dentistId: string, year: number, month: number): Promise<AdminAppointment[]> {
@@ -101,7 +161,7 @@ export async function getCitasByMonth(dentistId: string, year: number, month: nu
     .order('hora', { ascending: true })
 
   if (error) throw error
-  return (data ?? []) as AdminAppointment[]
+  return enrichCitas((data ?? []) as CitaRow[])
 }
 
 export async function updateAppointmentStatus(id: string, estado: AppointmentStatus): Promise<void> {
@@ -139,25 +199,21 @@ export async function adminCreateCita(payload: CreateAppointmentPayload): Promis
   const { data, error } = await supabase
     .from('citas')
     .insert({
-      dentist_id:         payload.dentist_id,
-      user_id:            payload.user_id ?? null,
-      tipo:               'cita' as const,
-      tratamiento:        payload.tratamiento,
-      fecha:              payload.fecha,
-      hora:               payload.hora.length === 5 ? payload.hora + ':00' : payload.hora,
-      duration_min:       payload.duration_min,
-      estado:             payload.estado,
-      source:             payload.source,
-      notes:              payload.notes,
-      patient_name:       payload.patient_name,
-      patient_phone:      payload.patient_phone,
-      patient_email:      payload.patient_email,
+      dentist_id:   payload.dentist_id,
+      user_id:      payload.user_id,
+      tratamiento:  payload.tratamiento,
+      fecha:        payload.fecha,
+      hora:         payload.hora.length === 5 ? payload.hora + ':00' : payload.hora,
+      duration_min: payload.duration_min,
+      estado:       payload.estado,
     })
-    .select()
+    .select('*')
     .single()
 
   if (error) throw new Error(error.message)
-  return data as AdminAppointment
+
+  const profileMap = await fetchProfileMap([payload.user_id])
+  return mergeProfile(data as CitaRow, profileMap)
 }
 
 export async function adminDeletePatient(id: string, deleteNewsletter = false): Promise<void> {
@@ -192,7 +248,6 @@ export async function adminCreatePatient(data: {
     }
   }
 
-  // Isolated client so admin session is unaffected
   const tempClient = createClient(url, key, { auth: { persistSession: false } })
   const { data: authData, error: authError } = await tempClient.auth.signUp({
     email: authEmail,

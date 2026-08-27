@@ -48,7 +48,7 @@ const services = [
   },
   {
     id: 'transformacion',
-    title: 'Transforma tu sonrisa',
+    title: 'Diseño de sonrisa',
     description:
       'Diseña la sonrisa que siempre has querido. Carillas, coronas y tratamientos personalizados.',
     image: '/images/servicios/sonrisa.webp',

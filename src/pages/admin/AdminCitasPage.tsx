@@ -3,8 +3,8 @@ import { Search, ChevronUp, ChevronDown, ChevronsUpDown, X, Phone, Mail, Copy, C
 import { useAdminAuth } from '../../admin/AdminAuthContext'
 import { getAllCitas, getPatientDetails, getAllPatients, adminCreateCita } from '../../services/adminService'
 import type { PatientDetails } from '../../services/adminService'
-import { CallButton, EmailButton } from '../../components/admin/ActionIconButtons'
-import type { AdminAppointment, AppointmentStatus, AppointmentSource, PatientRow, CreateAppointmentPayload } from '../../types/admin'
+import { CallButton, EmailButton, RefreshButton } from '../../components/admin/ActionIconButtons'
+import type { AdminAppointment, AppointmentStatus, PatientRow, CreateAppointmentPayload } from '../../types/admin'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -60,8 +60,9 @@ const DAYS_ES   = ['L','M','X','J','V','S','D']
 const TREATMENTS = [
   'Blanqueamiento dental',
   'Implantes dentales',
+  'Diseño de sonrisa',
   'Ortodoncia',
-  'Estética dental',
+  'Odontología general',
 ]
 
 const TIME_SLOTS = (() => {
@@ -329,18 +330,13 @@ function CreateCitaModal({ dentistId, patients, onClose, onCreated, onToast }: C
     if (Object.keys(errs).length > 0) { setErrors(errs); return }
 
     const payload: CreateAppointmentPayload = {
-      dentist_id:         dentistId,
-      user_id:            selectedPat!.id,
-      patient_name:       [selectedPat!.full_name, selectedPat!.last_name].filter(Boolean).join(' '),
-      patient_email:      isFakeEmail(selectedPat!.email) ? null : selectedPat!.email,
-      patient_phone:      selectedPat!.phone,
-      tratamiento:        tratamiento!,
-      fecha:              toYMD(fecha!),
-      hora:               hora!,
-      duration_min:       30,
+      dentist_id:   dentistId,
+      user_id:      selectedPat!.id,
+      tratamiento:  tratamiento!,
+      fecha:        toYMD(fecha!),
+      hora:         hora!,
+      duration_min: 30,
       estado,
-      source:             'presencial',
-      notes:              null,
     }
 
     setSubmitting(true)
@@ -574,7 +570,7 @@ function PatientModal({ cita, dentistName, dentistId, onClose }: PatientModalPro
 
   useEffect(() => {
     setLoading(true)
-    getPatientDetails(cita.user_id, cita.patient_name, dentistId)
+    getPatientDetails(cita.user_id, dentistId)
       .then(setDetails)
       .finally(() => setLoading(false))
   }, [cita, dentistId])
@@ -717,14 +713,25 @@ export default function AdminCitasPage() {
   const [showCreate, setShowCreate] = useState(false)
   const [patients, setPatients]     = useState<PatientRow[]>([])
   const [toast, setToast]           = useState<ToastData | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
 
-  useEffect(() => {
+  const loadCitas = async () => {
     if (!dentist) return
     setLoading(true)
-    getAllCitas(dentist.id)
-      .then(setCitas)
-      .finally(() => setLoading(false))
-  }, [dentist])
+    try {
+      const data = await getAllCitas(dentist.id)
+      setCitas(data)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { loadCitas() }, [dentist])
+
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    try { await loadCitas() } finally { setRefreshing(false) }
+  }
 
   useEffect(() => {
     getAllPatients().then(setPatients).catch(() => {})
@@ -780,7 +787,7 @@ export default function AdminCitasPage() {
       <div className="bg-white border border-border rounded-2xl shadow-card overflow-hidden">
 
         {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-6 py-4 border-b border-border/60">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-6 py-4 border-b border-border/60 relative">
           {/* Search */}
           <div className="relative shrink-0">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" strokeWidth={2} />
@@ -825,6 +832,10 @@ export default function AdminCitasPage() {
               ))}
             </select>
             <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" strokeWidth={2} />
+          </div>
+
+          <div className="sm:ml-auto shrink-0">
+            <RefreshButton onClick={handleRefresh} disabled={refreshing} loading={refreshing} label="Actualizar" />
           </div>
         </div>
 

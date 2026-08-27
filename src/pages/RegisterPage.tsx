@@ -156,7 +156,7 @@ export default function RegisterPage() {
       <div className="hidden lg:flex lg:w-[45%] flex-col relative overflow-hidden">
         <div className="flex-1 relative">
           <img
-            src="/images/backgrounds/background-image.webp"
+            src="/images/backgrounds/bg-login.webp"
             alt="Clínica dental DentalViva"
             className="absolute inset-0 w-full h-full object-cover object-[80%_center]"
           />
@@ -257,6 +257,7 @@ export default function RegisterPage() {
                   id="phone"
                   type="tel"
                   autoComplete="tel"
+                  maxLength={9}
                   value={fields.phone}
                   onChange={set('phone')}
                   onBlur={() => touch('phone')}

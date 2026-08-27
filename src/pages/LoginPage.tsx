@@ -48,7 +48,7 @@ export default function LoginPage() {
         {/* Dental image */}
         <div className="flex-1 relative">
           <img
-            src="/images/backgrounds/background-image.webp"
+            src="/images/backgrounds/bg-login.webp"
             alt="Clínica dental DentalViva"
             className="absolute inset-0 w-full h-full object-cover object-[80%_center]"
           />

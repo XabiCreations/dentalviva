@@ -19,16 +19,14 @@ export async function signIn({ identifier, password }: LoginCredentials) {
   let email = identifier
 
   if (isDniFormat(identifier)) {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('dni', identifier.toUpperCase())
-      .single()
+    const { data: dniEmail, error: dniError } = await supabase
+      .rpc('get_email_by_dni', { p_dni: identifier })
 
-    if (error || !data) {
+    if (dniError || !dniEmail) {
       throw new Error('No se encontró ninguna cuenta con ese DNI.')
     }
-    email = data.email
+
+    email = dniEmail
   }
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
@@ -62,7 +60,12 @@ export async function signUp(credentials: RegisterCredentials) {
     email: authEmail,
     password,
     options: {
-      data: { full_name: displayName, dni, phone: phone?.trim() || null },
+      data: {
+        full_name: normalizedName,
+        last_name: normalizedLastName,
+        dni,
+        phone: phone?.trim() || null,
+      },
     },
   })
 
@@ -99,6 +102,8 @@ export async function signUp(credentials: RegisterCredentials) {
 }
 
 export async function signOut() {
+  const { showLogoutOverlay } = await import('../lib/logoutOverlay')
+  await showLogoutOverlay()
   const { error } = await supabase.auth.signOut()
   if (error) throw new Error(error.message)
 }

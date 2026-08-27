@@ -44,6 +44,8 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signOut = async () => {
+    const { showLogoutOverlay } = await import('../lib/logoutOverlay')
+    await showLogoutOverlay()
     await supabase.auth.signOut()
     setState({ user: null, dentist: null, loading: false })
   }

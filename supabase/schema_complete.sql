@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict tEPxFH560rnBa0fNJfabGETHyIE53CldvJcJdOLv95QwBQILX5qSKn2uYlmwELo
+\restrict eG1sfyRFddX6OUhU8eIvVZZIXwZFtOHgHGNMDaWOmv9VvSd48KMOOP9RIGfoLeX
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.11 (Homebrew)
@@ -868,6 +868,25 @@ END;$$;
 
 
 --
+-- Name: get_email_by_dni(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.get_email_by_dni(p_dni text) RETURNS text
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public'
+    AS $$
+DECLARE
+  v_email text;
+BEGIN
+  SELECT email INTO v_email
+  FROM profiles
+  WHERE dni = upper(p_dni);
+  RETURN v_email;
+END;
+$$;
+
+
+--
 -- Name: handle_dentists_updated_at(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -889,10 +908,11 @@ CREATE FUNCTION public.handle_new_user() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
 BEGIN
-  INSERT INTO public.profiles (id, full_name, dni, email, phone)
+  INSERT INTO public.profiles (id, full_name, last_name, dni, email, phone)
   VALUES (
     new.id,
     COALESCE(new.raw_user_meta_data->>'full_name', ''),
+    COALESCE(new.raw_user_meta_data->>'last_name', ''),
     COALESCE(new.raw_user_meta_data->>'dni', ''),
     new.email,
     NULLIF(new.raw_user_meta_data->>'phone', '')
@@ -975,6 +995,65 @@ BEGIN
   WHERE p.email = lower(trim(p_email))
     AND newsletter_subscribers.email = lower(trim(p_email))
     AND newsletter_subscribers.user_id IS NULL;
+END;
+$$;
+
+
+--
+-- Name: sync_cita_patient_fields(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.sync_cita_patient_fields() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+DECLARE
+  v_full_name text;
+  v_last_name text;
+  v_phone     text;
+  v_email     text;
+BEGIN
+  IF NEW.user_id IS NOT NULL THEN
+    SELECT full_name, last_name, phone, email
+      INTO v_full_name, v_last_name, v_phone, v_email
+      FROM public.profiles
+     WHERE id = NEW.user_id;
+
+    NEW.patient_name  := CASE
+                           WHEN v_last_name IS NOT NULL AND v_last_name <> ''
+                           THEN v_full_name || ' ' || v_last_name
+                           ELSE v_full_name
+                         END;
+    NEW.patient_phone := v_phone;
+    NEW.patient_email := v_email;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+
+--
+-- Name: update_user_email(text); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.update_user_email(p_new_email text) RETURNS void
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public', 'auth'
+    AS $$
+BEGIN
+  IF auth.uid() IS NULL THEN
+    RAISE EXCEPTION 'Not authenticated';
+  END IF;
+
+  UPDATE auth.users
+  SET email             = p_new_email,
+      email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
+      updated_at         = NOW()
+  WHERE id = auth.uid();
+
+  UPDATE public.profiles
+  SET email = p_new_email
+  WHERE id = auth.uid();
 END;
 $$;
 
@@ -3518,8 +3597,8 @@ CREATE TABLE public.profiles (
     email text NOT NULL,
     created_at timestamp with time zone DEFAULT now(),
     updated_at timestamp with time zone DEFAULT now(),
-    phone text,
-    last_name text
+    phone text NOT NULL,
+    last_name text NOT NULL
 );
 
 
@@ -4693,6 +4772,13 @@ CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXEC
 
 
 --
+-- Name: citas citas_sync_patient_fields; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER citas_sync_patient_fields BEFORE INSERT OR UPDATE OF user_id ON public.citas FOR EACH ROW EXECUTE FUNCTION public.sync_cita_patient_fields();
+
+
+--
 -- Name: dentists dentists_updated_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -4898,7 +4984,7 @@ ALTER TABLE ONLY public.citas
 --
 
 ALTER TABLE ONLY public.citas
-    ADD CONSTRAINT citas_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+    ADD CONSTRAINT citas_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE SET NULL;
 
 
 --
@@ -5309,5 +5395,5 @@ CREATE EVENT TRIGGER pgrst_drop_watch ON sql_drop
 -- PostgreSQL database dump complete
 --
 
-\unrestrict tEPxFH560rnBa0fNJfabGETHyIE53CldvJcJdOLv95QwBQILX5qSKn2uYlmwELo
+\unrestrict eG1sfyRFddX6OUhU8eIvVZZIXwZFtOHgHGNMDaWOmv9VvSd48KMOOP9RIGfoLeX
 

@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Profile } from '../types/user'
-import type { AppointmentStatus, AppointmentSource } from '../types/admin'
+import type { AppointmentStatus } from '../types/admin'
 
 const supabaseUrl      = import.meta.env.VITE_SUPABASE_URL as string
 const supabaseAnonKey  = import.meta.env.VITE_SUPABASE_ANON_KEY as string
@@ -13,36 +13,28 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export interface DentistRow {
   id: string
-  user_id: string
+  user_id: string | null
   name: string
-  email: string
-  specialty: string
+  email: string | null
+  specialty: string | null
   avatar_url: string | null
   created_at: string
+  updated_at: string
 }
 
 export interface CitaRow {
   id: string
   user_id: string | null
   dentist_id: string | null
-  tipo: 'cita'
   tratamiento: string | null
   fecha: string
   hora: string
   duration_min: number
   estado: AppointmentStatus
-  source: AppointmentSource
-  notes: string | null
-  patient_name: string | null
-  patient_phone: string | null
-  patient_email: string | null
-  patient_birth_date: string | null
   created_at: string
 }
 
 // ─── Database type para createClient ─────────────────────────────────────────
-// Los tipos de fila deben ser object types (no interfaces) para que
-// @supabase/postgrest-js infiera los resultados correctamente.
 
 export type Database = {
   public: {
@@ -51,10 +43,10 @@ export type Database = {
         Row: {
           id: string
           full_name: string
-          last_name: string | null
+          last_name: string
           dni: string
           email: string
-          phone?: string | null
+          phone: string
           created_at: string
           updated_at: string
         }
@@ -63,41 +55,44 @@ export type Database = {
           full_name: string
           dni: string
           email: string
-          phone?: string | null
+          last_name: string
+          phone: string
         }
         Update: {
           full_name?: string
-          last_name?: string | null
-          birth_date?: string
+          last_name?: string
           dni?: string
           email?: string
-          phone?: string | null
+          phone?: string
+          updated_at?: string
         }
         Relationships: never[]
       }
       dentists: {
         Row: {
           id: string
-          user_id: string
+          user_id: string | null
           name: string
-          email: string
-          specialty: string
+          email: string | null
+          specialty: string | null
           avatar_url: string | null
           created_at: string
+          updated_at: string
         }
         Insert: {
           id?: string
-          user_id: string
+          user_id?: string | null
           name: string
-          email: string
-          specialty: string
+          email?: string | null
+          specialty?: string | null
           avatar_url?: string | null
         }
         Update: {
           name?: string
-          email?: string
-          specialty?: string
+          email?: string | null
+          specialty?: string | null
           avatar_url?: string | null
+          updated_at?: string
         }
         Relationships: never[]
       }
@@ -129,50 +124,30 @@ export type Database = {
           id: string
           user_id: string | null
           dentist_id: string | null
-          tipo: 'cita'
           tratamiento: string | null
           fecha: string
           hora: string
           duration_min: number
           estado: AppointmentStatus
-          source: AppointmentSource
-          notes: string | null
-          patient_name: string | null
-          patient_phone: string | null
-          patient_email: string | null
-          patient_birth_date: string | null
           created_at: string
         }
         Insert: {
+          id?: string
           user_id?: string | null
           dentist_id?: string | null
-          tipo: 'cita'
           tratamiento?: string | null
           fecha: string
           hora: string
           duration_min?: number
           estado?: AppointmentStatus
-          source?: AppointmentSource
-          notes?: string | null
-          patient_name?: string | null
-          patient_phone?: string | null
-          patient_email?: string | null
-          patient_birth_date?: string | null
         }
         Update: {
-          user_id?: string | null
           dentist_id?: string | null
           tratamiento?: string | null
           fecha?: string
           hora?: string
           duration_min?: number
           estado?: AppointmentStatus
-          source?: AppointmentSource
-          notes?: string | null
-          patient_name?: string | null
-          patient_phone?: string | null
-          patient_email?: string | null
-          patient_birth_date?: string | null
         }
         Relationships: [
           {
@@ -180,6 +155,13 @@ export type Database = {
             columns: ['dentist_id']
             isOneToOne: false
             referencedRelation: 'dentists'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'citas_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
             referencedColumns: ['id']
           }
         ]
@@ -192,7 +174,7 @@ export type Database = {
         Returns: string
       }
       link_newsletter_subscription: {
-        Args: { p_email: string; p_user_id: string }
+        Args: { p_email: string; p_user_id: string; p_full_name: string }
         Returns: undefined
       }
       subscribe_newsletter: {
@@ -206,8 +188,8 @@ export type Database = {
       get_all_patients: {
         Args: Record<never, never>
         Returns: {
-          id: string; full_name: string; last_name: string | null
-          dni: string; email: string; phone: string | null; created_at: string
+          id: string; full_name: string; last_name: string
+          dni: string; email: string; phone: string; created_at: string
         }[]
       }
       admin_update_patient: {
@@ -217,6 +199,18 @@ export type Database = {
       admin_delete_patient: {
         Args: { p_id: string; p_delete_newsletter?: boolean }
         Returns: undefined
+      }
+      update_user_email: {
+        Args: { p_new_email: string }
+        Returns: undefined
+      }
+      get_email_by_dni: {
+        Args: { p_dni: string }
+        Returns: string | null
+      }
+      current_dentist_id: {
+        Args: Record<never, never>
+        Returns: string
       }
     }
   }

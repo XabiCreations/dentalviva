@@ -106,11 +106,6 @@ function CitaDetailCard({ cita }: { cita: AdminAppointment }) {
         </span>
       </div>
 
-      {cita.notes && (
-        <p className="mt-2 text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5 leading-snug">
-          {cita.notes}
-        </p>
-      )}
     </li>
   )
 }

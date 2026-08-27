@@ -86,23 +86,12 @@ function SocialProofBadge({ socialRef, counterRef, prefersReducedMotion }) {
             {prefersReducedMotion ? '+750' : '+0'}
           </p>
           <div className="flex flex-col">
-            <span className="text-[11px] text-muted font-semibold tracking-normal">Pacientes</span>
-            <span className="text-[11px] text-muted font-semibold tracking-normal">mensuales</span>
+            <span className="text-body-sm text-muted font-semibold tracking-normal">Pacientes</span>
+            <span className="text-body-sm text-muted font-semibold tracking-normal">mensuales</span>
           </div>
         </div>
       </div>
 
-      {/* Rating badge */}
-      <div
-        className="flex items-center gap-1.5 bg-white rounded-2xl border border-[#ebebeb] shadow-sm px-2 py-2 sm:px-3 sm:py-3"
-        aria-label="Valoración 4.8 sobre 5"
-      >
-        <span className="text-[2rem] sm:text-[2.75rem] leading-none text-amber-400" aria-hidden="true">★</span>
-        <div className="flex flex-col items-center">
-          <p className="text-xl sm:text-h3 font-bold text-text leading-none">4.8</p>
-          <span className="hidden sm:block text-[11px] text-muted font-semibold tracking-normal">(235 reseñas)</span>
-        </div>
-      </div>
     </div>
   )
 }

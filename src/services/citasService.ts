@@ -1,7 +1,5 @@
 import { supabase } from '../lib/supabase'
 
-export type CitaTipo = 'cita'
-
 export type EstadoCita = 'pendiente' | 'confirmada' | 'completada' | 'cancelada' | 'no_asistio'
 
 export interface Dentist {
@@ -12,19 +10,14 @@ export interface Dentist {
 
 export interface CreateCitaParams {
   userId: string
-  tipo: CitaTipo
   tratamiento: string | null
   fecha: Date
   hora: string
-  patientName: string | null
-  patientPhone?: string | null
-  patientEmail?: string | null
 }
 
 export interface Cita {
   id: string
   user_id: string
-  tipo: CitaTipo
   tratamiento: string | null
   fecha: string
   hora: string
@@ -43,14 +36,12 @@ const TREATMENT_DENTIST_MAP: Record<string, string> = {
   'Estética dental':       '5c941484-83dd-44da-8beb-992191781680', // Dr. Luis Torres
 }
 
-export async function createCita({ userId, tipo, tratamiento, fecha, hora, patientName, patientPhone, patientEmail }: CreateCitaParams) {
-  // Verificar sesión activa antes de insertar (evita FK violation con sesiones stale)
+export async function createCita({ userId, tratamiento, fecha, hora }: CreateCitaParams) {
   const { data: { user: authUser } } = await supabase.auth.getUser()
   if (!authUser || authUser.id !== userId) {
     throw new Error('Tu sesión ha expirado. Por favor, cierra sesión e inicia de nuevo.')
   }
 
-  // Solo dentistas con cuenta admin (user_id IS NOT NULL)
   const { data: dentists } = await supabase
     .from('dentists')
     .select('id')
@@ -61,30 +52,11 @@ export async function createCita({ userId, tipo, tratamiento, fecha, hora, patie
     ? dentists?.find(d => d.id === fixedId)
     : dentists?.[Math.floor(Math.random() * (dentists?.length ?? 1))]
 
-  // Si el profile no se cargó en el componente, lo buscamos nosotros
-  let name = patientName
-  if (!name) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('full_name, last_name')
-      .eq('id', userId)
-      .single()
-    if (profile) {
-      name = (profile.last_name && !profile.full_name?.trim().endsWith(profile.last_name.trim()))
-        ? `${profile.full_name} ${profile.last_name}`
-        : profile.full_name ?? null
-    }
-  }
-
   const { error } = await supabase.from('citas').insert({
-    user_id: userId,
-    tipo,
+    user_id:    userId,
     tratamiento,
-    fecha: fecha.toLocaleDateString('sv-SE'),
+    fecha:      fecha.toLocaleDateString('sv-SE'),
     hora,
-    patient_name: name,
-    patient_email: patientEmail ?? authUser.email ?? null,
-    patient_phone: patientPhone ?? null,
     dentist_id: dentist?.id ?? null,
   })
 
@@ -97,16 +69,23 @@ export async function createCita({ userId, tipo, tratamiento, fecha, hora, patie
 export async function getCitasByUser(userId: string): Promise<Cita[]> {
   const { data, error } = await supabase
     .from('citas')
-    .select('*, dentist:dentists(id, name, specialty)')
+    .select('*, dentist:dentists(id, name, specialty), profiles(full_name, last_name)')
     .eq('user_id', userId)
     .order('fecha', { ascending: false })
     .order('hora', { ascending: false })
 
   if (error) {
     console.error('[getCitasByUser] Supabase error:', error)
-    throw new Error('No se pudo cargar el historial.')
+    throw new Error('No se pudieron cargar las citas.')
   }
-  return (data ?? []) as Cita[]
+
+  return (data ?? []).map((row: any) => {
+    const p = row.profiles
+    const patient_name = p?.full_name
+      ? (p.last_name ? `${p.full_name} ${p.last_name}` : p.full_name)
+      : null
+    return { ...row, patient_name, profiles: undefined }
+  }) as Cita[]
 }
 
 export async function cancelCita(citaId: string): Promise<void> {
