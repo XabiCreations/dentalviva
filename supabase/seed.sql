@@ -1,7 +1,7 @@
 -- ============================================================
 -- DentalViva — Seed data
 -- Ejecutar en: Supabase Dashboard → SQL Editor
--- Contraseña de todos los usuarios (pacientes y dentistas): Dentaviva2024!
+-- Contraseña de todos los usuarios (pacientes y dentistas): DentalViva2026!
 -- 3 dentistas · 50 pacientes · 30 newsletter (todos active) · 100 citas
 -- ============================================================
 
@@ -89,20 +89,20 @@ BEGIN
     created_at, updated_at, is_super_admin,
     confirmation_token, recovery_token, email_change_token_new, email_change
   ) VALUES
-    (mendoza_auth,iid,'authenticated','authenticated','carlos.mendoza@dentaviva.es',crypt('Dentaviva2024!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (garcia_auth, iid,'authenticated','authenticated','ana.garcia@dentaviva.es',    crypt('Dentaviva2024!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (torres_auth, iid,'authenticated','authenticated','luis.torres@dentaviva.es',   crypt('Dentaviva2024!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','','')
+    (mendoza_auth,iid,'authenticated','authenticated','carlos.mendoza@dentalviva.es',crypt('DentalViva2026!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (garcia_auth, iid,'authenticated','authenticated','ana.garcia@dentalviva.es',    crypt('DentalViva2026!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (torres_auth, iid,'authenticated','authenticated','luis.torres@dentalviva.es',   crypt('DentalViva2026!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','','')
   ON CONFLICT DO NOTHING;
 
   -- ── Dentistas ─────────────────────────────────────────────
   INSERT INTO public.dentists (id, name, specialty, email, user_id, avatar_url, created_at, updated_at) VALUES
-    (mendoza_dent,'Dr. Carlos Mendoza','Implantología',       'carlos.mendoza@dentaviva.es',mendoza_auth,null,now(),now()),
-    (garcia_dent, 'Dra. Ana García',   'Blanqueamiento Dental','ana.garcia@dentaviva.es',  garcia_auth, null,now(),now()),
-    (torres_dent, 'Dr. Luis Torres',   'Diseño de Sonrisa',   'luis.torres@dentaviva.es',  torres_auth, null,now(),now())
+    (mendoza_dent,'Dr. Carlos Mendoza','Implantología',       'carlos.mendoza@dentalviva.es',mendoza_auth,null,now(),now()),
+    (garcia_dent, 'Dra. Ana García',   'Blanqueamiento Dental','ana.garcia@dentalviva.es',  garcia_auth, null,now(),now()),
+    (torres_dent, 'Dr. Luis Torres',   'Diseño de Sonrisa',   'luis.torres@dentalviva.es',  torres_auth, null,now(),now())
   ON CONFLICT DO NOTHING;
 
   -- ── Usuario de prueba ─────────────────────────────────────
-  -- Email: demo@dentaviva.es · Contraseña: Dentaviva2024!
+  -- Email: demo@dentalviva.es · Contraseña: DentalViva2026!
   INSERT INTO auth.users (
     id, instance_id, aud, role,
     email, encrypted_password, email_confirmed_at,
@@ -111,13 +111,13 @@ BEGIN
     confirmation_token, recovery_token, email_change_token_new, email_change
   ) VALUES (
     demo_id,iid,'authenticated','authenticated',
-    'demo@dentaviva.es', crypt('Dentaviva2024!', gen_salt('bf')), now(),
+    'demo@dentalviva.es', crypt('DentalViva2026!', gen_salt('bf')), now(),
     '{"provider":"email","providers":["email"]}'::jsonb, '{}'::jsonb,
     now(), now(), false, '', '', '', ''
   ) ON CONFLICT DO NOTHING;
 
   INSERT INTO public.profiles (id, full_name, last_name, dni, email, phone, created_at, updated_at) VALUES
-    (demo_id,'Usuario','Demo','99999999Z','demo@dentaviva.es','600000000',now(),now())
+    (demo_id,'Usuario','Demo','99999999Z','demo@dentalviva.es','600000000',now(),now())
   ON CONFLICT DO NOTHING;
 
   -- ── Limpieza idempotente (por email) ──────────────────────
@@ -125,20 +125,20 @@ BEGIN
     SELECT id FROM auth.users
     WHERE email LIKE '%01@gmail.com' OR email LIKE '%01@hotmail.com'
        OR email LIKE '%01@yahoo.es'  OR email LIKE '%01@outlook.com'
-       OR email LIKE '%@patients.dentaviva.es'
-       OR email = 'demo@dentaviva.es'
+       OR email LIKE '%@patients.dentalviva.es'
+       OR email = 'demo@dentalviva.es'
   );
   DELETE FROM public.newsletter_subscribers WHERE email LIKE '%.seed@%';
   DELETE FROM public.profiles
     WHERE email LIKE '%01@gmail.com' OR email LIKE '%01@hotmail.com'
        OR email LIKE '%01@yahoo.es'  OR email LIKE '%01@outlook.com'
-       OR email LIKE '%@patients.dentaviva.es'
-       OR email = 'demo@dentaviva.es';
+       OR email LIKE '%@patients.dentalviva.es'
+       OR email = 'demo@dentalviva.es';
   DELETE FROM auth.users
     WHERE email LIKE '%01@gmail.com' OR email LIKE '%01@hotmail.com'
        OR email LIKE '%01@yahoo.es'  OR email LIKE '%01@outlook.com'
-       OR email LIKE '%@patients.dentaviva.es'
-       OR email = 'demo@dentaviva.es';
+       OR email LIKE '%@patients.dentalviva.es'
+       OR email = 'demo@dentalviva.es';
 
   -- ── Dentistas ─────────────────────────────────────────────
   SELECT id INTO mendoza_id FROM public.dentists WHERE name ILIKE '%mendoza%' LIMIT 1;
@@ -154,7 +154,7 @@ BEGIN
   IF garcia_id  IS NULL THEN garcia_id  := mendoza_id; END IF;
   IF torres_id  IS NULL THEN torres_id  := mendoza_id; END IF;
 
-  pwd := crypt('Dentaviva2024!', gen_salt('bf'));
+  pwd := crypt('DentalViva2026!', gen_salt('bf'));
 
   -- ══════════════════════════════════════════════════════════
   -- AUTH USERS (50)
@@ -169,51 +169,51 @@ BEGIN
   ) VALUES
     (u01,iid,'authenticated','authenticated','maria.garcia01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u02,iid,'authenticated','authenticated','carlos.rodriguez01@hotmail.com',    pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u03,iid,'authenticated','authenticated','10000003c@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u03,iid,'authenticated','authenticated','10000003c@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u04,iid,'authenticated','authenticated','jorge.sanchez01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u05,iid,'authenticated','authenticated','laura.fernandez01@gmail.com',       pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u06,iid,'authenticated','authenticated','pablo.lopez01@outlook.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u07,iid,'authenticated','authenticated','sofia.jimenez01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u08,iid,'authenticated','authenticated','10000008h@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u08,iid,'authenticated','authenticated','10000008h@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u09,iid,'authenticated','authenticated','cristina.moreno01@yahoo.es',        pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u10,iid,'authenticated','authenticated','daniel.torres01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u11,iid,'authenticated','authenticated','elena.ramirez01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u12,iid,'authenticated','authenticated','10000012m@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u12,iid,'authenticated','authenticated','10000012m@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u13,iid,'authenticated','authenticated','natalia.herrera01@gmail.com',       pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u14,iid,'authenticated','authenticated','miguel.nunez01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u15,iid,'authenticated','authenticated','carmen.castillo01@gmail.com',       pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u16,iid,'authenticated','authenticated','fernando.ortega01@gmail.com',       pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u17,iid,'authenticated','authenticated','patricia.morales01@outlook.com',    pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u18,iid,'authenticated','authenticated','10000018t@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u18,iid,'authenticated','authenticated','10000018t@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u19,iid,'authenticated','authenticated','isabel.serrano01@gmail.com',        pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u20,iid,'authenticated','authenticated','marcos.rubio01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u21,iid,'authenticated','authenticated','lucia.navarro01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u22,iid,'authenticated','authenticated','javier.romero01@hotmail.com',       pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u23,iid,'authenticated','authenticated','10000023z@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u23,iid,'authenticated','authenticated','10000023z@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u24,iid,'authenticated','authenticated','oscar.flores01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u25,iid,'authenticated','authenticated','marta.blanco01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u26,iid,'authenticated','authenticated','ruben.molina01@outlook.com',        pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u27,iid,'authenticated','authenticated','paula.ramos01@gmail.com',           pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u28,iid,'authenticated','authenticated','10000028e@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u28,iid,'authenticated','authenticated','10000028e@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u29,iid,'authenticated','authenticated','nuria.gonzalez01@gmail.com',        pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u30,iid,'authenticated','authenticated','alberto.perez01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u31,iid,'authenticated','authenticated','sandra.campos01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u32,iid,'authenticated','authenticated','sergio.herrero01@hotmail.com',      pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u33,iid,'authenticated','authenticated','10000033k@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u33,iid,'authenticated','authenticated','10000033k@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u34,iid,'authenticated','authenticated','rafael.lara01@gmail.com',           pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u35,iid,'authenticated','authenticated','irene.santos01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u36,iid,'authenticated','authenticated','david.jimenez01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u37,iid,'authenticated','authenticated','beatriz.ortiz01@gmail.com',         pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u38,iid,'authenticated','authenticated','10000038q@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u38,iid,'authenticated','authenticated','10000038q@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u39,iid,'authenticated','authenticated','julia.vargas01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u40,iid,'authenticated','authenticated','manuel.reyes01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u41,iid,'authenticated','authenticated','pilar.mora01@gmail.com',            pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u42,iid,'authenticated','authenticated','luis.hernandez01@hotmail.com',      pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u43,iid,'authenticated','authenticated','10000043w@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u43,iid,'authenticated','authenticated','10000043w@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u44,iid,'authenticated','authenticated','pedro.romero01@gmail.com',          pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u45,iid,'authenticated','authenticated','eva.nunez01@gmail.com',             pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u46,iid,'authenticated','authenticated','juan.ruiz01@gmail.com',             pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
-    (u47,iid,'authenticated','authenticated','10000047a@patients.dentaviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (u47,iid,'authenticated','authenticated','10000047a@patients.dentalviva.es',   pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u48,iid,'authenticated','authenticated','antonio.morales01@gmail.com',       pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u49,iid,'authenticated','authenticated','raquel.serrano01@gmail.com',        pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
     (u50,iid,'authenticated','authenticated','ramon.lopez01@gmail.com',           pwd,now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','','')
@@ -225,51 +225,51 @@ BEGIN
   INSERT INTO public.profiles (id, full_name, last_name, dni, email, phone, created_at, updated_at) VALUES
     (u01,'María',    'García López',      '10000001A','maria.garcia01@gmail.com',       '612000001',now(),now()),
     (u02,'Carlos',   'Rodríguez Vega',    '10000002B','carlos.rodriguez01@hotmail.com', '612000002',now(),now()),
-    (u03,'Ana',      'Martínez Ruiz',     '10000003C','10000003c@patients.dentaviva.es','612000003',now(),now()),
+    (u03,'Ana',      'Martínez Ruiz',     '10000003C','10000003c@patients.dentalviva.es','612000003',now(),now()),
     (u04,'Jorge',    'Sánchez Gil',       '10000004D','jorge.sanchez01@gmail.com',      '612000004',now(),now()),
     (u05,'Laura',    'Fernández Castro',  '10000005E','laura.fernandez01@gmail.com',    '612000005',now(),now()),
     (u06,'Pablo',    'López Moreno',      '10000006F','pablo.lopez01@outlook.com',      '612000006',now(),now()),
     (u07,'Sofía',    'Jiménez Ruiz',      '10000007G','sofia.jimenez01@gmail.com',      '612000007',now(),now()),
-    (u08,'Alejandro','Díaz Vega',         '10000008H','10000008h@patients.dentaviva.es','612000008',now(),now()),
+    (u08,'Alejandro','Díaz Vega',         '10000008H','10000008h@patients.dentalviva.es','612000008',now(),now()),
     (u09,'Cristina', 'Moreno García',     '10000009J','cristina.moreno01@yahoo.es',     '612000009',now(),now()),
     (u10,'Daniel',   'Torres Cruz',       '10000010K','daniel.torres01@gmail.com',      '612000010',now(),now()),
     (u11,'Elena',    'Ramírez Flores',    '10000011L','elena.ramirez01@gmail.com',      '612000011',now(),now()),
-    (u12,'Roberto',  'Vargas Díaz',       '10000012M','10000012m@patients.dentaviva.es','612000012',now(),now()),
+    (u12,'Roberto',  'Vargas Díaz',       '10000012M','10000012m@patients.dentalviva.es','612000012',now(),now()),
     (u13,'Natalia',  'Herrera Soto',      '10000013N','natalia.herrera01@gmail.com',    '612000013',now(),now()),
     (u14,'Miguel',   'Núñez Pérez',       '10000014P','miguel.nunez01@gmail.com',       '612000014',now(),now()),
     (u15,'Carmen',   'Castillo Rojas',    '10000015Q','carmen.castillo01@gmail.com',    '612000015',now(),now()),
     (u16,'Fernando', 'Ortega Lara',       '10000016R','fernando.ortega01@gmail.com',    '612000016',now(),now()),
     (u17,'Patricia', 'Morales Vera',      '10000017S','patricia.morales01@outlook.com', '612000017',now(),now()),
-    (u18,'Adrián',   'Gutiérrez Blanco',  '10000018T','10000018t@patients.dentaviva.es','612000018',now(),now()),
+    (u18,'Adrián',   'Gutiérrez Blanco',  '10000018T','10000018t@patients.dentalviva.es','612000018',now(),now()),
     (u19,'Isabel',   'Serrano Muñoz',     '10000019V','isabel.serrano01@gmail.com',     '612000019',now(),now()),
     (u20,'Marcos',   'Rubio Delgado',     '10000020W','marcos.rubio01@gmail.com',       '612000020',now(),now()),
     (u21,'Lucía',    'Navarro Campos',    '10000021X','lucia.navarro01@gmail.com',      '612000021',now(),now()),
     (u22,'Javier',   'Romero Alonso',     '10000022Y','javier.romero01@hotmail.com',    '612000022',now(),now()),
-    (u23,'Sara',     'Medina Ramos',      '10000023Z','10000023z@patients.dentaviva.es','612000023',now(),now()),
+    (u23,'Sara',     'Medina Ramos',      '10000023Z','10000023z@patients.dentalviva.es','612000023',now(),now()),
     (u24,'Óscar',    'Flores Reyes',      '10000024A','oscar.flores01@gmail.com',       '612000024',now(),now()),
     (u25,'Marta',    'Blanco Santos',     '10000025B','marta.blanco01@gmail.com',       '612000025',now(),now()),
     (u26,'Rubén',    'Molina Lara',       '10000026C','ruben.molina01@outlook.com',     '612000026',now(),now()),
     (u27,'Paula',    'Ramos Herrero',     '10000027D','paula.ramos01@gmail.com',        '612000027',now(),now()),
-    (u28,'Víctor',   'Alonso Cruz',       '10000028E','10000028e@patients.dentaviva.es','612000028',now(),now()),
+    (u28,'Víctor',   'Alonso Cruz',       '10000028E','10000028e@patients.dentalviva.es','612000028',now(),now()),
     (u29,'Nuria',    'González Vega',     '10000029F','nuria.gonzalez01@gmail.com',     '612000029',now(),now()),
     (u30,'Alberto',  'Pérez Molina',      '10000030G','alberto.perez01@gmail.com',      '612000030',now(),now()),
     (u31,'Sandra',   'Campos Gil',        '10000031H','sandra.campos01@gmail.com',      '612000031',now(),now()),
     (u32,'Sergio',   'Herrero Díaz',      '10000032J','sergio.herrero01@hotmail.com',   '612000032',now(),now()),
-    (u33,'Alicia',   'Delgado Mora',      '10000033K','10000033k@patients.dentaviva.es','612000033',now(),now()),
+    (u33,'Alicia',   'Delgado Mora',      '10000033K','10000033k@patients.dentalviva.es','612000033',now(),now()),
     (u34,'Rafael',   'Lara Ruiz',         '10000034L','rafael.lara01@gmail.com',        '612000034',now(),now()),
     (u35,'Irene',    'Santos Navarro',    '10000035M','irene.santos01@gmail.com',       '612000035',now(),now()),
     (u36,'David',    'Jiménez Flores',    '10000036N','david.jimenez01@gmail.com',      '612000036',now(),now()),
     (u37,'Beatriz',  'Ortiz Hernández',   '10000037P','beatriz.ortiz01@gmail.com',      '612000037',now(),now()),
-    (u38,'Tomás',    'Castro Romero',     '10000038Q','10000038q@patients.dentaviva.es','612000038',now(),now()),
+    (u38,'Tomás',    'Castro Romero',     '10000038Q','10000038q@patients.dentalviva.es','612000038',now(),now()),
     (u39,'Julia',    'Vargas López',      '10000039R','julia.vargas01@gmail.com',       '612000039',now(),now()),
     (u40,'Manuel',   'Reyes Castillo',    '10000040S','manuel.reyes01@gmail.com',       '612000040',now(),now()),
     (u41,'Pilar',    'Mora Sánchez',      '10000041T','pilar.mora01@gmail.com',         '612000041',now(),now()),
     (u42,'Luis',     'Hernández Vega',    '10000042V','luis.hernandez01@hotmail.com',   '612000042',now(),now()),
-    (u43,'Silvia',   'Cruz Moreno',       '10000043W','10000043w@patients.dentaviva.es','612000043',now(),now()),
+    (u43,'Silvia',   'Cruz Moreno',       '10000043W','10000043w@patients.dentalviva.es','612000043',now(),now()),
     (u44,'Pedro',    'Romero García',     '10000044X','pedro.romero01@gmail.com',       '612000044',now(),now()),
     (u45,'Eva',      'Núñez Blanco',      '10000045Y','eva.nunez01@gmail.com',          '612000045',now(),now()),
     (u46,'Juan',     'Ruiz Pérez',        '10000046Z','juan.ruiz01@gmail.com',          '612000046',now(),now()),
-    (u47,'Rosa',     'González Díaz',     '10000047A','10000047a@patients.dentaviva.es','612000047',now(),now()),
+    (u47,'Rosa',     'González Díaz',     '10000047A','10000047a@patients.dentalviva.es','612000047',now(),now()),
     (u48,'Antonio',  'Morales Ramos',     '10000048B','antonio.morales01@gmail.com',    '612000048',now(),now()),
     (u49,'Raquel',   'Serrano Gil',       '10000049C','raquel.serrano01@gmail.com',     '612000049',now(),now()),
     (u50,'Ramón',    'López Gutiérrez',   '10000050D','ramon.lopez01@gmail.com',        '612000050',now(),now())

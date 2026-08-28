@@ -11,7 +11,7 @@ import { supabase } from '../lib/supabase'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function isFakeEmail(email: string) {
-  return !email || email.endsWith('@patients.dentaviva.es')
+  return !email || email.endsWith('@patients.dentalviva.es')
 }
 
 // ─── EditableField ────────────────────────────────────────────────────────────

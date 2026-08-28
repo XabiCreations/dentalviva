@@ -67,17 +67,17 @@ La aplicación estará disponible en `http://localhost:5173`.
 
 | Campo | Valor |
 |-------|-------|
-| Email | demo@dentaviva.es |
-| Contraseña | Dentaviva2024! |
+| Email | demo@dentalviva.es |
+| Contraseña | DentalViva2026! |
 | DNI | 99999999Z |
 
 ### Dentistas (panel de administración)
 
 | Nombre | Email | Contraseña | Especialidad |
 |--------|-------|------------|--------------|
-| Dr. Carlos Mendoza | carlos.mendoza@dentaviva.es | Dentaviva2024! | Implantología |
-| Dra. Ana García | ana.garcia@dentaviva.es | Dentaviva2024! | Blanqueamiento Dental |
-| Dr. Luis Torres | luis.torres@dentaviva.es | Dentaviva2024! | Diseño de Sonrisa |
+| Dr. Carlos Mendoza | carlos.mendoza@dentalviva.es | DentalViva2026! | Implantología |
+| Dra. Ana García | ana.garcia@dentalviva.es | DentalViva2026! | Blanqueamiento Dental |
+| Dr. Luis Torres | luis.torres@dentalviva.es | DentalViva2026! | Diseño de Sonrisa |
 
 El seed también crea 50 pacientes de prueba y 100 citas distribuidas entre los tres dentistas.
 

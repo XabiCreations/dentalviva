@@ -43,7 +43,7 @@ export async function signUp(credentials: RegisterCredentials) {
     : normalizedName
 
   // Si no hay email real, generamos uno interno basado en el DNI para Supabase auth
-  const authEmail = email?.trim() || `${dni.toLowerCase().replace(/\W/g, '')}@patients.dentaviva.es`
+  const authEmail = email?.trim() || `${dni.toLowerCase().replace(/\W/g, '')}@patients.dentalviva.es`
 
   // Si hay email real, verificar si existe una cuenta fantasma y limpiarla
   if (email?.trim()) {

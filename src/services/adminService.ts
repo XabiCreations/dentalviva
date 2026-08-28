@@ -183,7 +183,7 @@ export async function adminUpdatePatient(
 ): Promise<void> {
   const authEmail = updates.email.trim()
     ? updates.email.trim().toLowerCase()
-    : `${updates.dni.toLowerCase().replace(/\W/g, '')}@patients.dentaviva.es`
+    : `${updates.dni.toLowerCase().replace(/\W/g, '')}@patients.dentalviva.es`
   const { error } = await supabase.rpc('admin_update_patient', {
     p_id:        id,
     p_full_name: updates.full_name,
@@ -239,7 +239,7 @@ export async function adminCreatePatient(data: {
   const hasRealEmail       = !!data.email.trim()
   const authEmail          = hasRealEmail
     ? data.email.trim().toLowerCase()
-    : `${data.dni.toLowerCase().replace(/\W/g, '')}@patients.dentaviva.es`
+    : `${data.dni.toLowerCase().replace(/\W/g, '')}@patients.dentalviva.es`
 
   if (hasRealEmail) {
     const { data: result } = await supabase.rpc('cleanup_ghost_account', { p_email: authEmail })

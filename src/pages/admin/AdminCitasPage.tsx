@@ -83,7 +83,7 @@ function toYMD(d: Date): string {
 }
 
 function isFakeEmail(email: string): boolean {
-  return !!email?.endsWith('@patients.dentaviva.es')
+  return !!email?.endsWith('@patients.dentalviva.es')
 }
 
 // ─── Sort helpers ─────────────────────────────────────────────────────────────

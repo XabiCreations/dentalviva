@@ -81,7 +81,7 @@ function GuestForm() {
 
 // Auth variant — email only, pre-filled
 function AuthForm({ userEmail, userName }) {
-  const isFakeEmail = userEmail?.endsWith('@patients.dentaviva.es')
+  const isFakeEmail = userEmail?.endsWith('@patients.dentalviva.es')
   const [email, setEmail] = useState(isFakeEmail ? '' : (userEmail ?? ''))
   const [state, setState] = useState('idle')
 

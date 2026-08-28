@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const profile = await getProfile(user.id)
       // Sync profiles.email from auth only when auth has a real email (not the DNI-based fake one)
-      const authEmailIsFake = user.email?.endsWith('@patients.dentaviva.es') ?? true
+      const authEmailIsFake = user.email?.endsWith('@patients.dentalviva.es') ?? true
       if (!authEmailIsFake && user.email && profile.email !== user.email) {
         await supabase.from('profiles').update({ email: user.email }).eq('id', user.id)
         profile.email = user.email

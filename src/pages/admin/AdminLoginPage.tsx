@@ -94,7 +94,7 @@ export default function AdminLoginPage() {
               autoComplete="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="tu.nombre@dentaviva.es"
+              placeholder="tu.nombre@dentalviva.es"
               className="w-full px-4 py-3 rounded-xl border border-border text-text text-body-sm placeholder:text-muted/50
                 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             />

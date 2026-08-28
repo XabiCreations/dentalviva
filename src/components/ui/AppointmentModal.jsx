@@ -59,7 +59,7 @@ export function AppointmentModal({ mode, onClose, initialData }) {
         fecha: date,
         hora: time,
         patientName: getDisplayName(profile) ?? null,
-        patientEmail: user.email?.endsWith('@patients.dentaviva.es') ? null : (user.email ?? null),
+        patientEmail: user.email?.endsWith('@patients.dentalviva.es') ? null : (user.email ?? null),
         patientPhone: profile?.phone ?? null,
       })
       setStep('success')

@@ -43,7 +43,7 @@ function validateDni(dni: string): boolean {
 }
 
 function isFakeEmail(email: string): boolean {
-  return !!email?.endsWith('@patients.dentaviva.es')
+  return !!email?.endsWith('@patients.dentalviva.es')
 }
 
 function isValidEmail(email: string): boolean {
@@ -554,7 +554,7 @@ export default function AdminPacientesPage() {
       await adminUpdatePatient(id, editDraft)
       const savedEmail = editDraft.email.trim()
         ? editDraft.email.trim().toLowerCase()
-        : `${editDraft.dni.toLowerCase().replace(/\W/g, '')}@patients.dentaviva.es`
+        : `${editDraft.dni.toLowerCase().replace(/\W/g, '')}@patients.dentalviva.es`
       setPatients(prev => prev.map(p => p.id !== id ? p : {
         ...p,
         full_name: editDraft.full_name.trim(),
