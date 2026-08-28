@@ -143,6 +143,8 @@ export function Hero() {
   const counterRef    = useRef(null)
   const col1Ref        = useRef(null) // desktop col1 scrolls UP
   const col2Ref        = useRef(null) // desktop col2 scrolls DOWN
+  const overlay1Ref    = useRef(null) // entrance overlay col1
+  const overlay2Ref    = useRef(null) // entrance overlay col2
   const colMobile1Ref  = useRef(null) // mobile col1 scrolls UP
   const colMobile2Ref  = useRef(null) // mobile col2 scrolls DOWN
 
@@ -205,6 +207,22 @@ export function Hero() {
 
     // Place col2 so the duplicate set (visually identical to the first) is on screen.
     gsap.set(col2, { y: -ONE_SET_H })
+
+    // Col1: overlay sube (revela de abajo a arriba)
+    gsap.to(overlay1Ref.current, {
+      y: '-100%',
+      duration: 1.4,
+      ease: 'power3.inOut',
+      delay: 0.2,
+    })
+
+    // Col2: overlay baja (revela de arriba a abajo)
+    gsap.to(overlay2Ref.current, {
+      y: '100%',
+      duration: 1.4,
+      ease: 'power3.inOut',
+      delay: 0.2,
+    })
 
     const anim1 = gsap.to(col1, {
       y: -ONE_SET_H,
@@ -360,7 +378,12 @@ export function Hero() {
         {/* Bottom fade */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
         {/* Column 1 — scrolls UP: exits top, reappears at bottom */}
-        <div className="flex-1">
+        <div className="flex-1 relative overflow-hidden">
+          <div
+            ref={overlay1Ref}
+            className="absolute inset-x-0 top-0 z-10 pointer-events-none"
+            style={{ height: '120%', background: 'linear-gradient(to bottom, white 70%, transparent 100%)' }}
+          />
           <div ref={col1Ref}>
             {[...GALLERY_COL1, ...GALLERY_COL1].map((img, i) => (
               <div
@@ -380,7 +403,12 @@ export function Hero() {
         </div>
 
         {/* Column 2 — scrolls DOWN: exits bottom, reappears at top */}
-        <div className="flex-1">
+        <div className="flex-1 relative overflow-hidden">
+          <div
+            ref={overlay2Ref}
+            className="absolute inset-x-0 top-0 z-10 pointer-events-none"
+            style={{ height: '120%', background: 'linear-gradient(to top, white 70%, transparent 100%)' }}
+          />
           <div ref={col2Ref}>
             {[...GALLERY_COL2, ...GALLERY_COL2].map((img, i) => (
               <div
