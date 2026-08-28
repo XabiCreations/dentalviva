@@ -29,8 +29,9 @@ function canCancel(cita: Cita): boolean {
 const ESTADO_CONFIG: Record<EstadoCita | string, { label: string; className: string }> = {
   pendiente:  { label: 'Pendiente',  className: 'bg-amber-100 text-amber-700' },
   confirmada: { label: 'Confirmada', className: 'bg-blue-100 text-blue-700' },
+  completada: { label: 'Completada', className: 'bg-green-100 text-green-700' },
   cancelada:  { label: 'Cancelada',  className: 'bg-gray-100 text-gray-500' },
-  realizada:  { label: 'Realizada',  className: 'bg-green-100 text-green-700' },
+  no_asistio: { label: 'No asistí',  className: 'bg-red-100 text-red-500' },
 }
 
 function EstadoBadge({ estado }: { estado: string }) {

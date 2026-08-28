@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Search, UserPlus, Pencil, Trash2, Check, X, Eye, EyeOff, ChevronDown, Copy, Wand2 } from 'lucide-react'
+import { Toast, type ToastData } from '../../admin/Toast'
+import { getInitials, avatarColor } from '../../utils/adminUtils'
 import { CallButton, EmailButton, EditButton, DeleteButton, RefreshButton } from '../../components/admin/ActionIconButtons'
 import { supabase } from '../../lib/supabase'
 import { getAllPatients, adminUpdatePatient, adminDeletePatient, adminCreatePatient } from '../../services/adminService'
@@ -26,18 +28,6 @@ const PWD_CRITERIA = [
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function getInitials(name: string): string {
-  return (name ?? '').split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
-}
-
-const AVATAR_COLORS = [
-  'bg-blue-100 text-blue-700',     'bg-emerald-100 text-emerald-700',
-  'bg-violet-100 text-violet-700', 'bg-amber-100 text-amber-700',
-  'bg-rose-100 text-rose-700',     'bg-sky-100 text-sky-700',
-]
-function avatarColor(name: string): string {
-  return AVATAR_COLORS[(name ?? ' ').charCodeAt(0) % AVATAR_COLORS.length]
-}
 
 function formatFecha(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('es-ES', {
@@ -97,30 +87,6 @@ function CopyButton({ value }: { value: string }) {
         : <Copy size={12} strokeWidth={1.75} />
       }
     </button>
-  )
-}
-
-// ─── Toast ────────────────────────────────────────────────────────────────────
-
-interface ToastData { message: string; type: 'success' | 'error' }
-
-function Toast({ toast, onDismiss }: { toast: ToastData; onDismiss: () => void }) {
-  useEffect(() => {
-    const t = setTimeout(onDismiss, 3500)
-    return () => clearTimeout(t)
-  }, [toast, onDismiss])
-
-  const cls = toast.type === 'success'
-    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-    : 'bg-red-50 border-red-200 text-red-800'
-
-  return (
-    <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-xl text-body-sm font-medium max-w-sm ${cls}`}>
-      <span>{toast.message}</span>
-      <button onClick={onDismiss} className="ml-1 shrink-0 opacity-60 hover:opacity-100 transition-opacity">
-        <X size={14} strokeWidth={2} />
-      </button>
-    </div>
   )
 }
 
@@ -950,7 +916,7 @@ export default function AdminPacientesPage() {
         />
       )}
 
-      {toast && <Toast toast={toast} onDismiss={() => setToast(null)} />}
+      {toast && <Toast {...toast} onDismiss={() => setToast(null)} />}
     </div>
   )
 }

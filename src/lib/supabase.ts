@@ -124,30 +124,51 @@ export type Database = {
           id: string
           user_id: string | null
           dentist_id: string | null
+          tipo: 'cita'
           tratamiento: string | null
           fecha: string
           hora: string
           duration_min: number
           estado: AppointmentStatus
+          source: string
+          notes: string | null
+          patient_name: string | null
+          patient_phone: string | null
+          patient_email: string | null
+          patient_birth_date: string | null
           created_at: string
         }
         Insert: {
           id?: string
           user_id?: string | null
           dentist_id?: string | null
+          tipo?: 'cita'
           tratamiento?: string | null
           fecha: string
           hora: string
           duration_min?: number
           estado?: AppointmentStatus
+          source?: string
+          notes?: string | null
+          patient_name?: string | null
+          patient_phone?: string | null
+          patient_email?: string | null
+          patient_birth_date?: string | null
         }
         Update: {
           dentist_id?: string | null
+          tipo?: 'cita'
           tratamiento?: string | null
           fecha?: string
           hora?: string
           duration_min?: number
           estado?: AppointmentStatus
+          source?: string
+          notes?: string | null
+          patient_name?: string | null
+          patient_phone?: string | null
+          patient_email?: string | null
+          patient_birth_date?: string | null
         }
         Relationships: [
           {

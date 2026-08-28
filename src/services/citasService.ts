@@ -28,12 +28,12 @@ export interface Cita {
   dentist: Dentist | null
 }
 
-// Asignación fija por tratamiento → ID de dentista
-// 'Ortodoncia' queda fuera → reparto aleatorio entre los 3
-const TREATMENT_DENTIST_MAP: Record<string, string> = {
-  'Implantes dentales':    '35174ed1-4a1a-47fb-bb56-8adadafc0f29', // Dr. Carlos Mendoza
-  'Blanqueamiento dental': '35a7d5ae-0c3f-4adf-8c26-c64a5f861255', // Dra. Ana García
-  'Estética dental':       '5c941484-83dd-44da-8beb-992191781680', // Dr. Luis Torres
+// Asignación por especialidad — funciona con cualquier instancia de Supabase
+// Los tratamientos sin entrada aquí reciben un dentista aleatorio
+const TREATMENT_SPECIALTY_MAP: Record<string, string> = {
+  'Implantes dentales':    'Implantología',
+  'Blanqueamiento dental': 'Blanqueamiento Dental',
+  'Estética dental':       'Diseño de Sonrisa',
 }
 
 export async function createCita({ userId, tratamiento, fecha, hora }: CreateCitaParams) {
@@ -42,15 +42,28 @@ export async function createCita({ userId, tratamiento, fecha, hora }: CreateCit
     throw new Error('Tu sesión ha expirado. Por favor, cierra sesión e inicia de nuevo.')
   }
 
-  const { data: dentists } = await supabase
-    .from('dentists')
-    .select('id')
-    .not('user_id', 'is', null)
+  const targetSpecialty = tratamiento ? TREATMENT_SPECIALTY_MAP[tratamiento] : null
 
-  const fixedId = tratamiento ? TREATMENT_DENTIST_MAP[tratamiento] : null
-  const dentist = fixedId
-    ? dentists?.find(d => d.id === fixedId)
-    : dentists?.[Math.floor(Math.random() * (dentists?.length ?? 1))]
+  let dentist: { id: string } | null = null
+
+  if (targetSpecialty) {
+    const { data } = await supabase
+      .from('dentists')
+      .select('id')
+      .eq('specialty', targetSpecialty)
+      .not('user_id', 'is', null)
+      .limit(1)
+      .single()
+    dentist = data
+  }
+
+  if (!dentist) {
+    const { data: allDentists } = await supabase
+      .from('dentists')
+      .select('id')
+      .not('user_id', 'is', null)
+    dentist = allDentists?.[Math.floor(Math.random() * (allDentists?.length ?? 1))] ?? null
+  }
 
   const { error } = await supabase.from('citas').insert({
     user_id:    userId,

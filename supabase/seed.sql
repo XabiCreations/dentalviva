@@ -1,8 +1,8 @@
 -- ============================================================
 -- DentalViva — Seed data
 -- Ejecutar en: Supabase Dashboard → SQL Editor
--- Contraseña de todos los pacientes: Dentaviva2024!
--- 50 usuarios · 30 newsletter (todos active) · 100 citas
+-- Contraseña de todos los usuarios (pacientes y dentistas): Dentaviva2024!
+-- 3 dentistas · 50 pacientes · 30 newsletter (todos active) · 100 citas
 -- ============================================================
 
 DO $$
@@ -10,74 +10,135 @@ DECLARE
   pwd text;
   iid uuid := '00000000-0000-0000-0000-000000000000';
 
-  -- Dentistas (por nombre)
-  mendoza_id uuid;  -- Implantes dentales
-  garcia_id  uuid;  -- Blanqueamiento dental
-  torres_id  uuid;  -- Estética dental
+  -- IDs de dentistas (lookup por nombre tras insertar)
+  mendoza_id uuid;
+  garcia_id  uuid;
+  torres_id  uuid;
 
-  -- 50 UUIDs fijos (idempotentes entre ejecuciones)
-  u01 uuid := 'd0000000-0000-0000-0000-000000000001';
-  u02 uuid := 'd0000000-0000-0000-0000-000000000002';
-  u03 uuid := 'd0000000-0000-0000-0000-000000000003';
-  u04 uuid := 'd0000000-0000-0000-0000-000000000004';
-  u05 uuid := 'd0000000-0000-0000-0000-000000000005';
-  u06 uuid := 'd0000000-0000-0000-0000-000000000006';
-  u07 uuid := 'd0000000-0000-0000-0000-000000000007';
-  u08 uuid := 'd0000000-0000-0000-0000-000000000008';
-  u09 uuid := 'd0000000-0000-0000-0000-000000000009';
-  u10 uuid := 'd0000000-0000-0000-0000-000000000010';
-  u11 uuid := 'd0000000-0000-0000-0000-000000000011';
-  u12 uuid := 'd0000000-0000-0000-0000-000000000012';
-  u13 uuid := 'd0000000-0000-0000-0000-000000000013';
-  u14 uuid := 'd0000000-0000-0000-0000-000000000014';
-  u15 uuid := 'd0000000-0000-0000-0000-000000000015';
-  u16 uuid := 'd0000000-0000-0000-0000-000000000016';
-  u17 uuid := 'd0000000-0000-0000-0000-000000000017';
-  u18 uuid := 'd0000000-0000-0000-0000-000000000018';
-  u19 uuid := 'd0000000-0000-0000-0000-000000000019';
-  u20 uuid := 'd0000000-0000-0000-0000-000000000020';
-  u21 uuid := 'd0000000-0000-0000-0000-000000000021';
-  u22 uuid := 'd0000000-0000-0000-0000-000000000022';
-  u23 uuid := 'd0000000-0000-0000-0000-000000000023';
-  u24 uuid := 'd0000000-0000-0000-0000-000000000024';
-  u25 uuid := 'd0000000-0000-0000-0000-000000000025';
-  u26 uuid := 'd0000000-0000-0000-0000-000000000026';
-  u27 uuid := 'd0000000-0000-0000-0000-000000000027';
-  u28 uuid := 'd0000000-0000-0000-0000-000000000028';
-  u29 uuid := 'd0000000-0000-0000-0000-000000000029';
-  u30 uuid := 'd0000000-0000-0000-0000-000000000030';
-  u31 uuid := 'd0000000-0000-0000-0000-000000000031';
-  u32 uuid := 'd0000000-0000-0000-0000-000000000032';
-  u33 uuid := 'd0000000-0000-0000-0000-000000000033';
-  u34 uuid := 'd0000000-0000-0000-0000-000000000034';
-  u35 uuid := 'd0000000-0000-0000-0000-000000000035';
-  u36 uuid := 'd0000000-0000-0000-0000-000000000036';
-  u37 uuid := 'd0000000-0000-0000-0000-000000000037';
-  u38 uuid := 'd0000000-0000-0000-0000-000000000038';
-  u39 uuid := 'd0000000-0000-0000-0000-000000000039';
-  u40 uuid := 'd0000000-0000-0000-0000-000000000040';
-  u41 uuid := 'd0000000-0000-0000-0000-000000000041';
-  u42 uuid := 'd0000000-0000-0000-0000-000000000042';
-  u43 uuid := 'd0000000-0000-0000-0000-000000000043';
-  u44 uuid := 'd0000000-0000-0000-0000-000000000044';
-  u45 uuid := 'd0000000-0000-0000-0000-000000000045';
-  u46 uuid := 'd0000000-0000-0000-0000-000000000046';
-  u47 uuid := 'd0000000-0000-0000-0000-000000000047';
-  u48 uuid := 'd0000000-0000-0000-0000-000000000048';
-  u49 uuid := 'd0000000-0000-0000-0000-000000000049';
-  u50 uuid := 'd0000000-0000-0000-0000-000000000050';
+  -- Auth UUIDs de dentistas (generados por Supabase)
+  mendoza_auth uuid := gen_random_uuid();
+  garcia_auth  uuid := gen_random_uuid();
+  torres_auth  uuid := gen_random_uuid();
+
+  -- IDs en public.dentists (generados por Supabase)
+  mendoza_dent uuid := gen_random_uuid();
+  garcia_dent  uuid := gen_random_uuid();
+  torres_dent  uuid := gen_random_uuid();
+
+  -- ID del usuario de prueba
+  demo_id uuid := gen_random_uuid();
+
+  -- UUIDs de los 50 pacientes (generados por Supabase)
+  u01 uuid := gen_random_uuid();
+  u02 uuid := gen_random_uuid();
+  u03 uuid := gen_random_uuid();
+  u04 uuid := gen_random_uuid();
+  u05 uuid := gen_random_uuid();
+  u06 uuid := gen_random_uuid();
+  u07 uuid := gen_random_uuid();
+  u08 uuid := gen_random_uuid();
+  u09 uuid := gen_random_uuid();
+  u10 uuid := gen_random_uuid();
+  u11 uuid := gen_random_uuid();
+  u12 uuid := gen_random_uuid();
+  u13 uuid := gen_random_uuid();
+  u14 uuid := gen_random_uuid();
+  u15 uuid := gen_random_uuid();
+  u16 uuid := gen_random_uuid();
+  u17 uuid := gen_random_uuid();
+  u18 uuid := gen_random_uuid();
+  u19 uuid := gen_random_uuid();
+  u20 uuid := gen_random_uuid();
+  u21 uuid := gen_random_uuid();
+  u22 uuid := gen_random_uuid();
+  u23 uuid := gen_random_uuid();
+  u24 uuid := gen_random_uuid();
+  u25 uuid := gen_random_uuid();
+  u26 uuid := gen_random_uuid();
+  u27 uuid := gen_random_uuid();
+  u28 uuid := gen_random_uuid();
+  u29 uuid := gen_random_uuid();
+  u30 uuid := gen_random_uuid();
+  u31 uuid := gen_random_uuid();
+  u32 uuid := gen_random_uuid();
+  u33 uuid := gen_random_uuid();
+  u34 uuid := gen_random_uuid();
+  u35 uuid := gen_random_uuid();
+  u36 uuid := gen_random_uuid();
+  u37 uuid := gen_random_uuid();
+  u38 uuid := gen_random_uuid();
+  u39 uuid := gen_random_uuid();
+  u40 uuid := gen_random_uuid();
+  u41 uuid := gen_random_uuid();
+  u42 uuid := gen_random_uuid();
+  u43 uuid := gen_random_uuid();
+  u44 uuid := gen_random_uuid();
+  u45 uuid := gen_random_uuid();
+  u46 uuid := gen_random_uuid();
+  u47 uuid := gen_random_uuid();
+  u48 uuid := gen_random_uuid();
+  u49 uuid := gen_random_uuid();
+  u50 uuid := gen_random_uuid();
 
 BEGIN
-  -- ── Limpieza idempotente ───────────────────────────────────
-  DELETE FROM public.citas
-    WHERE user_id::text LIKE 'd0000000-0000-0000-0000-%';
-  DELETE FROM public.newsletter_subscribers
-    WHERE user_id::text LIKE 'd0000000-0000-0000-0000-%'
-       OR email LIKE '%.seed@%';
+  -- ── Auth users de dentistas ───────────────────────────────
+  INSERT INTO auth.users (
+    id, instance_id, aud, role,
+    email, encrypted_password, email_confirmed_at,
+    raw_app_meta_data, raw_user_meta_data,
+    created_at, updated_at, is_super_admin,
+    confirmation_token, recovery_token, email_change_token_new, email_change
+  ) VALUES
+    (mendoza_auth,iid,'authenticated','authenticated','carlos.mendoza@dentaviva.es',crypt('Dentaviva2024!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (garcia_auth, iid,'authenticated','authenticated','ana.garcia@dentaviva.es',    crypt('Dentaviva2024!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','',''),
+    (torres_auth, iid,'authenticated','authenticated','luis.torres@dentaviva.es',   crypt('Dentaviva2024!',gen_salt('bf')),now(),'{"provider":"email","providers":["email"]}'::jsonb,'{}'::jsonb,now(),now(),false,'','','','')
+  ON CONFLICT DO NOTHING;
+
+  -- ── Dentistas ─────────────────────────────────────────────
+  INSERT INTO public.dentists (id, name, specialty, email, user_id, avatar_url, created_at, updated_at) VALUES
+    (mendoza_dent,'Dr. Carlos Mendoza','Implantología',       'carlos.mendoza@dentaviva.es',mendoza_auth,null,now(),now()),
+    (garcia_dent, 'Dra. Ana García',   'Blanqueamiento Dental','ana.garcia@dentaviva.es',  garcia_auth, null,now(),now()),
+    (torres_dent, 'Dr. Luis Torres',   'Diseño de Sonrisa',   'luis.torres@dentaviva.es',  torres_auth, null,now(),now())
+  ON CONFLICT DO NOTHING;
+
+  -- ── Usuario de prueba ─────────────────────────────────────
+  -- Email: demo@dentaviva.es · Contraseña: Dentaviva2024!
+  INSERT INTO auth.users (
+    id, instance_id, aud, role,
+    email, encrypted_password, email_confirmed_at,
+    raw_app_meta_data, raw_user_meta_data,
+    created_at, updated_at, is_super_admin,
+    confirmation_token, recovery_token, email_change_token_new, email_change
+  ) VALUES (
+    demo_id,iid,'authenticated','authenticated',
+    'demo@dentaviva.es', crypt('Dentaviva2024!', gen_salt('bf')), now(),
+    '{"provider":"email","providers":["email"]}'::jsonb, '{}'::jsonb,
+    now(), now(), false, '', '', '', ''
+  ) ON CONFLICT DO NOTHING;
+
+  INSERT INTO public.profiles (id, full_name, last_name, dni, email, phone, created_at, updated_at) VALUES
+    (demo_id,'Usuario','Demo','99999999Z','demo@dentaviva.es','600000000',now(),now())
+  ON CONFLICT DO NOTHING;
+
+  -- ── Limpieza idempotente (por email) ──────────────────────
+  DELETE FROM public.citas WHERE user_id IN (
+    SELECT id FROM auth.users
+    WHERE email LIKE '%01@gmail.com' OR email LIKE '%01@hotmail.com'
+       OR email LIKE '%01@yahoo.es'  OR email LIKE '%01@outlook.com'
+       OR email LIKE '%@patients.dentaviva.es'
+       OR email = 'demo@dentaviva.es'
+  );
+  DELETE FROM public.newsletter_subscribers WHERE email LIKE '%.seed@%';
   DELETE FROM public.profiles
-    WHERE id::text LIKE 'd0000000-0000-0000-0000-%';
+    WHERE email LIKE '%01@gmail.com' OR email LIKE '%01@hotmail.com'
+       OR email LIKE '%01@yahoo.es'  OR email LIKE '%01@outlook.com'
+       OR email LIKE '%@patients.dentaviva.es'
+       OR email = 'demo@dentaviva.es';
   DELETE FROM auth.users
-    WHERE id::text LIKE 'd0000000-0000-0000-0000-%';
+    WHERE email LIKE '%01@gmail.com' OR email LIKE '%01@hotmail.com'
+       OR email LIKE '%01@yahoo.es'  OR email LIKE '%01@outlook.com'
+       OR email LIKE '%@patients.dentaviva.es'
+       OR email = 'demo@dentaviva.es';
 
   -- ── Dentistas ─────────────────────────────────────────────
   SELECT id INTO mendoza_id FROM public.dentists WHERE name ILIKE '%mendoza%' LIMIT 1;
@@ -89,7 +150,7 @@ BEGIN
   IF garcia_id  IS NULL THEN SELECT id INTO garcia_id  FROM public.dentists ORDER BY created_at LIMIT 1 OFFSET 1; END IF;
   IF torres_id  IS NULL THEN SELECT id INTO torres_id  FROM public.dentists ORDER BY created_at LIMIT 1 OFFSET 2; END IF;
 
-  IF mendoza_id IS NULL THEN RAISE EXCEPTION 'Se necesitan al menos 3 dentistas en la tabla dentists.'; END IF;
+  IF mendoza_id IS NULL THEN RAISE EXCEPTION 'No se encontraron dentistas. Asegúrate de que el seed se ejecutó correctamente.'; END IF;
   IF garcia_id  IS NULL THEN garcia_id  := mendoza_id; END IF;
   IF torres_id  IS NULL THEN torres_id  := mendoza_id; END IF;
 

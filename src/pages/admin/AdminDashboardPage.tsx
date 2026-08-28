@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { useAdminAuth } from '../../admin/AdminAuthContext'
 import { Toast, type ToastData } from '../../admin/Toast'
+import { getInitials, avatarColor } from '../../utils/adminUtils'
 import { ApproveButton, RejectButton, CallButton, EmailButton, RefreshButton } from '../../components/admin/ActionIconButtons'
 import {
   getUpcomingAppointments,
@@ -15,21 +16,6 @@ import type { AdminAppointment } from '../../types/admin'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function getInitials(name: string): string {
-  return (name ?? '').split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
-}
-
-const AVATAR_COLORS = [
-  'bg-blue-100 text-blue-700',
-  'bg-emerald-100 text-emerald-700',
-  'bg-violet-100 text-violet-700',
-  'bg-amber-100 text-amber-700',
-  'bg-rose-100 text-rose-700',
-  'bg-sky-100 text-sky-700',
-]
-function avatarColor(name: string): string {
-  return AVATAR_COLORS[(name ?? ' ').charCodeAt(0) % AVATAR_COLORS.length]
-}
 
 function formatFecha(fecha: string): string {
   return new Date(fecha + 'T00:00:00').toLocaleDateString('es-ES', {
